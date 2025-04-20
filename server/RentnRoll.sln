@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentnRoll.API", "RentnRoll.API\RentnRoll.API.csproj", "{0906AA12-F897-4506-B9A4-2123DE3C02CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentnRoll.Core", "RentnRoll.Core\RentnRoll.Core.csproj", "{A080D0EE-2FCE-49D0-86CD-7C20384E72B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentnRoll.Application", "RentnRoll.Application\RentnRoll.Application.csproj", "{4D310083-7590-49EE-95F7-47376A3CB3B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentnRoll.Persistence", "RentnRoll.Persistence\RentnRoll.Persistence.csproj", "{D64D4184-A4A4-4252-904A-E23881C8CC58}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0906AA12-F897-4506-B9A4-2123DE3C02CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0906AA12-F897-4506-B9A4-2123DE3C02CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0906AA12-F897-4506-B9A4-2123DE3C02CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0906AA12-F897-4506-B9A4-2123DE3C02CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A080D0EE-2FCE-49D0-86CD-7C20384E72B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A080D0EE-2FCE-49D0-86CD-7C20384E72B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A080D0EE-2FCE-49D0-86CD-7C20384E72B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A080D0EE-2FCE-49D0-86CD-7C20384E72B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D310083-7590-49EE-95F7-47376A3CB3B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D310083-7590-49EE-95F7-47376A3CB3B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D310083-7590-49EE-95F7-47376A3CB3B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D310083-7590-49EE-95F7-47376A3CB3B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D64D4184-A4A4-4252-904A-E23881C8CC58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D64D4184-A4A4-4252-904A-E23881C8CC58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D64D4184-A4A4-4252-904A-E23881C8CC58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D64D4184-A4A4-4252-904A-E23881C8CC58}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
