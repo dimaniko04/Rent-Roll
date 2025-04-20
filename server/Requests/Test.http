@@ -1,2 +1,2 @@
-GET {{host}}/api/v1/test
+GET {{host}}/api
 Accept: application/json
