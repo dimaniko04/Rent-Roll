@@ -19,3 +19,7 @@ Content-Type: application/json
 
 GET {{host}}/api/test/{{id}}
 Accept: application/json
+
+### Unhandled Error
+GET {{host}}/api/test/not-implemented
+Accept: application/json

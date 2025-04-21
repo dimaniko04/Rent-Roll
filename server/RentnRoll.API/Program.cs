@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 {
     app.UseSerilogRequestLogging();
+    app.UseExceptionHandler();
 
     app.MapControllers();
 }

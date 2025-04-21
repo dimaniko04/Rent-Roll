@@ -30,6 +30,7 @@ public class TestController : ControllerBase
         return Ok(testEntity);
     }
 
+    [HttpPost]
     public async Task<IActionResult> Create(CreateTestEntityRequest request)
     {
         var testEntity = await _testEntityService
@@ -39,5 +40,11 @@ public class TestController : ControllerBase
             "GetById",
             new { id = testEntity.Id },
             testEntity);
+    }
+
+    [HttpGet("not-implemented")]
+    public Task<IActionResult> NotImplemented()
+    {
+        throw new NotImplementedException("This is a test exception");
     }
 }

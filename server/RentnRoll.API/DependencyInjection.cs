@@ -1,3 +1,5 @@
+using RentnRoll.API.Middlewares;
+
 namespace RentnRoll.API;
 
 public static class DependencyInjection
@@ -6,6 +8,8 @@ public static class DependencyInjection
         this IServiceCollection services)
     {
         services.AddControllers();
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddProblemDetails();
 
         return services;
     }
