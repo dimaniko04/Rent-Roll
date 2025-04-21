@@ -1,13 +1,23 @@
+using RentnRoll.API;
 using RentnRoll.Application;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddControllers();
-    builder.Services.AddApplication();
+    builder.Services
+        .AddPresentation()
+        .AddApplication();
+
+    builder.Logging.ClearProviders();
+    builder.Host.UseSerilog((context, config) =>
+        config.ReadFrom.Configuration(context.Configuration)
+    );
 }
 
 var app = builder.Build();
 {
+    app.UseSerilogRequestLogging();
+
     app.MapControllers();
 }
 
