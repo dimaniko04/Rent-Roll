@@ -1,2 +1,21 @@
-GET {{host}}/api
+### Get All
+GET {{host}}/api/test
+Accept: application/json
+
+### Create Test
+# @name createTest
+POST {{host}}/api/test
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "First Test",
+    "secret": "Some user secret"
+}
+
+
+### Get By Id
+@id = {{createTest.response.body.id}}
+
+GET {{host}}/api/test/{{id}}
 Accept: application/json
