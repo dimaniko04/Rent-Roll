@@ -1,6 +1,6 @@
 using RentnRoll.Core.Entities;
 
-namespace RentnRoll.Application.Responses;
+namespace RentnRoll.Application.Common.Responses;
 
 public record TestEntityResponse(
     Guid Id,

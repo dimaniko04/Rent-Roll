@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using RentnRoll.Application.Common.Request;
 using RentnRoll.Application.Interfaces.Services;
 
 namespace RentnRoll.API.Controllers;
 
 [ApiController]
 [Route("api/test")]
-public class TestController : ControllerBase
+public class TestController : ApiController
 {
     private readonly ITestEntityService _testEntityService;
 
@@ -25,9 +26,9 @@ public class TestController : ControllerBase
     [HttpGet("{id:guid}", Name = "GetById")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var testEntity = await _testEntityService.GetTestEntityAsync(id);
+        var testEntityResult = await _testEntityService.GetTestEntityAsync(id);
 
-        return Ok(testEntity);
+        return testEntityResult.Match(Ok, Problem);
     }
 
     [HttpPost]

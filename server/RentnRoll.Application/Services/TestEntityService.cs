@@ -1,12 +1,24 @@
+using Microsoft.Extensions.Logging;
+using RentnRoll.Application.Common.Errors;
+using RentnRoll.Application.Common.Request;
+using RentnRoll.Application.Common.Responses;
 using RentnRoll.Application.Interfaces.Services;
-using RentnRoll.Application.Responses;
+using RentnRoll.Core.Common;
+using RentnRoll.Core.Common.Result;
 using RentnRoll.Core.Entities;
 
 namespace RentnRoll.Application.Services;
 
 public class TestEntityService : ITestEntityService
 {
-    private List<TestEntity> _testEntities = new List<TestEntity>();
+    private readonly ILogger<TestEntityService> _logger;
+
+    public TestEntityService(ILogger<TestEntityService> logger)
+    {
+        _logger = logger;
+    }
+
+    private readonly List<TestEntity> _testEntities = new List<TestEntity>();
 
     public Task<TestEntityResponse> CreateTestEntityAsync(
         CreateTestEntityRequest request)
@@ -28,18 +40,22 @@ public class TestEntityService : ITestEntityService
         return Task.FromResult(testEntityResponses);
     }
 
-    public Task<TestEntityResponse> GetTestEntityAsync(Guid id)
+    public async Task<Result<TestEntityResponse>> GetTestEntityAsync(Guid id)
     {
         var testEntity = _testEntities
             .FirstOrDefault(x => x.Id == id);
+        await Task.CompletedTask;
 
         if (testEntity == null)
         {
-            throw new KeyNotFoundException($"TestEntity with ID {id} not found.");
+            _logger.LogError(
+                "Error: {Type} - Test Entity with ID {Id} not found.",
+                ErrorType.NotFound, id);
+            return Errors.TestEntity.NotFound(id);
         }
 
         var testEntityResponse = TestEntityResponse.FromDomain(testEntity);
 
-        return Task.FromResult(testEntityResponse);
+        return testEntityResponse;
     }
 }

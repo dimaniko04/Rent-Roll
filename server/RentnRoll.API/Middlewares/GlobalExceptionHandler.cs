@@ -13,7 +13,7 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
     }
 
     public async ValueTask<bool> TryHandleAsync(
-        HttpContext context,
+        HttpContext httpContext,
         Exception exception,
         CancellationToken cancellationToken)
     {
@@ -29,12 +29,12 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
             Title = "An unexpected error occurred",
             Status = StatusCodes.Status500InternalServerError,
             Detail = exception.Message,
-            Instance = context.Request.Path
+            Instance = httpContext.Request.Path
         };
-        context.Response.ContentType = "application/problem+json";
-        context.Response.StatusCode = problemDetails.Status.Value;
+        httpContext.Response.ContentType = "application/problem+json";
+        httpContext.Response.StatusCode = problemDetails.Status.Value;
 
-        await context.Response
+        await httpContext.Response
             .WriteAsJsonAsync(problemDetails, cancellationToken);
 
         return true;
