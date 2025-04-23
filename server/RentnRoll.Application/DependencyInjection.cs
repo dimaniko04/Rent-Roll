@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using RentnRoll.Application.Interfaces.Services;
 using RentnRoll.Application.Services;
@@ -10,6 +11,10 @@ public static class DependencyInjection
         this IServiceCollection services)
     {
         services.AddSingleton<ITestEntityService, TestEntityService>();
+
+        services.AddValidatorsFromAssembly(
+            typeof(IAssemblyMarker).Assembly,
+            includeInternalTypes: true);
 
         return services;
     }

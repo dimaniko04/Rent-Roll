@@ -1,4 +1,4 @@
-namespace RentnRoll.Core.Common;
+namespace RentnRoll.Core.Entities;
 
 public class BaseEntity
 {

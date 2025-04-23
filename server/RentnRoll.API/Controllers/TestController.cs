@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using RentnRoll.API.ActionFilters;
 using RentnRoll.Application.Common.Request;
 using RentnRoll.Application.Interfaces.Services;
 
@@ -32,6 +33,7 @@ public class TestController : ApiController
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(AsyncValidationFilter))]
     public async Task<IActionResult> Create(CreateTestEntityRequest request)
     {
         var testEntity = await _testEntityService

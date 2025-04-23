@@ -13,6 +13,23 @@ Content-Type: application/json
     "secret": "Some user secret"
 }
 
+### Create Test - Bad Request (Required Field)
+POST {{host}}/api/test
+Accept: application/json
+Content-Type: application/json
+
+{
+}
+
+### Create Test - Bad Request (Max Length)
+POST {{host}}/api/test
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Bad Request Test", 
+    "secret": "Very long user secret that exceeds the maximum length of 20 characters"
+}
 
 ### Get By Id
 @id = {{createTest.response.body.id}}
