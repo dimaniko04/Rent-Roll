@@ -10,7 +10,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(
         this IServiceCollection services)
     {
-        services.AddSingleton<ITestEntityService, TestEntityService>();
+        services.AddScoped<ITestEntityService, TestEntityService>();
 
         services.AddValidatorsFromAssembly(
             typeof(IAssemblyMarker).Assembly,

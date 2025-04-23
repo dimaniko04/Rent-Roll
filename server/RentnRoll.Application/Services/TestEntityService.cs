@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Logging;
 using RentnRoll.Application.Common.Errors;
+using RentnRoll.Application.Common.Interfaces.Persistence.Repositories;
+using RentnRoll.Application.Common.Interfaces.Persistence.UnitOfWork;
 using RentnRoll.Application.Common.Request;
 using RentnRoll.Application.Common.Responses;
 using RentnRoll.Application.Interfaces.Services;
@@ -11,40 +13,34 @@ namespace RentnRoll.Application.Services;
 
 public class TestEntityService : ITestEntityService
 {
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<TestEntityService> _logger;
+    private readonly ITestEntityRepository _testEntityRepository;
 
-    public TestEntityService(ILogger<TestEntityService> logger)
+    public TestEntityService(
+        ILogger<TestEntityService> logger,
+        IUnitOfWork unitOfWork)
     {
         _logger = logger;
+        _unitOfWork = unitOfWork;
+        _testEntityRepository = unitOfWork
+            .GetRepository<ITestEntityRepository>();
     }
 
-    private readonly List<TestEntity> _testEntities = new List<TestEntity>();
-
-    public Task<TestEntityResponse> CreateTestEntityAsync(
-        CreateTestEntityRequest request)
+    public async Task<List<TestEntityResponse>> GetAllTestEntitiesAsync()
     {
-        var testEntity = request.ToDomain();
-        _testEntities.Add(testEntity);
+        var testEntities = await _testEntityRepository
+            .GetAllAsync();
 
-        var testEntityResponse = TestEntityResponse.FromDomain(testEntity);
-
-        return Task.FromResult(testEntityResponse);
-    }
-
-    public Task<List<TestEntityResponse>> GetAllTestEntitiesAsync()
-    {
-        var testEntityResponses = _testEntities
+        return testEntities
             .Select(TestEntityResponse.FromDomain)
             .ToList();
-
-        return Task.FromResult(testEntityResponses);
     }
 
     public async Task<Result<TestEntityResponse>> GetTestEntityAsync(Guid id)
     {
-        var testEntity = _testEntities
-            .FirstOrDefault(x => x.Id == id);
-        await Task.CompletedTask;
+        var testEntity = await _testEntityRepository
+            .GetByIdAsync(id);
 
         if (testEntity == null)
         {
@@ -53,6 +49,19 @@ public class TestEntityService : ITestEntityService
                 ErrorType.NotFound, id);
             return Errors.TestEntity.NotFound(id);
         }
+
+        var testEntityResponse = TestEntityResponse.FromDomain(testEntity);
+
+        return testEntityResponse;
+    }
+
+    public async Task<TestEntityResponse> CreateTestEntityAsync(
+        CreateTestEntityRequest request)
+    {
+        var testEntity = request.ToDomain();
+
+        await _testEntityRepository.AddAsync(testEntity);
+        await _unitOfWork.SaveChangesAsync();
 
         var testEntityResponse = TestEntityResponse.FromDomain(testEntity);
 

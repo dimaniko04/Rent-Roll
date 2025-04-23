@@ -9,7 +9,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "name": "First Test",
+    "name": "Test entity",
     "secret": "Some user secret"
 }
 
