@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using RentnRoll.Core.Entities;
 
 namespace RentnRoll.Persistence.Configurations;

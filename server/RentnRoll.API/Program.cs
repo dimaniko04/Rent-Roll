@@ -1,6 +1,7 @@
 using RentnRoll.API.Extensions;
 using RentnRoll.Application;
 using RentnRoll.Persistence;
+
 using Serilog;
 
 var CORS_ALLOW_ALL = "AllowAll";

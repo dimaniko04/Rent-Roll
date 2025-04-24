@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+
 using RentnRoll.Application.Common.Interfaces.Persistence.Repositories;
 using RentnRoll.Application.Common.Interfaces.Persistence.UnitOfWork;
 using RentnRoll.Persistence.Context;

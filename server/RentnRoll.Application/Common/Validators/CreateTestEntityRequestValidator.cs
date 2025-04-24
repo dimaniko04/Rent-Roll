@@ -1,4 +1,5 @@
 using FluentValidation;
+
 using RentnRoll.Application.Common.Request;
 
 namespace RentnRoll.Application.Common.Validators;

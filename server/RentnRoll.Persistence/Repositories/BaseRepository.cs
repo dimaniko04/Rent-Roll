@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using RentnRoll.Application.Common.Interfaces.Persistence.Repositories;
 using RentnRoll.Core.Entities;
 using RentnRoll.Persistence.Context;

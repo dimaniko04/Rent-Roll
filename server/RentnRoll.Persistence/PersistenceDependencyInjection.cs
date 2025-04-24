@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using RentnRoll.Application.Common.Interfaces.Persistence.Repositories;
 using RentnRoll.Application.Common.Interfaces.Persistence.UnitOfWork;
 using RentnRoll.Persistence.Context;
@@ -9,7 +10,7 @@ using RentnRoll.Persistence.UnitOfWork;
 
 namespace RentnRoll.Persistence;
 
-public static class DependencyInjection
+public static class PersistenceDependencyInjection
 {
     public static IServiceCollection AddPersistence(
         this IServiceCollection services,

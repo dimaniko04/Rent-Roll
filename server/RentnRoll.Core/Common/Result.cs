@@ -1,4 +1,4 @@
-namespace RentnRoll.Core.Common.Result;
+namespace RentnRoll.Core.Common;
 
 public class Result
 {

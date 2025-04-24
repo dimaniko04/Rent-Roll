@@ -2,7 +2,7 @@ using RentnRoll.Core.Common;
 
 namespace RentnRoll.Application.Common.Errors;
 
-public static partial class Errors
+public static partial class AppErrors
 {
     public static class TestEntity
     {

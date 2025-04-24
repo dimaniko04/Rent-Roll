@@ -1,8 +1,8 @@
 using RentnRoll.Application.Common.Request;
 using RentnRoll.Application.Common.Responses;
-using RentnRoll.Core.Common.Result;
+using RentnRoll.Core.Common;
 
-namespace RentnRoll.Application.Interfaces.Services;
+namespace RentnRoll.Application.Common.Interfaces.Services;
 
 public interface ITestEntityService
 {

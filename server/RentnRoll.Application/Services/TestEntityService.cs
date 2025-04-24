@@ -1,13 +1,12 @@
 using Microsoft.Extensions.Logging;
+
 using RentnRoll.Application.Common.Errors;
 using RentnRoll.Application.Common.Interfaces.Persistence.Repositories;
 using RentnRoll.Application.Common.Interfaces.Persistence.UnitOfWork;
+using RentnRoll.Application.Common.Interfaces.Services;
 using RentnRoll.Application.Common.Request;
 using RentnRoll.Application.Common.Responses;
-using RentnRoll.Application.Interfaces.Services;
 using RentnRoll.Core.Common;
-using RentnRoll.Core.Common.Result;
-using RentnRoll.Core.Entities;
 
 namespace RentnRoll.Application.Services;
 
@@ -47,7 +46,7 @@ public class TestEntityService : ITestEntityService
             _logger.LogError(
                 "Error: {Type} - Test Entity with ID {Id} not found.",
                 ErrorType.NotFound, id);
-            return Errors.TestEntity.NotFound(id);
+            return AppErrors.TestEntity.NotFound(id);
         }
 
         var testEntityResponse = TestEntityResponse.FromDomain(testEntity);
