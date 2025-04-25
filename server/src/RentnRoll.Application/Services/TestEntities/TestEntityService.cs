@@ -4,6 +4,7 @@ using RentnRoll.Application.Common.AppErrors;
 using RentnRoll.Application.Common.Interfaces.Repositories;
 using RentnRoll.Application.Common.Interfaces.UnitOfWork;
 using RentnRoll.Application.Contracts.TestEntities;
+using RentnRoll.Application.Services.Validation;
 using RentnRoll.Domain.Common;
 
 namespace RentnRoll.Application.Services.TestEntities;
@@ -12,16 +13,19 @@ public class TestEntityService : ITestEntityService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<TestEntityService> _logger;
+    private readonly IValidationService _validationService;
     private readonly ITestEntityRepository _testEntityRepository;
 
     public TestEntityService(
+        IUnitOfWork unitOfWork,
         ILogger<TestEntityService> logger,
-        IUnitOfWork unitOfWork)
+        IValidationService validationService)
     {
         _logger = logger;
         _unitOfWork = unitOfWork;
         _testEntityRepository = unitOfWork
             .GetRepository<ITestEntityRepository>();
+        _validationService = validationService;
     }
 
     public async Task<List<TestEntityResponse>> GetAllTestEntitiesAsync()
@@ -52,9 +56,17 @@ public class TestEntityService : ITestEntityService
         return testEntityResponse;
     }
 
-    public async Task<TestEntityResponse> CreateTestEntityAsync(
+    public async Task<Result<TestEntityResponse>> CreateTestEntityAsync(
         CreateTestEntityRequest request)
     {
+        var validationResult = await _validationService
+            .ValidateAsync(request);
+
+        if (validationResult.IsError)
+        {
+            return validationResult.Errors;
+        }
+
         var testEntity = request.ToDomain();
 
         await _testEntityRepository.AddAsync(testEntity);

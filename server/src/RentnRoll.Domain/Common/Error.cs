@@ -31,4 +31,10 @@ public sealed record Error(
         string message = "Authentication required.",
         string? details = null
         ) => new(code, message, details, ErrorType.Unauthorized);
+
+    public static Error Validation(
+        string code = "Validation",
+        string message = "A validation error has occurred.",
+        string? details = null
+        ) => new(code, message, details, ErrorType.Validation);
 }

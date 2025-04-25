@@ -7,5 +7,6 @@ public interface ITestEntityService
 {
     Task<List<TestEntityResponse>> GetAllTestEntitiesAsync();
     Task<Result<TestEntityResponse>> GetTestEntityAsync(Guid id);
-    Task<TestEntityResponse> CreateTestEntityAsync(CreateTestEntityRequest request);
+    Task<Result<TestEntityResponse>> CreateTestEntityAsync(
+        CreateTestEntityRequest request);
 }

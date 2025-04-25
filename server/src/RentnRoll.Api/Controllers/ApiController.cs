@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 using RentnRoll.Domain.Common;
 
@@ -6,38 +7,44 @@ namespace RentnRoll.Api.Controllers;
 
 public class ApiController : ControllerBase
 {
-    protected IActionResult Problem(Error error)
+    protected IActionResult Problem(List<Error> errors)
     {
-        var (type, statusCode) = error.Type switch
+        if (errors.All(e => e.Type == ErrorType.Validation))
         {
-            ErrorType.NotFound => (
-                "https://httpstatuses.com/404",
-                StatusCodes.Status404NotFound
-            ),
-            ErrorType.Forbidden => (
-                "https://httpstatuses.com/403",
-                StatusCodes.Status403Forbidden
-            ),
-            ErrorType.InvalidRequest => (
-                "https://httpstatuses.com/400",
-                StatusCodes.Status400BadRequest
-            ),
-            ErrorType.Unauthorized => (
-                "https://httpstatuses.com/401",
-                StatusCodes.Status401Unauthorized
-            ),
-            _ => (
-                "https://httpstatuses.com/500",
-                StatusCodes.Status500InternalServerError
-            )
+            return ValidationProblem(errors);
+        }
+
+        return Problem(errors.First());
+    }
+
+    private IActionResult Problem(Error error)
+    {
+        var statusCode = error.Type switch
+        {
+            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            ErrorType.Forbidden => StatusCodes.Status403Forbidden,
+            ErrorType.InvalidRequest => StatusCodes.Status400BadRequest,
+            ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+            _ => StatusCodes.Status500InternalServerError
         };
 
         return Problem(
-            type: type,
+            type: $"https://httpstatuses.com/{statusCode}",
             title: error.Message,
             detail: error.Details,
             statusCode: statusCode,
             instance: HttpContext.Request.Path
         );
+    }
+
+    private IActionResult ValidationProblem(
+        List<Error> errors)
+    {
+        var modelStateDictionary = new ModelStateDictionary();
+
+        errors.ForEach(error => modelStateDictionary
+            .AddModelError(error.Code, error.Message));
+
+        return ValidationProblem(modelStateDictionary);
     }
 }

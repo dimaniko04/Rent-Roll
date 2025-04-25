@@ -4,6 +4,7 @@ public enum ErrorType
 {
     Unknown,
     NotFound,
+    Validation,
     Forbidden,
     InvalidRequest,
     Unauthorized,

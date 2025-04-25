@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 
-using RentnRoll.Api.ActionFilters;
 using RentnRoll.Api.Middlewares;
 
 namespace RentnRoll.Api.Extensions;
@@ -16,8 +15,6 @@ public static class ServiceExtensions
         services.AddControllers();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
-
-        services.AddScoped<AsyncValidationFilter>();
 
         services.Configure<ApiBehaviorOptions>(options =>
         {

@@ -2,33 +2,37 @@ namespace RentnRoll.Domain.Common;
 
 public class Result
 {
-    public Error? Error { get; }
     public bool IsSuccess { get; }
+    public List<Error> Errors { get; }
 
     public bool IsError => !IsSuccess;
 
     protected Result()
     {
+        Errors = [];
         IsSuccess = true;
-        Error = null;
     }
 
-    protected Result(Error error)
+    protected Result(List<Error> errors)
     {
-        Error = error ?? throw new ArgumentNullException(
-            nameof(error), "Error cannot be null.");
+        if (errors.Count == 0)
+        {
+            throw new ArgumentException(
+                nameof(errors), "Error list cannot be empty.");
+        }
+        Errors = errors;
         IsSuccess = false;
     }
 
     public static Result Success() => new();
 
-    public static Result Failure(Error error) => new(error);
+    public static Result Failure(List<Error> errors) => new(errors);
 
     public TResult Match<TResult>(
         Func<TResult> onSuccess,
-        Func<Error, TResult> onError)
+        Func<List<Error>, TResult> onError)
     {
-        return IsSuccess ? onSuccess() : onError(Error!);
+        return IsSuccess ? onSuccess() : onError(Errors);
     }
 }
 
@@ -41,18 +45,21 @@ public sealed class Result<T> : Result
         Value = value;
     }
 
-    private Result(Error error) : base(error)
+    private Result(List<Error> errors) : base(errors)
     {
         Value = default;
     }
 
     public static implicit operator Result<T>(T value) => new(value);
-    public static implicit operator Result<T>(Error error) => new(error);
+    public static implicit operator Result<T>(List<Error> errors)
+        => new(errors);
+    public static implicit operator Result<T>(Error error)
+        => new(new List<Error> { error });
 
     public TResult Match<TResult>(
         Func<T, TResult> onSuccess,
-        Func<Error, TResult> onError)
+        Func<List<Error>, TResult> onError)
     {
-        return IsSuccess ? onSuccess(Value!) : onError(Error!);
+        return IsSuccess ? onSuccess(Value!) : onError(Errors);
     }
 }

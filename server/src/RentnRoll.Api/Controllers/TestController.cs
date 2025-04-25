@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 
-using RentnRoll.Api.ActionFilters;
 using RentnRoll.Application.Contracts.TestEntities;
 using RentnRoll.Application.Services.TestEntities;
 
@@ -34,15 +33,19 @@ public class TestController : ApiController
     }
 
     [HttpPost]
-    [ServiceFilter(typeof(AsyncValidationFilter))]
     public async Task<IActionResult> Create(CreateTestEntityRequest request)
     {
         var testEntity = await _testEntityService
             .CreateTestEntityAsync(request);
 
+        if (testEntity.IsError)
+        {
+            return Problem(testEntity.Errors);
+        }
+
         return CreatedAtRoute(
             "GetById",
-            new { id = testEntity.Id },
+            new { id = testEntity.Value!.Id },
             testEntity);
     }
 
