@@ -1,6 +1,7 @@
 using RentnRoll.Api.Extensions;
 using RentnRoll.Application;
 using RentnRoll.Persistence;
+using RentnRoll.Persistence.Identity;
 
 using Serilog;
 
@@ -37,7 +38,11 @@ app.UseCors(CORS_ALLOW_ALL);
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 
-app.MapControllers();
+app.MapIdentityApi<User>();
 
+app.UseAuthorization();
+app.UseAuthentication();
+
+app.MapControllers();
 
 await app.RunAsync();

@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
+using RentnRoll.Persistence.Identity;
 
 namespace RentnRoll.Persistence.Context;
 
-public class RentnRollDbContext : DbContext
+public class RentnRollDbContext : IdentityDbContext<User>
 {
     public RentnRollDbContext(DbContextOptions<RentnRollDbContext> options)
         : base(options)

@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 using RentnRoll.Api.Middlewares;
+using RentnRoll.Persistence.Context;
+using RentnRoll.Persistence.Identity;
 
 namespace RentnRoll.Api.Extensions;
 
@@ -13,6 +16,7 @@ public static class ServiceExtensions
         services.AddCorsPolicy(corsPolicyName);
         services.AddSwagger();
         services.AddControllers();
+        services.AddIdentity();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
@@ -54,6 +58,21 @@ public static class ServiceExtensions
                     corsPolicyBuilder.AllowAnyHeader();
                 });
         });
+
+        return services;
+    }
+
+    private static IServiceCollection AddIdentity(
+        this IServiceCollection services)
+    {
+        services.AddAuthorization();
+        services.AddAuthentication()
+            .AddBearerToken(IdentityConstants.BearerScheme);
+
+        services.AddIdentityCore<User>()
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<RentnRollDbContext>()
+            .AddApiEndpoints();
 
         return services;
     }
