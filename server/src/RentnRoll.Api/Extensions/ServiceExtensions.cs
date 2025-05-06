@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 
 using RentnRoll.Api.Middlewares;
 using RentnRoll.Persistence.Context;
@@ -16,7 +17,6 @@ public static class ServiceExtensions
         services.AddCorsPolicy(corsPolicyName);
         services.AddSwagger();
         services.AddControllers();
-        services.AddIdentity();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
@@ -34,10 +34,25 @@ public static class ServiceExtensions
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+            c.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title = "RentnRoll API",
                 Version = "v1"
+            });
+
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    []
+                }
             });
         });
 
@@ -58,21 +73,6 @@ public static class ServiceExtensions
                     corsPolicyBuilder.AllowAnyHeader();
                 });
         });
-
-        return services;
-    }
-
-    private static IServiceCollection AddIdentity(
-        this IServiceCollection services)
-    {
-        services.AddAuthorization();
-        services.AddAuthentication()
-            .AddBearerToken(IdentityConstants.BearerScheme);
-
-        services.AddIdentityCore<User>()
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<RentnRollDbContext>()
-            .AddApiEndpoints();
 
         return services;
     }

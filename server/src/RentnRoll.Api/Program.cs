@@ -38,7 +38,9 @@ app.UseCors(CORS_ALLOW_ALL);
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 
-app.MapIdentityApi<User>();
+app.MapGroup("api/auth")
+    .WithTags("Authentication")
+    .MapIdentityApi<User>();
 
 app.UseAuthorization();
 app.UseAuthentication();

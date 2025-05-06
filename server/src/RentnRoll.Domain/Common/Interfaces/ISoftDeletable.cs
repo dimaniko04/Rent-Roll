@@ -1,4 +1,4 @@
-namespace RentnRoll.Domain.Common;
+namespace RentnRoll.Domain.Common.Interfaces;
 
 public interface ISoftDeletable
 {

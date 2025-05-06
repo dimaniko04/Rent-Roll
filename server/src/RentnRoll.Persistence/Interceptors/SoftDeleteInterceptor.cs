@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-using RentnRoll.Domain.Common;
+using RentnRoll.Domain.Common.Interfaces;
 
 namespace RentnRoll.Persistence.Interceptors;
 
