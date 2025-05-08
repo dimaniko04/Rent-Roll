@@ -1,12 +1,20 @@
+using System.Text;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
+using RentnRoll.Application.Common.Interfaces.Identity;
 using RentnRoll.Application.Common.Interfaces.UnitOfWork;
 using RentnRoll.Persistence.Context;
 using RentnRoll.Persistence.Identity;
+using RentnRoll.Persistence.Identity.Services;
 using RentnRoll.Persistence.Interceptors;
+using RentnRoll.Persistence.Seeding;
+using RentnRoll.Persistence.Settings;
 using RentnRoll.Persistence.UnitOfWork;
 
 namespace RentnRoll.Persistence;
@@ -17,10 +25,33 @@ public static class PersistenceDependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        var jwtSettings = new JwtSettings();
+        configuration
+            .GetSection(JwtSettings.SectionName)
+            .Bind(jwtSettings);
+        services.Configure<AdminSettings>(
+            configuration.GetSection(AdminSettings.SectionName));
+
+        services.AddAuthorization();
+        services
+            .AddJwtAuthentication(jwtSettings)
+            .AddIdentity()
+            .AddDbContext(configuration);
+
+        services.AddScoped<Seeder>();
+
+        services.AddScoped<IUnitOfWork, RentnRollUnitOfWork>();
+
+        return services;
+    }
+
+    private static void AddDbContext(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
         var connectionString = configuration
             .GetConnectionString("DefaultConnection");
 
-        services.AddIdentity();
         services.AddSingleton<SoftDeleteInterceptor>();
         services.AddSingleton<UpdateAuditableInterceptor>();
 
@@ -29,8 +60,28 @@ public static class PersistenceDependencyInjection
                 .AddInterceptors(
                     sp.GetRequiredService<SoftDeleteInterceptor>(),
                     sp.GetRequiredService<UpdateAuditableInterceptor>()));
+    }
 
-        services.AddScoped<IUnitOfWork, RentnRollUnitOfWork>();
+    private static IServiceCollection AddJwtAuthentication(
+        this IServiceCollection services,
+        JwtSettings jwtSettings)
+    {
+        services.AddAuthentication()
+            .AddJwtBearer(IdentityConstants.BearerScheme, options =>
+            {
+                var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
+            });
 
         return services;
     }
@@ -38,14 +89,9 @@ public static class PersistenceDependencyInjection
     private static IServiceCollection AddIdentity(
         this IServiceCollection services)
     {
-        services.AddAuthorization();
-        services.AddAuthentication()
-            .AddBearerToken(IdentityConstants.BearerScheme);
-
         services.AddIdentityCore<User>()
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<RentnRollDbContext>()
-            .AddApiEndpoints();
+            .AddEntityFrameworkStores<RentnRollDbContext>();
 
         services.Configure<IdentityOptions>(options =>
         {

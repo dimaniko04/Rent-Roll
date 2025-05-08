@@ -1,7 +1,7 @@
 using RentnRoll.Api.Extensions;
 using RentnRoll.Application;
 using RentnRoll.Persistence;
-using RentnRoll.Persistence.Identity;
+using RentnRoll.Persistence.Extensions;
 
 using Serilog;
 
@@ -20,6 +20,9 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    await app.ApplyMigrationsAsync();
+    await app.SeedDataAsync();
+
     app.UseDeveloperExceptionPage();
 
     app.UseSwagger();
@@ -37,10 +40,6 @@ else
 app.UseCors(CORS_ALLOW_ALL);
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
-
-app.MapGroup("api/auth")
-    .WithTags("Authentication")
-    .MapIdentityApi<User>();
 
 app.UseAuthorization();
 app.UseAuthentication();

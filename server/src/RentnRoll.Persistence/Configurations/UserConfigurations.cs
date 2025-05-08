@@ -30,13 +30,13 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
 
         builder
             .Property(u => u.Country)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(100)
             .HasColumnType("varchar(100)");
 
         builder
             .Property(u => u.BirthDate)
-            .IsRequired()
+            .IsRequired(false)
             .HasColumnType("date");
 
         builder

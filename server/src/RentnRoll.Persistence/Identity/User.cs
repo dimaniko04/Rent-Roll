@@ -8,8 +8,8 @@ public class User : IdentityUser, ISoftDeletable, IAuditable
 {
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
-    public string Country { get; set; } = null!;
-    public DateTime BirthDate { get; set; }
+    public string? Country { get; set; }
+    public DateTime? BirthDate { get; set; }
 
     public bool IsDeleted { get; set; } = false;
     public DateTime? DeletedAt { get; set; }
