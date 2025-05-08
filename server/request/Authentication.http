@@ -1,0 +1,44 @@
+### Register test user
+POST {{host}}/api/register
+Accept: application/json
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "joedoe@gmail.com",
+    "password": "Password123",
+    "phoneNumber": "+1234567890",
+    "birthDate": "1990-01-01",
+    "country": "USA"
+}
+
+### Login test user (user does not exist)
+POST {{host}}/api/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "nomail@gmail.com",
+    "password": "Password123"
+}
+
+### Login test user (invalid password)
+POST {{host}}/api/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "joedoe@gmail.com",
+    "password": "Password1234"
+}
+
+### Login test user (valid credentials)
+POST {{host}}/api/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "joedoe@gmail.com",
+    "password": "Password123"
+}

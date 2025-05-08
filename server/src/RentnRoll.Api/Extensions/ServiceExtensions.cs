@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
 using RentnRoll.Api.Middlewares;
-using RentnRoll.Persistence.Context;
-using RentnRoll.Persistence.Identity;
 
 namespace RentnRoll.Api.Extensions;
 
