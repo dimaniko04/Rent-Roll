@@ -1,0 +1,18 @@
+using FluentValidation;
+
+namespace RentnRoll.Application.Contracts.Authentication;
+
+public class RefreshRequestValidation
+    : AbstractValidator<RefreshRequest>
+{
+    public RefreshRequestValidation()
+    {
+        RuleFor(x => x.AccessToken)
+            .NotEmpty()
+            .WithMessage("Access token is required.");
+
+        RuleFor(x => x.RefreshToken)
+            .NotEmpty()
+            .WithMessage("Refresh token is required.");
+    }
+}

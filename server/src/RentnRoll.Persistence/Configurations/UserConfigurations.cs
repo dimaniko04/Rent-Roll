@@ -52,5 +52,16 @@ internal sealed class UserConfigurations : IEntityTypeConfiguration<User>
             .Property(u => u.DeletedAt)
             .HasColumnType("datetime")
             .IsRequired(false);
+
+        builder
+            .Property(u => u.RefreshToken)
+            .IsRequired(false)
+            .HasMaxLength(200)
+            .HasColumnType("varchar(200)");
+
+        builder
+            .Property(u => u.RefreshTokenExpiry)
+            .HasColumnType("datetime")
+            .IsRequired(false);
     }
 }

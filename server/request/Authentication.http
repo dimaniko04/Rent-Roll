@@ -59,6 +59,7 @@ Content-Type: application/json
 }
 
 ### Login test user (valid credentials)
+# @name loginSuccess
 POST {{host}}/api/login
 Accept: application/json
 Content-Type: application/json
@@ -66,4 +67,48 @@ Content-Type: application/json
 {
     "email": "joedoe@gmail.com",
     "password": "Password123"
+}
+
+### Refresh token (validation errors)
+POST {{host}}/api/refresh
+Accept: application/json
+Content-Type: application/json
+
+{
+    "accessToken": "",
+    "refreshToken": ""
+}
+
+### Refresh token (valid token)
+@accessToken = {{loginSuccess.response.body.accessToken}}
+@refreshToken = {{loginSuccess.response.body.refreshToken}}
+
+POST {{host}}/api/refresh
+Accept: application/json
+Content-Type: application/json
+
+{
+    "accessToken": "{{accessToken}}",
+    "refreshToken": "{{refreshToken}}"
+}
+
+### Refresh token (invalid access token)
+POST {{host}}/api/refresh
+Accept: application/json
+Content-Type: application/json
+
+{
+    "accessToken": "invalid-access-token",
+    "refreshToken": "{{refreshToken}}"
+}
+
+
+### Refresh token (old refresh token)
+POST {{host}}/api/refresh
+Accept: application/json
+Content-Type: application/json
+
+{
+    "accessToken": "{{accessToken}}",
+    "refreshToken": "{{refreshToken}}"
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
+using RentnRoll.Application.Common.Interfaces.Identity;
 using RentnRoll.Domain.Constants;
 using RentnRoll.Persistence.Context;
 using RentnRoll.Persistence.Identity;

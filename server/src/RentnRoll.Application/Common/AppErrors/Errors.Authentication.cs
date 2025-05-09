@@ -20,5 +20,15 @@ public static partial class Errors
             Error.NotFound(
                 "Authentication.UserNotFound",
                 "User with this email does not exist.");
+
+        public static Error InvalidRefreshToken =>
+            Error.NotFound(
+                "Authentication.InvalidRefreshToken",
+                "Invalid refresh token.");
+
+        public static Error InvalidToken =>
+            Error.NotFound(
+                "Authentication.InvalidToken",
+                "Invalid token.");
     }
 }

@@ -31,4 +31,12 @@ public class AuthController : ApiController
 
         return result.Match(Ok, Problem);
     }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh(RefreshRequest request)
+    {
+        var result = await _userService.RefreshTokenAsync(request);
+
+        return result.Match(Ok, Problem);
+    }
 }

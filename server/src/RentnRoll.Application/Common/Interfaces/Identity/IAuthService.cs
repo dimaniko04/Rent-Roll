@@ -9,4 +9,6 @@ public interface IAuthService
         UserRegisterRequest request);
     Task<Result<AuthResponse>> LoginAsync(
         UserLoginRequest request);
+    Task<Result<AuthResponse>> RefreshTokenAsync(
+        RefreshRequest request);
 }

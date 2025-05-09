@@ -1,10 +1,12 @@
+using System.Security.Claims;
+
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 using RentnRoll.Application.Common.AppErrors;
 using RentnRoll.Application.Common.Interfaces.Identity;
 using RentnRoll.Application.Contracts.Authentication;
-using RentnRoll.Application.Contracts.Users;
 using RentnRoll.Application.Services.Validation;
 using RentnRoll.Domain.Common;
 using RentnRoll.Domain.Constants;
@@ -67,7 +69,10 @@ public class AuthService : IAuthService
 
         var (accessToken, refreshToken) = _tokenService
             .GenerateTokens(userResponse);
-        await _tokenService.SaveRefreshTokenAsync(user.Id, refreshToken);
+
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+        await _userManager.UpdateAsync(user);
 
         return new AuthResponse(
             accessToken,
@@ -141,7 +146,61 @@ public class AuthService : IAuthService
 
         var (accessToken, refreshToken) = _tokenService
             .GenerateTokens(userResponse);
-        await _tokenService.SaveRefreshTokenAsync(user.Id, refreshToken);
+
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+        await _userManager.UpdateAsync(user);
+
+        return new AuthResponse(
+            accessToken,
+            refreshToken
+        );
+    }
+
+    public async Task<Result<AuthResponse>> RefreshTokenAsync(
+        RefreshRequest request)
+    {
+        var validationResult = await _validationService
+            .ValidateAsync(request);
+
+        if (validationResult.IsError)
+        {
+            return validationResult.Errors;
+        }
+
+        var principal = _tokenService
+            .GetTokenPrincipal(request.AccessToken)
+            .Value;
+        var userId = principal
+            ?.FindFirst(ClaimTypes.NameIdentifier)
+            ?.Value;
+        var user = await _userManager
+            .FindByIdAsync(userId ?? string.Empty);
+
+        if (user == null)
+        {
+            _logger.LogError("Invalid access token");
+            return Errors.Authentication.InvalidToken;
+        }
+
+        if (user.RefreshToken != request.RefreshToken
+            || user.RefreshTokenExpiry < DateTime.UtcNow)
+        {
+            _logger.LogError(
+                "Invalid refresh token for user with email {Email}",
+                user.Email
+            );
+            return Errors.Authentication.InvalidRefreshToken;
+        }
+
+        var userResponse = user.ToUserResponse([Roles.User]);
+        var (accessToken, refreshToken) = _tokenService
+            .GenerateTokens(userResponse);
+
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+
+        await _userManager.UpdateAsync(user);
 
         return new AuthResponse(
             accessToken,

@@ -6,9 +6,10 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
+using RentnRoll.Application.Common.AppErrors;
 using RentnRoll.Application.Common.Interfaces.Identity;
 using RentnRoll.Application.Contracts.Users;
-using RentnRoll.Persistence.Context;
+using RentnRoll.Domain.Common;
 using RentnRoll.Persistence.Settings;
 
 namespace RentnRoll.Persistence.Identity.Services;
@@ -16,13 +17,9 @@ namespace RentnRoll.Persistence.Identity.Services;
 public class TokenService : ITokenService
 {
     private readonly JwtSettings _jwtSettings;
-    private readonly RentnRollDbContext _dbContext;
 
-    public TokenService(
-        RentnRollDbContext dbContext,
-        IOptions<JwtSettings> jwtOptions)
+    public TokenService(IOptions<JwtSettings> jwtOptions)
     {
-        _dbContext = dbContext;
         _jwtSettings = jwtOptions.Value;
     }
 
@@ -32,6 +29,34 @@ public class TokenService : ITokenService
         var refreshToken = GenerateRefreshToken();
 
         return (accessToken, refreshToken);
+    }
+
+    public Result<ClaimsPrincipal?> GetTokenPrincipal(string token)
+    {
+        var key = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(_jwtSettings.Key));
+
+        var validationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = _jwtSettings.Issuer,
+            ValidAudience = _jwtSettings.Audience,
+            IssuerSigningKey = key,
+        };
+
+        try
+        {
+            var principal = new JwtSecurityTokenHandler()
+                .ValidateToken(token, validationParameters, out _);
+            return principal;
+        }
+        catch (Exception)
+        {
+            return Errors.Authentication.InvalidToken;
+        }
     }
 
     private string GenerateAccessToken(UserResponse user)
@@ -74,25 +99,9 @@ public class TokenService : ITokenService
             .WriteToken(securityToken);
     }
 
-    public async Task SaveRefreshTokenAsync(
-        string userId,
-        string tokenValue)
-    {
-        var refreshToken = new RefreshToken
-        {
-            Id = Guid.NewGuid(),
-            UserId = userId,
-            ExpiresAt = DateTime.UtcNow.AddDays(7),
-            Token = tokenValue,
-        };
-
-        await _dbContext.RefreshTokens.AddAsync(refreshToken);
-        await _dbContext.SaveChangesAsync();
-    }
-
     private string GenerateRefreshToken()
     {
-        var randomNumber = new byte[32];
+        var randomNumber = new byte[64];
 
         using (var rng = RandomNumberGenerator.Create())
         {

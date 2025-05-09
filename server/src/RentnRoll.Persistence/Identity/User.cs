@@ -18,6 +18,9 @@ public class User : IdentityUser, ISoftDeletable, IAuditable
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiry { get; set; }
+
     internal UserResponse ToUserResponse(IEnumerable<string> roles)
     {
         return new UserResponse(
