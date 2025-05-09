@@ -1,3 +1,18 @@
+### Register test user (validation errors)
+POST {{host}}/api/register
+Accept: application/json
+Content-Type: application/json
+
+{
+    "firstName": "",
+    "lastName": "",
+    "email": "invalid-email",
+    "password": "123",
+    "phoneNumber": "+123",
+    "birthDate": "3000-01-01",
+    "country": ""
+}
+
 ### Register test user
 POST {{host}}/api/register
 Accept: application/json
@@ -11,6 +26,16 @@ Content-Type: application/json
     "phoneNumber": "+1234567890",
     "birthDate": "1990-01-01",
     "country": "USA"
+}
+
+### Login user (validation errors)
+POST {{host}}/api/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "",
+    "password": ""
 }
 
 ### Login test user (user does not exist)
