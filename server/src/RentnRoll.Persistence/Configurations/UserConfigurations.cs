@@ -5,7 +5,7 @@ using RentnRoll.Persistence.Identity;
 
 namespace RentnRoll.Persistence.Configurations;
 
-public class UserConfigurations : IEntityTypeConfiguration<User>
+internal sealed class UserConfigurations : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {

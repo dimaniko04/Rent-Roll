@@ -1,6 +1,7 @@
 namespace RentnRoll.Application.Contracts.Users;
 
 public record AuthResponse(
-    string Token,
+    string AccessToken,
+    string RefreshToken,
     UserResponse User
 );

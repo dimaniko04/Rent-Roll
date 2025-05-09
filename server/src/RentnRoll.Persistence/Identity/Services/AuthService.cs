@@ -12,12 +12,14 @@ namespace RentnRoll.Persistence.Identity.Services;
 
 public class AuthService : IAuthService
 {
+    private readonly ITokenService _tokenService;
     private readonly ILogger<AuthService> _logger;
     private readonly UserManager<User> _userManager;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IValidationService _validationService;
 
     public AuthService(
+        ITokenService tokenService,
         ILogger<AuthService> logger,
         UserManager<User> userManager,
         IValidationService validationService,
@@ -25,6 +27,7 @@ public class AuthService : IAuthService
     {
         _logger = logger;
         _userManager = userManager;
+        _tokenService = tokenService;
         _validationService = validationService;
         _jwtTokenGenerator = jwtTokenGenerator;
     }
@@ -71,10 +74,12 @@ public class AuthService : IAuthService
             roles
         );
 
-        var token = _jwtTokenGenerator.GenerateToken(userResponse);
+        var accessToken = _jwtTokenGenerator.GenerateAccessToken(userResponse);
+        var refreshToken = await _tokenService.AddUserRefreshTokenAsync(user.Id);
 
         return new AuthResponse(
-            token,
+            accessToken,
+            refreshToken,
             userResponse
         );
     }
@@ -149,10 +154,12 @@ public class AuthService : IAuthService
             new List<string> { "User" }
         );
 
-        var token = _jwtTokenGenerator.GenerateToken(userResponse);
+        var accessToken = _jwtTokenGenerator.GenerateAccessToken(userResponse);
+        var refreshToken = await _tokenService.AddUserRefreshTokenAsync(user.Id);
 
         return new AuthResponse(
-            token,
+            accessToken,
+            refreshToken,
             userResponse
         );
     }

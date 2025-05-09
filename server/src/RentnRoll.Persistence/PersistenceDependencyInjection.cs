@@ -1,7 +1,6 @@
 using System.Text;
 
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,6 +43,7 @@ public static class PersistenceDependencyInjection
         services.AddSingleton(Options.Create(jwtSettings));
 
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IUnitOfWork, RentnRollUnitOfWork>();
 

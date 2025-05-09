@@ -4,5 +4,6 @@ namespace RentnRoll.Application.Common.Interfaces.Identity;
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(UserResponse user);
+    string GenerateAccessToken(UserResponse user);
+    string GenerateRefreshToken();
 }
