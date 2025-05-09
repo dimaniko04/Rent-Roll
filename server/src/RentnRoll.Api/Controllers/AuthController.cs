@@ -1,5 +1,9 @@
+using System.Security.Claims;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using RentnRoll.Application.Common.AppErrors;
 using RentnRoll.Application.Common.Interfaces.Identity;
 using RentnRoll.Application.Contracts.Authentication;
 
@@ -36,6 +40,22 @@ public class AuthController : ApiController
     public async Task<IActionResult> Refresh(RefreshRequest request)
     {
         var result = await _userService.RefreshTokenAsync(request);
+
+        return result.Match(Ok, Problem);
+    }
+
+    [HttpPost("logout")]
+    [Authorize]
+    public async Task<IActionResult> Logout()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Problem([Errors.Authentication.InvalidToken]);
+        }
+
+        var result = await _userService.LogoutAsync(userId);
 
         return result.Match(Ok, Problem);
     }

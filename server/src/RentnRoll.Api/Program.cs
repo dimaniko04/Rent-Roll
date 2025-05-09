@@ -41,8 +41,8 @@ app.UseCors(CORS_ALLOW_ALL);
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

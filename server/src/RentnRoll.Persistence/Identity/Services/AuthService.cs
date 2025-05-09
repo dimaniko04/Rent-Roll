@@ -207,4 +207,30 @@ public class AuthService : IAuthService
             refreshToken
         );
     }
+
+    public async Task<Result> LogoutAsync(
+        string userId)
+    {
+        var user = await _userManager
+            .Users
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null)
+        {
+            _logger.LogError(
+                "User with id {UserId} not found",
+                userId
+            );
+            return Result.Failure([
+                Errors.Authentication.UserNotFound
+            ]);
+        }
+
+        user.RefreshToken = null;
+        user.RefreshTokenExpiry = null;
+
+        await _userManager.UpdateAsync(user);
+
+        return Result.Success();
+    }
 }

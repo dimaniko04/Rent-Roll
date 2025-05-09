@@ -11,4 +11,5 @@ public interface IAuthService
         UserLoginRequest request);
     Task<Result<AuthResponse>> RefreshTokenAsync(
         RefreshRequest request);
+    Task<Result> LogoutAsync(string userId);
 }

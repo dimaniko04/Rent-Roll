@@ -112,3 +112,12 @@ Content-Type: application/json
     "accessToken": "{{accessToken}}",
     "refreshToken": "{{refreshToken}}"
 }
+
+### Logout user (unauthorized)
+POST {{host}}/api/logout
+Accept: application/json
+
+### Logout user (authorized)
+POST {{host}}/api/logout
+Accept: application/json
+Authorization: Bearer {{accessToken}}

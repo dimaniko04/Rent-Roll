@@ -1,5 +1,6 @@
 using System.Text;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,11 +33,11 @@ public static class PersistenceDependencyInjection
         services.Configure<AdminSettings>(
             configuration.GetSection(AdminSettings.SectionName));
 
-        services.AddAuthorization();
         services
-            .AddJwtAuthentication(jwtSettings)
             .AddIdentity()
+            .AddJwtAuthentication(jwtSettings)
             .AddDbContext(configuration);
+        services.AddAuthorization();
 
         services.AddScoped<Seeder>();
 
@@ -70,8 +71,9 @@ public static class PersistenceDependencyInjection
         this IServiceCollection services,
         JwtSettings jwtSettings)
     {
-        services.AddAuthentication()
-            .AddJwtBearer(IdentityConstants.BearerScheme, options =>
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
                 var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
 
