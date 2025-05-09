@@ -1,29 +1,29 @@
 ﻿using System;
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace RentnRoll.Persistence.Migrations
+namespace RentnRoll.Persistence.Migrations;
+
+/// <inheritdoc />
+public partial class UserSoftDeleteAndAudit : Migration
 {
     /// <inheritdoc />
-    public partial class UserSoftDeleteAndAudit : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "AspNetUsers",
-                type: "datetime2",
-                nullable: true);
-        }
+        migrationBuilder.AddColumn<DateTime>(
+            name: "UpdatedAt",
+            table: "AspNetUsers",
+            type: "datetime2",
+            nullable: true);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "UpdatedAt",
-                table: "AspNetUsers");
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            name: "UpdatedAt",
+            table: "AspNetUsers");
     }
 }

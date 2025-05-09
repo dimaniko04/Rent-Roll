@@ -44,7 +44,6 @@ public static class PersistenceDependencyInjection
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService, TokenService>();
-        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IUnitOfWork, RentnRollUnitOfWork>();
 
         return services;

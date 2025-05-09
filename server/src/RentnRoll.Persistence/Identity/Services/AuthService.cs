@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 
 using RentnRoll.Application.Common.AppErrors;
 using RentnRoll.Application.Common.Interfaces.Identity;
+using RentnRoll.Application.Contracts.Authentication;
 using RentnRoll.Application.Contracts.Users;
 using RentnRoll.Application.Services.Validation;
 using RentnRoll.Domain.Common;
@@ -15,21 +16,18 @@ public class AuthService : IAuthService
     private readonly ITokenService _tokenService;
     private readonly ILogger<AuthService> _logger;
     private readonly UserManager<User> _userManager;
-    private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IValidationService _validationService;
 
     public AuthService(
         ITokenService tokenService,
         ILogger<AuthService> logger,
         UserManager<User> userManager,
-        IValidationService validationService,
-        IJwtTokenGenerator jwtTokenGenerator)
+        IValidationService validationService)
     {
         _logger = logger;
         _userManager = userManager;
         _tokenService = tokenService;
         _validationService = validationService;
-        _jwtTokenGenerator = jwtTokenGenerator;
     }
 
     public async Task<Result<AuthResponse>> LoginAsync(
@@ -65,22 +63,15 @@ public class AuthService : IAuthService
             return Errors.Authentication.InvalidCredentials;
         }
         var roles = await _userManager.GetRolesAsync(user);
+        var userResponse = user.ToUserResponse(roles);
 
-        var userResponse = new UserResponse(
-            user.Id,
-            user.Email!,
-            user.Country,
-            user.BirthDate,
-            roles
-        );
-
-        var accessToken = _jwtTokenGenerator.GenerateAccessToken(userResponse);
-        var refreshToken = await _tokenService.AddUserRefreshTokenAsync(user.Id);
+        var (accessToken, refreshToken) = _tokenService
+            .GenerateTokens(userResponse);
+        await _tokenService.SaveRefreshTokenAsync(user.Id, refreshToken);
 
         return new AuthResponse(
             accessToken,
-            refreshToken,
-            userResponse
+            refreshToken
         );
     }
 
@@ -146,21 +137,15 @@ public class AuthService : IAuthService
                 .ToList();
         }
 
-        var userResponse = new UserResponse(
-            user.Id,
-            user.Email,
-            user.Country,
-            user.BirthDate,
-            new List<string> { "User" }
-        );
+        var userResponse = user.ToUserResponse([Roles.User]);
 
-        var accessToken = _jwtTokenGenerator.GenerateAccessToken(userResponse);
-        var refreshToken = await _tokenService.AddUserRefreshTokenAsync(user.Id);
+        var (accessToken, refreshToken) = _tokenService
+            .GenerateTokens(userResponse);
+        await _tokenService.SaveRefreshTokenAsync(user.Id, refreshToken);
 
         return new AuthResponse(
             accessToken,
-            refreshToken,
-            userResponse
+            refreshToken
         );
     }
 }

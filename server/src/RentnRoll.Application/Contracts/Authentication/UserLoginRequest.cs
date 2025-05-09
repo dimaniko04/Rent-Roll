@@ -1,4 +1,4 @@
-namespace RentnRoll.Application.Contracts.Users;
+namespace RentnRoll.Application.Contracts.Authentication;
 
 public record UserLoginRequest(
     string Email,

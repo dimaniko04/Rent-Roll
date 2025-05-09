@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
+using RentnRoll.Application.Contracts.Users;
 using RentnRoll.Domain.Common.Interfaces;
 
 namespace RentnRoll.Persistence.Identity;
@@ -16,4 +17,21 @@ public class User : IdentityUser, ISoftDeletable, IAuditable
 
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+
+    internal UserResponse ToUserResponse(IEnumerable<string> roles)
+    {
+        return new UserResponse(
+            Id,
+            Email!,
+            FirstName,
+            LastName,
+            PhoneNumber,
+            Country,
+            BirthDate,
+            CreatedAt,
+            UpdatedAt,
+            DeletedAt,
+            roles
+        );
+    }
 }

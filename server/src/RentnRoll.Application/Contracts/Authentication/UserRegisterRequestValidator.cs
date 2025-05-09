@@ -2,7 +2,7 @@ using FluentValidation;
 
 using RentnRoll.Application.Validators;
 
-namespace RentnRoll.Application.Contracts.Users;
+namespace RentnRoll.Application.Contracts.Authentication;
 
 internal sealed class UserRegisterRequestValidator
     : AbstractValidator<UserRegisterRequest>
