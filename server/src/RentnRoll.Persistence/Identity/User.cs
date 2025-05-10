@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
+using RentnRoll.Application.Contracts.Authentication;
 using RentnRoll.Application.Contracts.Users;
 using RentnRoll.Domain.Common.Interfaces;
 
@@ -36,5 +37,20 @@ public class User : IdentityUser, ISoftDeletable, IAuditable
             DeletedAt,
             roles
         );
+    }
+
+    internal static User FromUserRegisterRequest(UserRegisterRequest request)
+    {
+        return new User
+        {
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Email = request.Email,
+            UserName = request.Email,
+            PhoneNumber = request.PhoneNumber,
+            Country = request.Country,
+            BirthDate = request.BirthDate,
+            CreatedAt = DateTime.UtcNow
+        };
     }
 }

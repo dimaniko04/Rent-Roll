@@ -11,16 +11,6 @@ public static partial class Errors
                 "Authentication.InvalidCredentials",
                 "Invalid email or password.");
 
-        public static Error UserAlreadyExists =>
-            Error.InvalidRequest(
-                "Authentication.UserAlreadyExists",
-                "User with this email already exists.");
-
-        public static Error UserNotFound =>
-            Error.NotFound(
-                "Authentication.UserNotFound",
-                "User with this email does not exist.");
-
         public static Error InvalidRefreshToken =>
             Error.NotFound(
                 "Authentication.InvalidRefreshToken",

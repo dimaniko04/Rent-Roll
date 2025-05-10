@@ -1,5 +1,5 @@
 ### Register test user (validation errors)
-POST {{host}}/api/register
+POST {{host}}/api/authentication/register
 Accept: application/json
 Content-Type: application/json
 
@@ -14,7 +14,7 @@ Content-Type: application/json
 }
 
 ### Register test user
-POST {{host}}/api/register
+POST {{host}}/api/authentication/register
 Accept: application/json
 Content-Type: application/json
 
@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ### Login user (validation errors)
-POST {{host}}/api/login
+POST {{host}}/api/authentication/login
 Accept: application/json
 Content-Type: application/json
 
@@ -39,7 +39,7 @@ Content-Type: application/json
 }
 
 ### Login test user (user does not exist)
-POST {{host}}/api/login
+POST {{host}}/api/authentication/login
 Accept: application/json
 Content-Type: application/json
 
@@ -49,7 +49,7 @@ Content-Type: application/json
 }
 
 ### Login test user (invalid password)
-POST {{host}}/api/login
+POST {{host}}/api/authentication/login
 Accept: application/json
 Content-Type: application/json
 
@@ -60,7 +60,7 @@ Content-Type: application/json
 
 ### Login test user (valid credentials)
 # @name loginSuccess
-POST {{host}}/api/login
+POST {{host}}/api/authentication/login
 Accept: application/json
 Content-Type: application/json
 
@@ -70,7 +70,7 @@ Content-Type: application/json
 }
 
 ### Refresh token (validation errors)
-POST {{host}}/api/refresh
+POST {{host}}/api/authentication/refresh
 Accept: application/json
 Content-Type: application/json
 
@@ -83,7 +83,7 @@ Content-Type: application/json
 @accessToken = {{loginSuccess.response.body.accessToken}}
 @refreshToken = {{loginSuccess.response.body.refreshToken}}
 
-POST {{host}}/api/refresh
+POST {{host}}/api/authentication/refresh
 Accept: application/json
 Content-Type: application/json
 
@@ -93,7 +93,7 @@ Content-Type: application/json
 }
 
 ### Refresh token (invalid access token)
-POST {{host}}/api/refresh
+POST {{host}}/api/authentication/refresh
 Accept: application/json
 Content-Type: application/json
 
@@ -104,7 +104,7 @@ Content-Type: application/json
 
 
 ### Refresh token (old refresh token)
-POST {{host}}/api/refresh
+POST {{host}}/api/authentication/refresh
 Accept: application/json
 Content-Type: application/json
 
@@ -114,10 +114,10 @@ Content-Type: application/json
 }
 
 ### Logout user (unauthorized)
-POST {{host}}/api/logout
+POST {{host}}/api/authentication/logout
 Accept: application/json
 
 ### Logout user (authorized)
-POST {{host}}/api/logout
+POST {{host}}/api/authentication/logout
 Accept: application/json
 Authorization: Bearer {{accessToken}}

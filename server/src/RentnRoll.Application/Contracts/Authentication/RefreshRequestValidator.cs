@@ -2,10 +2,10 @@ using FluentValidation;
 
 namespace RentnRoll.Application.Contracts.Authentication;
 
-public class RefreshRequestValidation
+public class RefreshRequestValidator
     : AbstractValidator<RefreshRequest>
 {
-    public RefreshRequestValidation()
+    public RefreshRequestValidator()
     {
         RuleFor(x => x.AccessToken)
             .NotEmpty()

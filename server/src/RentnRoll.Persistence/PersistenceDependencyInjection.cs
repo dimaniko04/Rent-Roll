@@ -44,7 +44,9 @@ public static class PersistenceDependencyInjection
         services.AddSingleton(Options.Create(jwtSettings));
 
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITokenService, TokenService>();
+
         services.AddScoped<IUnitOfWork, RentnRollUnitOfWork>();
 
         return services;

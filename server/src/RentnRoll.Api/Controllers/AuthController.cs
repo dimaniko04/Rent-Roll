@@ -10,7 +10,7 @@ using RentnRoll.Application.Contracts.Authentication;
 namespace RentnRoll.Api.Controllers;
 
 [ApiController]
-[Route("api")]
+[Route("api/authentication")]
 public class AuthController : ApiController
 {
     private readonly IAuthService _userService;

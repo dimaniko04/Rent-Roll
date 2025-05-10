@@ -51,7 +51,7 @@ public class AuthService : IAuthService
                 "User with email {Email} not found",
                 request.Email
             );
-            return Errors.Authentication.UserNotFound;
+            return Errors.User.NotFound;
         }
 
         var result = await _userManager.CheckPasswordAsync(user, request.Password);
@@ -99,19 +99,10 @@ public class AuthService : IAuthService
                 "User with email {Email} already exists",
                 request.Email
             );
-            return Errors.Authentication.UserAlreadyExists;
+            return Errors.User.AlreadyExists;
         }
 
-        var user = new User
-        {
-            UserName = request.Email,
-            Email = request.Email,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Country = request.Country,
-            BirthDate = request.BirthDate,
-            PhoneNumber = request.PhoneNumber
-        };
+        var user = User.FromUserRegisterRequest(request);
 
         var result = await _userManager.CreateAsync(user, request.Password);
 
@@ -222,7 +213,7 @@ public class AuthService : IAuthService
                 userId
             );
             return Result.Failure([
-                Errors.Authentication.UserNotFound
+                Errors.User.NotFound
             ]);
         }
 
