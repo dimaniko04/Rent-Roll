@@ -17,4 +17,5 @@ public interface IUserService
     Task<Result<UserResponse>> PromoteUserToAdminAsync(
         string userId);
     Task<Result> BlockUserAsync(string userId);
+    Task<Result> RestoreUserAsync(string userId);
 }

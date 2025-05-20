@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 using RentnRoll.Application.Common.AppErrors;
@@ -8,21 +9,25 @@ using RentnRoll.Application.Contracts.Users;
 using RentnRoll.Application.Services.Validation;
 using RentnRoll.Domain.Common;
 using RentnRoll.Domain.Constants;
+using RentnRoll.Persistence.Context;
 
 namespace RentnRoll.Persistence.Identity.Services;
 
 public class UserService : IUserService
 {
+    private readonly RentnRollDbContext _context;
     private readonly ILogger<UserService> _logger;
     private readonly UserManager<User> _userManager;
     private readonly IValidationService _validationService;
 
     public UserService(
         ILogger<UserService> logger,
+        RentnRollDbContext dbContext,
         UserManager<User> userManager,
         IValidationService validationService)
     {
         _logger = logger;
+        _context = dbContext;
         _userManager = userManager;
         _validationService = validationService;
     }
@@ -61,9 +66,49 @@ public class UserService : IUserService
                 string.Join(", ", result.Errors.Select(e => e.Description))
             );
             return Result.Failure(result.Errors
-                .Select(e => Error.Validation(e.Code, e.Description))
+                .Select(e => Error.InvalidRequest(e.Code, e.Description))
                 .ToList());
         }
+
+        return Result.Success();
+    }
+
+    public async Task<Result> RestoreUserAsync(string userId)
+    {
+        _logger.LogInformation(
+            "Restoring user with id {UserId}",
+            userId
+        );
+
+        var user = await _context.Set<User>()
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null)
+        {
+            _logger.LogError(
+                "User with id {UserId} does not exist",
+                userId
+            );
+            return Result.Failure([Errors.User.NotFound]);
+        }
+
+        user.DeletedAt = null;
+        user.IsDeleted = false;
+        var result = await _userManager.UpdateAsync(user);
+
+        if (!result.Succeeded)
+        {
+            _logger.LogError(
+                "Failed to restore user with id {UserId}: {Errors}",
+                userId,
+                string.Join(", ", result.Errors.Select(e => e.Description))
+            );
+            return Result.Failure(result.Errors
+                .Select(e => Error.InvalidRequest(e.Code, e.Description))
+                .ToList());
+        }
+
 
         return Result.Success();
     }

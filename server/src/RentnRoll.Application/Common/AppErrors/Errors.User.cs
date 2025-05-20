@@ -19,7 +19,7 @@ public static partial class Errors
         public static Error NotFound =>
             Error.NotFound(
                 "Authentication.UserNotFound",
-                "User with this email is blocked or does not exist.");
+                "User is blocked or does not exist.");
 
         public static Error AdminCannotBeBlocked =>
             Error.Forbidden(

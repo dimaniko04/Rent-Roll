@@ -70,7 +70,7 @@ Content-Type: application/json
   "lastName": "Doe_Updated",
   "firstName": "John_Updated",
   "birthDate": "1990-01-01",
-  "email": "john.doe_updated@example.com",
+  "email": "joedoe@gmail.com",
   "phoneNumber": "+12345678901"
 }
 
@@ -137,6 +137,14 @@ Authorization: Bearer {{adminToken}}
 
 ### Block user by Id
 DELETE {{host}}/api/users/{{userId}}
+Authorization: Bearer {{adminToken}}
+
+### Restore user by Id (forbidden for non-admin)
+PUT {{host}}/api/users/{{userId}}/restore
+Authorization: Bearer {{userToken}}
+
+### Restore user by Id
+PUT {{host}}/api/users/{{userId}}/restore
 Authorization: Bearer {{adminToken}}
 
 ### Get user by Id

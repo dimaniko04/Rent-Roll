@@ -99,4 +99,13 @@ public class UserController : ApiController
 
         return result.Match(NoContent, Problem);
     }
+
+    [HttpPut("{id}/restore")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> RestoreUser(string id)
+    {
+        var result = await _userService.RestoreUserAsync(id);
+
+        return result.Match(NoContent, Problem);
+    }
 }
