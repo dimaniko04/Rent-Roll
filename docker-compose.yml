@@ -3,7 +3,7 @@ networks:
     name: local_dev
 
 services:
-  webapp:
+  api:
     container_name: rent-roll-api
     build:
       context: ./server
@@ -20,7 +20,7 @@ services:
       - db
     env_file:
       - .env
-  
+
   db:
     container_name: rent-roll-db
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -33,6 +33,18 @@ services:
     volumes:
       - sql-data:/var/opt/mssql
     restart: unless-stopped
+
+  webapp:
+    container_name: rent-roll-webapp
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - local_dev
+    depends_on:
+      - api
 
 volumes:
   sql-data:
