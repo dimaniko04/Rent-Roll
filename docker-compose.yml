@@ -41,6 +41,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
     networks:
       - local_dev
     depends_on:
