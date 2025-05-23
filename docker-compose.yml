@@ -39,6 +39,11 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+    develop:
+      watch:
+        - action: rebuild
+          path: ./client/package.json
+          target: /app/package.json
     ports:
       - "3000:3000"
     volumes:
