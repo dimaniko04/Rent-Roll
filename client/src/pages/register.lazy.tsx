@@ -1,5 +1,5 @@
 import companyLogo from "@assets/dice-logo.svg";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/register")({
   component: RouteComponent,
@@ -18,8 +18,8 @@ function RouteComponent() {
         />
         <h2 className="font-dynapuff text-5xl text-center">Rent&Roll</h2>
       </div>
-      <h1 className="text-center">Register</h1>
-      <h1 className="text-center font-roboto">Register (Roboto)</h1>
+      <h1 className="text-center">Register (TODO)</h1>
+      <Link to="/login">Already have an account?</Link>
     </div>
   );
 }
