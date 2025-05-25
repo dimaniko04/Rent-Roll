@@ -10,6 +10,6 @@ public interface IAuthService
     Task<Result<AuthResponse>> LoginAsync(
         UserLoginRequest request);
     Task<Result<AuthResponse>> RefreshTokenAsync(
-        RefreshRequest request);
+        string refreshToken);
     Task<Result> LogoutAsync(string userId);
 }

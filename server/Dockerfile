@@ -21,7 +21,9 @@ RUN dotnet publish -c release -o /app/publish --no-restore
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 USER app
 ENV ASPNETCORE_HTTP_PORTS=5000
+ENV ASPNETCORE_HTTPS_PORTS=5001
 EXPOSE 5000
+EXPOSE 5001
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT [ "dotnet", "RentnRoll.Api.dll" ]

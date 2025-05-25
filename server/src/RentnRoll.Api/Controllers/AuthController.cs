@@ -37,9 +37,19 @@ public class AuthController : ApiController
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh(RefreshRequest request)
+    public async Task<IActionResult> Refresh()
     {
-        var result = await _userService.RefreshTokenAsync(request);
+        var tokenFromHeader = Request.Headers["x-refresh-token"].FirstOrDefault();
+        var tokenFromCookie = Request.Cookies["refreshToken"];
+
+        var refreshToken = tokenFromCookie ?? tokenFromHeader;
+
+        if (string.IsNullOrEmpty(refreshToken))
+        {
+            return Problem([Errors.Authentication.NoRefreshToken]);
+        }
+
+        var result = await _userService.RefreshTokenAsync(refreshToken);
 
         return result.Match(Ok, Problem);
     }

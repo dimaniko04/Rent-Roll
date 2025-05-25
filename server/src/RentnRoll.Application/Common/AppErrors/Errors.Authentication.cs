@@ -16,6 +16,11 @@ public static partial class Errors
                 "Authentication.InvalidRefreshToken",
                 "Invalid refresh token.");
 
+        public static Error NoRefreshToken =>
+            Error.NotFound(
+                "Authentication.NoRefreshToken",
+                "No refresh token provided. Please login again.");
+
         public static Error InvalidToken =>
             Error.NotFound(
                 "Authentication.InvalidToken",

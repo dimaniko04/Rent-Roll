@@ -1,5 +1,7 @@
+using System.Net;
 using System.Security.Claims;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -10,6 +12,7 @@ using RentnRoll.Application.Contracts.Authentication;
 using RentnRoll.Application.Services.Validation;
 using RentnRoll.Domain.Common;
 using RentnRoll.Domain.Constants;
+using RentnRoll.Persistence.Context;
 
 namespace RentnRoll.Persistence.Identity.Services;
 
@@ -17,16 +20,19 @@ public class AuthService : IAuthService
 {
     private readonly ITokenService _tokenService;
     private readonly ILogger<AuthService> _logger;
+    private readonly RentnRollDbContext _dbContext;
     private readonly UserManager<User> _userManager;
     private readonly IValidationService _validationService;
 
     public AuthService(
         ITokenService tokenService,
         ILogger<AuthService> logger,
+        RentnRollDbContext dbContext,
         UserManager<User> userManager,
         IValidationService validationService)
     {
         _logger = logger;
+        _dbContext = dbContext;
         _userManager = userManager;
         _tokenService = tokenService;
         _validationService = validationService;
@@ -65,19 +71,8 @@ public class AuthService : IAuthService
             return Errors.Authentication.InvalidCredentials;
         }
         var roles = await _userManager.GetRolesAsync(user);
-        var userResponse = user.ToUserResponse(roles);
 
-        var (accessToken, refreshToken) = _tokenService
-            .GenerateTokens(userResponse);
-
-        user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
-        await _userManager.UpdateAsync(user);
-
-        return new AuthResponse(
-            accessToken,
-            refreshToken
-        );
+        return await GenerateAuthResponseAsync(user, roles);
     }
 
     public async Task<Result<AuthResponse>> RegisterAsync(
@@ -133,40 +128,16 @@ public class AuthService : IAuthService
                 .ToList();
         }
 
-        var userResponse = user.ToUserResponse([Roles.User]);
-
-        var (accessToken, refreshToken) = _tokenService
-            .GenerateTokens(userResponse);
-
-        user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
-        await _userManager.UpdateAsync(user);
-
-        return new AuthResponse(
-            accessToken,
-            refreshToken
-        );
+        return await GenerateAuthResponseAsync(user, [Roles.User]);
     }
 
     public async Task<Result<AuthResponse>> RefreshTokenAsync(
-        RefreshRequest request)
+        string refreshToken)
     {
-        var validationResult = await _validationService
-            .ValidateAsync(request);
-
-        if (validationResult.IsError)
-        {
-            return validationResult.Errors;
-        }
-
-        var principal = _tokenService
-            .GetTokenPrincipal(request.AccessToken)
-            .Value;
-        var userId = principal
-            ?.FindFirst(ClaimTypes.NameIdentifier)
-            ?.Value;
-        var user = await _userManager
-            .FindByIdAsync(userId ?? string.Empty);
+        var user = await _dbContext
+            .Set<User>()
+            .FirstOrDefaultAsync(u =>
+                u.RefreshToken == refreshToken);
 
         if (user == null)
         {
@@ -174,29 +145,9 @@ public class AuthService : IAuthService
             return Errors.Authentication.InvalidToken;
         }
 
-        if (user.RefreshToken != request.RefreshToken
-            || user.RefreshTokenExpiry < DateTime.UtcNow)
-        {
-            _logger.LogError(
-                "Invalid refresh token for user with email {Email}",
-                user.Email
-            );
-            return Errors.Authentication.InvalidRefreshToken;
-        }
+        var roles = await _userManager.GetRolesAsync(user);
 
-        var userResponse = user.ToUserResponse([Roles.User]);
-        var (accessToken, refreshToken) = _tokenService
-            .GenerateTokens(userResponse);
-
-        user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
-
-        await _userManager.UpdateAsync(user);
-
-        return new AuthResponse(
-            accessToken,
-            refreshToken
-        );
+        return await GenerateAuthResponseAsync(user, roles);
     }
 
     public async Task<Result> LogoutAsync(
@@ -221,7 +172,28 @@ public class AuthService : IAuthService
         user.RefreshTokenExpiry = null;
 
         await _userManager.UpdateAsync(user);
+        _tokenService.SetTokenCookie(string.Empty, isExpired: true);
 
         return Result.Success();
+    }
+
+    private async Task<AuthResponse> GenerateAuthResponseAsync(
+        User user,
+        IEnumerable<string> roles)
+    {
+        var userResponse = user.ToUserResponse(roles);
+        var (accessToken, refreshToken) = _tokenService
+            .GenerateTokens(userResponse);
+
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+        await _userManager.UpdateAsync(user);
+
+        _tokenService.SetTokenCookie(refreshToken, isExpired: false);
+
+        return new AuthResponse(
+            accessToken,
+            refreshToken
+        );
     }
 }

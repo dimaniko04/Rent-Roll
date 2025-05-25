@@ -14,6 +14,7 @@ public static class ServiceExtensions
         services.AddCorsPolicy(corsPolicyName);
         services.AddSwagger();
         services.AddControllers();
+        services.AddHttpContextAccessor();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 

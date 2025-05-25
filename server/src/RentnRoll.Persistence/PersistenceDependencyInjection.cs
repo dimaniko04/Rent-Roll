@@ -79,6 +79,8 @@ public static class PersistenceDependencyInjection
             {
                 var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
 
+                options.RequireHttpsMetadata = true;
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,

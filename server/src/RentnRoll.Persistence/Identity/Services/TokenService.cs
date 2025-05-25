@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,10 +18,35 @@ namespace RentnRoll.Persistence.Identity.Services;
 public class TokenService : ITokenService
 {
     private readonly JwtSettings _jwtSettings;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public TokenService(IOptions<JwtSettings> jwtOptions)
+    public TokenService(
+        IOptions<JwtSettings> jwtOptions,
+        IHttpContextAccessor httpContextAccessor)
     {
         _jwtSettings = jwtOptions.Value;
+        _httpContextAccessor = httpContextAccessor;
+    }
+
+    public void SetTokenCookie(string token, bool isExpired = false)
+    {
+        var expires = isExpired
+            ? DateTime.UtcNow.AddDays(-1)
+            : DateTime.UtcNow.AddMinutes(
+                _jwtSettings.RefreshTokenExpirationInDays);
+
+        var options = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = expires,
+        };
+
+        _httpContextAccessor.HttpContext!
+            .Response
+            .Cookies
+            .Append("refreshToken", token, options);
     }
 
     public (string, string) GenerateTokens(UserResponse user)
@@ -90,7 +116,7 @@ public class TokenService : ITokenService
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
             expires: DateTime.UtcNow.AddMinutes(
-                _jwtSettings.ExpirationInMinutes),
+                _jwtSettings.AccessTokenExpirationInMinutes),
             signingCredentials: signingCredentials,
             claims: claims
         );
