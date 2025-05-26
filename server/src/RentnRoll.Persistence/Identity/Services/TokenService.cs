@@ -49,7 +49,7 @@ public class TokenService : ITokenService
             .Append("refreshToken", token, options);
     }
 
-    public (string, string) GenerateTokens(UserResponse user)
+    public (string, string) GenerateTokens(DetailedUserResponse user)
     {
         var accessToken = GenerateAccessToken(user);
         var refreshToken = GenerateRefreshToken();
@@ -85,7 +85,7 @@ public class TokenService : ITokenService
         }
     }
 
-    private string GenerateAccessToken(UserResponse user)
+    private string GenerateAccessToken(DetailedUserResponse user)
     {
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(

@@ -39,7 +39,8 @@ public class UserController : ApiController
     }
 
     [HttpPut("me")]
-    public async Task<IActionResult> UpdateCurrentUser(UpdateUserRequest request)
+    public async Task<IActionResult> UpdateCurrentUser(
+        UpdateUserRequest request)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -56,9 +57,10 @@ public class UserController : ApiController
 
     [HttpGet]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetAllUsers(
+        [FromQuery] GetAllUsersRequest request)
     {
-        var users = await _userService.GetAllUsersAsync();
+        var users = await _userService.GetAllUsersAsync(request);
 
         return Ok(users);
     }

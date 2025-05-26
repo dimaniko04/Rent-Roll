@@ -5,11 +5,13 @@ using Microsoft.Extensions.Logging;
 using RentnRoll.Application.Common.AppErrors;
 using RentnRoll.Application.Common.Interfaces.Identity;
 using RentnRoll.Application.Contracts.Authentication;
+using RentnRoll.Application.Contracts.Common;
 using RentnRoll.Application.Contracts.Users;
 using RentnRoll.Application.Services.Validation;
 using RentnRoll.Domain.Common;
 using RentnRoll.Domain.Constants;
 using RentnRoll.Persistence.Context;
+using RentnRoll.Persistence.Extensions;
 
 namespace RentnRoll.Persistence.Identity.Services;
 
@@ -113,7 +115,7 @@ public class UserService : IUserService
         return Result.Success();
     }
 
-    public async Task<Result<UserResponse>> CreateAdminUserAsync(
+    public async Task<Result<DetailedUserResponse>> CreateAdminUserAsync(
         UserRegisterRequest request)
     {
         var validationResult = await _validationService
@@ -165,12 +167,13 @@ public class UserService : IUserService
                 .ToList();
         }
 
-        var userResponse = user.ToUserResponse([Roles.Admin]);
+        var userResponse = user.ToDetailedUserResponse([Roles.Admin]);
 
         return userResponse;
     }
 
-    public async Task<Result<UserResponse>> PromoteUserToAdminAsync(string userId)
+    public async Task<Result<DetailedUserResponse>> PromoteUserToAdminAsync(
+        string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
 
@@ -197,23 +200,23 @@ public class UserService : IUserService
                 .ToList();
         }
         var roles = await _userManager.GetRolesAsync(user);
-        var userResponse = user.ToUserResponse(roles);
+        var userResponse = user.ToDetailedUserResponse(roles);
 
         return userResponse;
     }
 
-    public async Task<IEnumerable<UserResponse>> GetAllUsersAsync()
+    public async Task<PaginatedResponse<UserResponse>> GetAllUsersAsync(
+        GetAllUsersRequest request)
     {
-        var users = await _userManager.GetUsersInRoleAsync(Roles.User);
+        var users = await _context.Set<User>()
+            .Select(u => u.ToUserResponse())
+            .PaginateAsync(request);
 
-        var userResponses = users
-            .Select(u => u.ToUserResponse([Roles.User]))
-            .ToList();
-
-        return userResponses;
+        return users;
     }
 
-    public async Task<Result<UserResponse>> GetUserById(string userId)
+    public async Task<Result<DetailedUserResponse>> GetUserById(
+        string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
 
@@ -227,10 +230,11 @@ public class UserService : IUserService
         }
         var roles = await _userManager.GetRolesAsync(user);
 
-        return user.ToUserResponse(roles);
+        return user.ToDetailedUserResponse(roles);
     }
 
-    public async Task<Result<UserResponse>> GetCurrentUserAsync(string userId)
+    public async Task<Result<DetailedUserResponse>> GetCurrentUserAsync(
+        string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
 
@@ -244,13 +248,12 @@ public class UserService : IUserService
         }
 
         var roles = await _userManager.GetRolesAsync(user);
-
-        var userResponse = user.ToUserResponse(roles);
+        var userResponse = user.ToDetailedUserResponse(roles);
 
         return userResponse;
     }
 
-    public async Task<Result<UserResponse>> UpdateCurrentUserAsync(
+    public async Task<Result<DetailedUserResponse>> UpdateCurrentUserAsync(
         string userId,
         UpdateUserRequest request)
     {
@@ -289,7 +292,7 @@ public class UserService : IUserService
         }
 
         var roles = await _userManager.GetRolesAsync(user);
-        var userResponse = user.ToUserResponse(roles);
+        var userResponse = user.ToDetailedUserResponse(roles);
 
         return userResponse;
     }

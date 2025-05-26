@@ -22,9 +22,23 @@ public class User : IdentityUser, ISoftDeletable, IAuditable
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiry { get; set; }
 
-    internal UserResponse ToUserResponse(IEnumerable<string> roles)
+    internal UserResponse ToUserResponse()
     {
         return new UserResponse(
+            Id,
+            Email!,
+            FirstName,
+            LastName,
+            PhoneNumber,
+            Country,
+            BirthDate
+        );
+    }
+
+    internal DetailedUserResponse ToDetailedUserResponse(
+        IEnumerable<string> roles)
+    {
+        return new DetailedUserResponse(
             Id,
             Email!,
             FirstName,

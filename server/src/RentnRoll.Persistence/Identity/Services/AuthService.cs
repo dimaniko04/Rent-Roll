@@ -181,7 +181,7 @@ public class AuthService : IAuthService
         User user,
         IEnumerable<string> roles)
     {
-        var userResponse = user.ToUserResponse(roles);
+        var userResponse = user.ToDetailedUserResponse(roles);
         var (accessToken, refreshToken) = _tokenService
             .GenerateTokens(userResponse);
 
