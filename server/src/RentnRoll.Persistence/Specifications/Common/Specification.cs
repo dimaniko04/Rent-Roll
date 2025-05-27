@@ -4,7 +4,7 @@ namespace RentnRoll.Persistence.Specifications.Common;
 
 public abstract class Specification<T> : ISpecification<T>
 {
-    public abstract Expression<Func<T, bool>> Criteria { get; }
+    public Expression<Func<T, bool>>? Criteria { get; private set; }
     public List<Expression<Func<T, object>>> Includes { get; } = new();
     public Expression<Func<T, object>>? OrderBy { get; private set; }
     public Expression<Func<T, object>>? OrderByDescending { get; private set; }
@@ -12,6 +12,11 @@ public abstract class Specification<T> : ISpecification<T>
     public int PageSize { get; private set; }
     public int PageNumber { get; private set; }
     public bool IsPagingEnabled { get; private set; }
+
+    protected void ApplyCriteria(Expression<Func<T, bool>> criteria)
+    {
+        Criteria = criteria;
+    }
 
     protected void ApplyIncludeList(
         IEnumerable<Expression<Func<T, object>>> includes)
@@ -92,17 +97,5 @@ public abstract class Specification<T> : ISpecification<T>
         {
             ApplyOrderBy(orderByExpression);
         }
-    }
-
-    private Func<T, bool>? _compiledCriteria;
-
-    private Func<T, bool> CompiledCriteria
-    {
-        get { return _compiledCriteria ??= Criteria.Compile(); }
-    }
-
-    public bool IsSatisfiedBy(T entity)
-    {
-        return CompiledCriteria(entity);
     }
 }

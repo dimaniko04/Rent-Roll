@@ -214,6 +214,11 @@ public class UserService : IUserService
             new GetAllUsersRequestSpec(request)
         );
 
+        if (request.IsDeleted)
+        {
+            query = query.IgnoreQueryFilters().Where(u => u.IsDeleted);
+        }
+
         var totalCount = await query.CountAsync();
         var users = await query
             .Select(u => u.ToUserResponse())

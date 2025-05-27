@@ -82,6 +82,10 @@ Authorization: Bearer {{userToken}}
 GET {{host}}/api/users
 Authorization: Bearer {{adminToken}}
 
+### Get all users (deleted)
+GET {{host}}/api/users?isDeleted=true
+Authorization: Bearer {{adminToken}}
+
 ### Create admin user (validation errors)
 POST {{host}}/api/users/admin
 Authorization: Bearer {{adminToken}}
