@@ -11,7 +11,8 @@ using RentnRoll.Application.Services.Validation;
 using RentnRoll.Domain.Common;
 using RentnRoll.Domain.Constants;
 using RentnRoll.Persistence.Context;
-using RentnRoll.Persistence.Extensions;
+using RentnRoll.Persistence.Specifications;
+using RentnRoll.Persistence.Specifications.Common;
 
 namespace RentnRoll.Persistence.Identity.Services;
 
@@ -208,11 +209,24 @@ public class UserService : IUserService
     public async Task<PaginatedResponse<UserResponse>> GetAllUsersAsync(
         GetAllUsersRequest request)
     {
-        var users = await _context.Set<User>()
-            .Select(u => u.ToUserResponse())
-            .PaginateAsync(request);
+        var query = SpecificationEvaluator.GetQuery(
+            _context.Set<User>(),
+            new GetAllUsersRequestSpec(request)
+        );
 
-        return users;
+        var totalCount = await query.CountAsync();
+        var users = await query
+            .Select(u => u.ToUserResponse())
+            .ToListAsync();
+
+        var paginatedResponse = new PaginatedResponse<UserResponse>(
+            users,
+            totalCount,
+            request.PageNumber,
+            request.PageSize
+        );
+
+        return paginatedResponse;
     }
 
     public async Task<Result<DetailedUserResponse>> GetUserById(

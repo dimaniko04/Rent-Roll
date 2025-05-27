@@ -22,18 +22,4 @@ public class PaginatedResponse<T>
         TotalCount = count;
         Items = items.ToList();
     }
-
-    public static PaginatedResponse<T> Map<TIn>(
-        PaginatedResponse<TIn> source,
-        Func<TIn, T> mapFunc)
-    {
-        if (source == null) throw new ArgumentNullException(nameof(source));
-        if (mapFunc == null) throw new ArgumentNullException(nameof(mapFunc));
-
-        return new PaginatedResponse<T>(
-            source.Items.Select(mapFunc),
-            source.TotalCount,
-            source.CurrentPage,
-            source.PageSize);
-    }
 }
