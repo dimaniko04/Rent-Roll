@@ -6,12 +6,9 @@ public abstract class Specification<T> : ISpecification<T>
 {
     public Expression<Func<T, bool>>? Criteria { get; private set; }
     public List<Expression<Func<T, object>>> Includes { get; } = new();
+    public List<string> IncludeStrings { get; } = new();
     public Expression<Func<T, object>>? OrderBy { get; private set; }
     public Expression<Func<T, object>>? OrderByDescending { get; private set; }
-
-    public int PageSize { get; private set; }
-    public int PageNumber { get; private set; }
-    public bool IsPagingEnabled { get; private set; }
 
     protected void ApplyCriteria(Expression<Func<T, bool>> criteria)
     {
@@ -32,21 +29,17 @@ public abstract class Specification<T> : ISpecification<T>
         Includes.Add(include);
     }
 
-    protected void ApplyPagination(int pageNumber, int pageSize)
+    protected void ApplyIncludeList(IEnumerable<string> includes)
     {
-        if (pageNumber < 1)
+        foreach (var include in includes)
         {
-            throw new ArgumentOutOfRangeException(nameof(pageNumber), "Page number must be greater than 0.");
+            AddInclude(include);
         }
+    }
 
-        if (pageSize < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be greater than 0.");
-        }
-
-        PageNumber = pageNumber;
-        PageSize = pageSize;
-        IsPagingEnabled = true;
+    protected void AddInclude(string includeString)
+    {
+        IncludeStrings.Add(includeString);
     }
 
     protected void ApplyOrderBy(Expression<Func<T, object>> orderBy)

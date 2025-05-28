@@ -11,6 +11,7 @@ using RentnRoll.Application.Services.Validation;
 using RentnRoll.Domain.Common;
 using RentnRoll.Domain.Constants;
 using RentnRoll.Persistence.Context;
+using RentnRoll.Persistence.Extensions;
 using RentnRoll.Persistence.Specifications;
 using RentnRoll.Persistence.Specifications.Common;
 
@@ -18,7 +19,7 @@ namespace RentnRoll.Persistence.Identity.Services;
 
 public class UserService : IUserService
 {
-    private readonly RentnRollDbContext _context;
+    private readonly RentnRollDbContext _dbContext;
     private readonly ILogger<UserService> _logger;
     private readonly UserManager<User> _userManager;
     private readonly IValidationService _validationService;
@@ -30,7 +31,7 @@ public class UserService : IUserService
         IValidationService validationService)
     {
         _logger = logger;
-        _context = dbContext;
+        _dbContext = dbContext;
         _userManager = userManager;
         _validationService = validationService;
     }
@@ -83,7 +84,8 @@ public class UserService : IUserService
             userId
         );
 
-        var user = await _context.Set<User>()
+        var user = await _userManager
+            .Users
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(u => u.Id == userId);
 
@@ -210,39 +212,49 @@ public class UserService : IUserService
         GetAllUsersRequest request)
     {
         var query = SpecificationEvaluator.GetQuery(
-            _context.Set<User>(),
+            _dbContext.Users.IgnoreQueryFilters(),
             new GetAllUsersRequestSpec(request)
         );
 
-        if (request.IsDeleted)
+        if (!string.IsNullOrEmpty(request.Role))
         {
-            query = query.IgnoreQueryFilters().Where(u => u.IsDeleted);
+            query = query.Join(
+                _dbContext.UserRoles,
+                user => user.Id,
+                userRole => userRole.UserId,
+                (user, userRole) => new { User = user, userRole.RoleId }
+            ).Join(
+                _dbContext.Roles,
+                obj => obj.RoleId,
+                role => role.Id,
+                (obj, role) => new { obj.User, Role = role.Name }
+            )
+            .Where(u => u.Role == request.Role)
+            .Select(u => u.User);
         }
 
-        var totalCount = await query.CountAsync();
         var users = await query
             .Select(u => u.ToUserResponse())
-            .ToListAsync();
+            .ToPaginatedResponse(
+                request.PageNumber,
+                request.PageSize
+            );
 
-        var paginatedResponse = new PaginatedResponse<UserResponse>(
-            users,
-            totalCount,
-            request.PageNumber,
-            request.PageSize
-        );
-
-        return paginatedResponse;
+        return users;
     }
 
     public async Task<Result<DetailedUserResponse>> GetUserById(
         string userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager
+            .Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user == null)
         {
             _logger.LogError(
-                "User with id {UserId} not found or blocked",
+                "User with id {UserId} not found",
                 userId
             );
             return Errors.User.NotFound;
@@ -260,10 +272,10 @@ public class UserService : IUserService
         if (user == null)
         {
             _logger.LogError(
-                "User with id {UserId} not found or blocked",
+                "User with id {UserId} is blocked",
                 userId
             );
-            return Errors.User.NotFound;
+            return Errors.User.Blocked;
         }
 
         var roles = await _userManager.GetRolesAsync(user);
@@ -289,10 +301,10 @@ public class UserService : IUserService
         if (user == null)
         {
             _logger.LogError(
-                "User with id {UserId} not found or blocked",
+                "User with id {UserId} is blocked",
                 userId
             );
-            return Errors.User.NotFound;
+            return Errors.User.Blocked;
         }
 
         MapUpdateRequestToUser(user, request);

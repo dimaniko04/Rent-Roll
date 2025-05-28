@@ -45,7 +45,9 @@ public class AuthService : IAuthService
             return validationResult.Errors;
         }
 
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        var user = await _userManager.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(u => u.Email == request.Email);
 
         if (user == null)
         {
@@ -54,6 +56,14 @@ public class AuthService : IAuthService
                 request.Email
             );
             return Errors.User.NotFound;
+        }
+        if (user.IsDeleted)
+        {
+            _logger.LogError(
+                "User with email {Email} is blocked",
+                request.Email
+            );
+            return Errors.User.Blocked;
         }
 
         var result = await _userManager.CheckPasswordAsync(user, request.Password);
@@ -133,7 +143,8 @@ public class AuthService : IAuthService
         var user = await _dbContext
             .Set<User>()
             .FirstOrDefaultAsync(u =>
-                u.RefreshToken == refreshToken);
+                u.RefreshToken == refreshToken &&
+                u.RefreshTokenExpiry > DateTime.UtcNow);
 
         if (user == null)
         {
@@ -150,8 +161,7 @@ public class AuthService : IAuthService
         string userId)
     {
         var user = await _userManager
-            .Users
-            .FirstOrDefaultAsync(u => u.Id == userId);
+            .FindByIdAsync(userId);
 
         if (user == null)
         {

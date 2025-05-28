@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 
-using RentnRoll.Domain.Common;
-
 namespace RentnRoll.Persistence.Specifications.Common;
 
 public static class SpecificationEvaluator
@@ -22,6 +20,10 @@ public static class SpecificationEvaluator
             query,
             (current, include) => current.Include(include));
 
+        specification.IncludeStrings.Aggregate(
+            query,
+            (current, include) => current.Include(include));
+
         if (specification.OrderBy != null)
         {
             query = query.OrderBy(specification.OrderBy);
@@ -29,16 +31,6 @@ public static class SpecificationEvaluator
         else if (specification.OrderByDescending != null)
         {
             query = query.OrderByDescending(specification.OrderByDescending);
-        }
-
-        if (specification.IsPagingEnabled)
-        {
-            var pageSize = specification.PageSize;
-            var pageNumber = specification.PageNumber;
-
-            query = query
-                .Skip(pageSize * (pageNumber - 1))
-                .Take(pageSize);
         }
 
         return query;

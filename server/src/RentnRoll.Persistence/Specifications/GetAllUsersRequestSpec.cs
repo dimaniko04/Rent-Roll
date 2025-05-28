@@ -8,7 +8,7 @@ public sealed class GetAllUsersRequestSpec : Specification<User>
 {
     public GetAllUsersRequestSpec(GetAllUsersRequest request)
     {
-        ApplyPagination(request.PageNumber, request.PageSize);
+        ApplyCriteria(u => u.IsDeleted == request.IsDeleted);
 
         ApplyOrderByDescending(u => u.CreatedAt);
     }
