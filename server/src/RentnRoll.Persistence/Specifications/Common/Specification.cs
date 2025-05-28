@@ -1,18 +1,29 @@
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace RentnRoll.Persistence.Specifications.Common;
 
 public abstract class Specification<T> : ISpecification<T>
 {
-    public Expression<Func<T, bool>>? Criteria { get; private set; }
-    public List<Expression<Func<T, object>>> Includes { get; } = new();
-    public List<string> IncludeStrings { get; } = new();
+    public List<Expression<Func<T, bool>>> Criteria { get; private set; } = new();
+    public List<Expression<Func<T, object>>> Includes { get; private set; } = new();
+    public List<string> IncludeStrings { get; private set; } = new();
     public Expression<Func<T, object>>? OrderBy { get; private set; }
     public Expression<Func<T, object>>? OrderByDescending { get; private set; }
 
-    protected void ApplyCriteria(Expression<Func<T, bool>> criteria)
+    protected void ApplyCriteriaList(
+        List<Expression<Func<T, bool>>> criteriaList)
     {
-        Criteria = criteria;
+        foreach (var criteria in criteriaList)
+        {
+            AddCriteria(criteria);
+        }
+    }
+
+    protected void AddCriteria(
+        Expression<Func<T, bool>> criteria)
+    {
+        Criteria.Add(criteria);
     }
 
     protected void ApplyIncludeList(
@@ -52,7 +63,7 @@ public abstract class Specification<T> : ISpecification<T>
         OrderByDescending = orderByDescending;
     }
 
-    const string DescendingSuffix = "desc";
+    const string DescendingSuffix = " desc";
 
     protected void ApplySorting(string sort)
     {
@@ -66,13 +77,11 @@ public abstract class Specification<T> : ISpecification<T>
             StringComparison.OrdinalIgnoreCase);
 
         var propertyName = sort.Split(' ')[0];
-        var normalizedPropertyName =
-            propertyName.Substring(0, 1).ToUpper() +
-            propertyName.Substring(1);
+        var property = GetProperty(propertyName);
 
-        var property = typeof(T).GetProperty(normalizedPropertyName) ??
-            throw new InvalidOperationException(
-                $"Property '{normalizedPropertyName}' does not exist on type '{typeof(T).Name}'.");
+        if (property == null)
+            return;
+
         var parameter = Expression.Parameter(typeof(T), "x");
         var propertyAccess = Expression.Convert(
             Expression.Property(parameter, property),
@@ -90,5 +99,17 @@ public abstract class Specification<T> : ISpecification<T>
         {
             ApplyOrderBy(orderByExpression);
         }
+    }
+
+    private static PropertyInfo? GetProperty(string name)
+    {
+        var normalizedPropertyName =
+            name.Substring(0, 1).ToUpper() +
+            name.Substring(1);
+
+        var property = typeof(T)
+            .GetProperty(normalizedPropertyName);
+
+        return property;
     }
 }

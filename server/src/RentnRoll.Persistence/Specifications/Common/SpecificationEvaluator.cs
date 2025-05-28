@@ -11,10 +11,9 @@ public static class SpecificationEvaluator
     {
         var query = inputQuery;
 
-        if (specification.Criteria != null)
-        {
-            query = query.Where(specification.Criteria);
-        }
+        specification.Criteria.Aggregate(
+            query,
+            (current, criteria) => current.Where(criteria));
 
         specification.Includes.Aggregate(
             query,

@@ -8,8 +8,9 @@ public sealed class GetAllUsersRequestSpec : Specification<User>
 {
     public GetAllUsersRequestSpec(GetAllUsersRequest request)
     {
-        ApplyCriteria(u => u.IsDeleted == request.IsDeleted);
+        AddCriteria(u => u.IsDeleted == request.IsDeleted);
 
         ApplyOrderByDescending(u => u.CreatedAt);
+        ApplySorting(request.SortBy);
     }
 }
