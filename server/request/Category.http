@@ -1,0 +1,116 @@
+@userEmail = joedoe@gmail.com
+@userPassword = Password123
+@adminEmail = dmytro.nikora@nure.ua
+@adminPassword = Password_123
+
+### Login test user (valid credentials)
+# @name loginUser
+POST {{host}}/api/authentication/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "{{userEmail}}",
+    "password": "{{userPassword}}"
+}
+
+### Login admin user
+# @name loginAdmin
+POST {{host}}/api/authentication/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+### Set token variables
+@userToken = {{loginUser.response.body.accessToken}}
+@adminToken = {{loginAdmin.response.body.accessToken}}
+
+### Create category (as admin, valid)
+# @name createCategory
+POST {{host}}/api/categories
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+    "name": "Economic"
+}
+
+### Set category id variable
+@categoryId = {{createCategory.response.body.id}}
+
+### Create category (as user, forbidden)
+POST {{host}}/api/categories
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+    "name": "Sedan"
+}
+
+### Create category (missing name, validation error)
+POST {{host}}/api/categories
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+}
+
+### Create category (unauthorized, invalid token)
+POST {{host}}/api/categories
+Authorization: Bearer invalidtoken
+Content-Type: application/json
+
+{
+    "name": "Coupe"
+}
+
+### Get all categories
+GET {{host}}/api/categories?search=F
+Authorization: Bearer {{userToken}}
+
+### Get category by valid id
+# @name getCategory
+GET {{host}}/api/categories/{{categoryId}}
+Authorization: Bearer {{userToken}}
+
+### Get category by invalid id (not found)
+GET {{host}}/api/categories/2f277e8e-4ec5-49cd-b22d-2421f97dfb71
+Authorization: Bearer {{userToken}}
+
+### Update category (as admin, valid)
+PUT {{host}}/api/categories/{{categoryId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+    "name": "Fighting"
+}
+
+### Update category (as user, forbidden)
+PUT {{host}}/api/categories/{{categoryId}}
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+    "name": "User Update Attempt"
+}
+
+### Update category (invalid id)
+PUT {{host}}/api/categories/2f277e8e-4ec5-49cd-b22d-2421f97dfb71
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+    "name": "Nonexistent"
+}
+
+### Delete category (as admin, valid)
+DELETE {{host}}/api/categories/{{categoryId}}
+Authorization: Bearer {{adminToken}}
+
+### Delete category (as user, forbidden)
+DELETE {{host}}/api/categories/{{categoryId}}
+Authorization: Bearer {{userToken}}

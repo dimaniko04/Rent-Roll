@@ -19,6 +19,10 @@ internal sealed class GameConfigurations : IEntityTypeConfiguration<Game>
             .HasColumnType("varchar(300)");
 
         builder
+            .HasIndex(g => g.Name)
+            .IsUnique();
+
+        builder
             .Property(g => g.Description)
             .IsRequired()
             .HasMaxLength(2000)

@@ -16,5 +16,9 @@ internal sealed class MechanicConfigurations : IEntityTypeConfiguration<Mechanic
             .IsRequired()
             .HasMaxLength(200)
             .HasColumnType("varchar(200)");
+
+        builder
+            .HasIndex(g => g.Name)
+            .IsUnique();
     }
 }

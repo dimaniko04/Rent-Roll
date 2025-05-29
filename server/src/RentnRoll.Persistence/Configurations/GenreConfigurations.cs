@@ -16,5 +16,9 @@ internal sealed class GenreConfigurations : IEntityTypeConfiguration<Genre>
             .IsRequired()
             .HasMaxLength(200)
             .HasColumnType("varchar(200)");
+
+        builder
+            .HasIndex(g => g.Name)
+            .IsUnique();
     }
 }

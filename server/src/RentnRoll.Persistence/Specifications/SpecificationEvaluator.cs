@@ -1,6 +1,11 @@
-using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
-namespace RentnRoll.Persistence.Specifications.Common;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+
+using RentnRoll.Application.Specifications.Common;
+
+namespace RentnRoll.Persistence.Specifications;
 
 public static class SpecificationEvaluator
 {
@@ -11,9 +16,13 @@ public static class SpecificationEvaluator
     {
         var query = inputQuery;
 
-        specification.Criteria.Aggregate(
-            query,
-            (current, criteria) => current.Where(criteria));
+        if (specification.Criteria.Any())
+        {
+            foreach (var criteria in specification.Criteria)
+            {
+                query = query.Where(criteria);
+            }
+        }
 
         specification.Includes.Aggregate(
             query,

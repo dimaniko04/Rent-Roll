@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace RentnRoll.Persistence.Specifications.Common;
+namespace RentnRoll.Application.Specifications.Common;
 
 public interface ISpecification<T>
 {

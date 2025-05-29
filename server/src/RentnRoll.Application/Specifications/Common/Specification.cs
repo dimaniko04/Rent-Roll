@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace RentnRoll.Persistence.Specifications.Common;
+namespace RentnRoll.Application.Specifications.Common;
 
 public abstract class Specification<T> : ISpecification<T>
 {

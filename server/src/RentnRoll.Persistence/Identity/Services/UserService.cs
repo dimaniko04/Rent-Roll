@@ -13,7 +13,6 @@ using RentnRoll.Domain.Constants;
 using RentnRoll.Persistence.Context;
 using RentnRoll.Persistence.Extensions;
 using RentnRoll.Persistence.Specifications;
-using RentnRoll.Persistence.Specifications.Common;
 
 namespace RentnRoll.Persistence.Identity.Services;
 

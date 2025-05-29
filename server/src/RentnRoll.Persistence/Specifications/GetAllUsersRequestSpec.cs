@@ -1,6 +1,6 @@
 using RentnRoll.Persistence.Identity;
 using RentnRoll.Application.Contracts.Users;
-using RentnRoll.Persistence.Specifications.Common;
+using RentnRoll.Application.Specifications.Common;
 
 namespace RentnRoll.Persistence.Specifications;
 

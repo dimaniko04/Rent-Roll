@@ -36,7 +36,8 @@ public static class PersistenceDependencyInjection
         services
             .AddIdentity()
             .AddJwtAuthentication(jwtSettings)
-            .AddDbContext(configuration);
+            .AddDbContext(configuration)
+            .AddRepositories();
         services.AddAuthorization();
 
         services.AddScoped<Seeder>();
@@ -52,7 +53,7 @@ public static class PersistenceDependencyInjection
         return services;
     }
 
-    private static void AddDbContext(
+    private static IServiceCollection AddDbContext(
         this IServiceCollection services,
         IConfiguration configuration)
     {
@@ -67,6 +68,30 @@ public static class PersistenceDependencyInjection
                 .AddInterceptors(
                     sp.GetRequiredService<SoftDeleteInterceptor>(),
                     sp.GetRequiredService<UpdateAuditableInterceptor>()));
+
+        return services;
+    }
+
+    private static void AddRepositories(
+        this IServiceCollection services)
+    {
+        var assembly = typeof(IAssemblyMarker).Assembly;
+        var repositoryTypes = assembly.GetTypes()
+            .Where(t =>
+                t.IsClass &&
+                !t.IsAbstract &&
+                t.Name.EndsWith("Repository"));
+
+        foreach (var repositoryType in repositoryTypes)
+        {
+            var interfaceType = repositoryType.GetInterfaces()
+                .FirstOrDefault(i => i.Name == $"I{repositoryType.Name}");
+
+            if (interfaceType is not null)
+            {
+                services.AddScoped(interfaceType, repositoryType);
+            }
+        }
     }
 
     private static IServiceCollection AddJwtAuthentication(
