@@ -28,21 +28,21 @@ Content-Type: application/json
 @userToken = {{loginUser.response.body.accessToken}}
 @adminToken = {{loginAdmin.response.body.accessToken}}
 
-### Create category (as admin, valid)
-# @name createCategory
-POST {{host}}/api/categories
+### Create mechanic (as admin, valid)
+# @name createMechanic
+POST {{host}}/api/mechanics
 Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
 {
-    "name": "Economic"
+    "name": "Acting"
 }
 
-### Set category id variable
-@categoryId = {{createCategory.response.body.id}}
+### Set mechanic id variable
+@mechanicId = {{createMechanic.response.body.id}}
 
-### Create category (as user, forbidden)
-POST {{host}}/api/categories
+### Create mechanic (as user, forbidden)
+POST {{host}}/api/mechanics
 Authorization: Bearer {{userToken}}
 Content-Type: application/json
 
@@ -50,16 +50,16 @@ Content-Type: application/json
     "name": "Sedan"
 }
 
-### Create category (missing name, validation error)
-POST {{host}}/api/categories
+### Create mechanic (missing name, validation error)
+POST {{host}}/api/mechanics
 Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
 {
 }
 
-### Create category (unauthorized, invalid token)
-POST {{host}}/api/categories
+### Create mechanic (unauthorized, invalid token)
+POST {{host}}/api/mechanics
 Authorization: Bearer invalidtoken
 Content-Type: application/json
 
@@ -67,30 +67,30 @@ Content-Type: application/json
     "name": "Coupe"
 }
 
-### Get all categories
-GET {{host}}/api/categories?search=
+### Get all mechanics
+GET {{host}}/api/mechanics?search=
 Authorization: Bearer {{userToken}}
 
-### Get category by valid id
-# @name getCategory
-GET {{host}}/api/categories/{{categoryId}}
+### Get mechanic by valid id
+# @name getMechanic
+GET {{host}}/api/mechanics/{{mechanicId}}
 Authorization: Bearer {{userToken}}
 
-### Get category by invalid id (not found)
-GET {{host}}/api/categories/2f277e8e-4ec5-49cd-b22d-2421f97dfb71
+### Get mechanic by invalid id (not found)
+GET {{host}}/api/mechanics/2f277e8e-4ec5-49cd-b22d-2421f97dfb71
 Authorization: Bearer {{userToken}}
 
-### Update category (as admin, valid)
-PUT {{host}}/api/categories/{{categoryId}}
+### Update mechanic (as admin, valid)
+PUT {{host}}/api/mechanics/{{mechanicId}}
 Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
 {
-    "name": "Fighting"
+    "name": "Alliances"
 }
 
-### Update category (as user, forbidden)
-PUT {{host}}/api/categories/{{categoryId}}
+### Update mechanic (as user, forbidden)
+PUT {{host}}/api/mechanics/{{mechanicId}}
 Authorization: Bearer {{userToken}}
 Content-Type: application/json
 
@@ -98,8 +98,8 @@ Content-Type: application/json
     "name": "User Update Attempt"
 }
 
-### Update category (invalid id)
-PUT {{host}}/api/categories/2f277e8e-4ec5-49cd-b22d-2421f97dfb71
+### Update mechanic (invalid id)
+PUT {{host}}/api/mechanics/2f277e8e-4ec5-49cd-b22d-2421f97dfb71
 Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
@@ -107,10 +107,10 @@ Content-Type: application/json
     "name": "Nonexistent"
 }
 
-### Delete category (as admin, valid)
-DELETE {{host}}/api/categories/{{categoryId}}
+### Delete mechanic (as admin, valid)
+DELETE {{host}}/api/mechanics/{{mechanicId}}
 Authorization: Bearer {{adminToken}}
 
-### Delete category (as user, forbidden)
-DELETE {{host}}/api/categories/{{categoryId}}
+### Delete mechanic (as user, forbidden)
+DELETE {{host}}/api/mechanics/{{mechanicId}}
 Authorization: Bearer {{userToken}}
