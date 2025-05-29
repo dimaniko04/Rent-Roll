@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentnRoll.Persistence.Context;
 
@@ -11,9 +12,11 @@ using RentnRoll.Persistence.Context;
 namespace RentnRoll.Persistence.Migrations
 {
     [DbContext(typeof(RentnRollDbContext))]
-    partial class RentnRollDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250529145145_GameEntity")]
+    partial class GameEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
