@@ -9,4 +9,7 @@ public interface ISpecification<T>
     List<string> IncludeStrings { get; }
     Expression<Func<T, object>>? OrderBy { get; }
     Expression<Func<T, object>>? OrderByDescending { get; }
+    int PageNumber { get; }
+    int PageSize { get; }
+    bool IsPagingEnabled { get; }
 }

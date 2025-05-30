@@ -60,7 +60,7 @@ internal sealed class GameConfigurations : IEntityTypeConfiguration<Game>
             .IsRequired(false);
 
         builder
-            .Property(g => g.isVerified)
+            .Property(g => g.IsVerified)
             .HasDefaultValue(false);
 
         builder

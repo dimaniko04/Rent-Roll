@@ -12,9 +12,11 @@ public abstract class BaseRepository<TEntity>
     : IBaseRepository<TEntity> where TEntity : Entity
 {
     protected readonly DbSet<TEntity> _dbSet;
+    protected readonly RentnRollDbContext _context;
 
     protected BaseRepository(RentnRollDbContext context)
     {
+        _context = context;
         _dbSet = context.Set<TEntity>();
     }
 
@@ -34,7 +36,7 @@ public abstract class BaseRepository<TEntity>
             await query.AsNoTracking().ToListAsync();
     }
 
-    public async Task<TEntity?> GetByIdAsync(
+    public async virtual Task<TEntity?> GetByIdAsync(
         Guid id,
         bool trackChanges = false)
     {
@@ -44,17 +46,17 @@ public abstract class BaseRepository<TEntity>
                 .FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id);
     }
 
-    public async Task CreateAsync(TEntity entity)
+    public async virtual Task CreateAsync(TEntity entity)
     {
         await _dbSet.AddAsync(entity);
     }
 
-    public void Delete(TEntity entity)
+    public virtual void Delete(TEntity entity)
     {
         _dbSet.Remove(entity);
     }
 
-    public void Update(TEntity entity)
+    public virtual void Update(TEntity entity)
     {
         _dbSet.Update(entity);
     }

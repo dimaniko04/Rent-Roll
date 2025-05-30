@@ -1,0 +1,46 @@
+@userEmail = joedoe@gmail.com
+@userPassword = Password123
+@adminEmail = dmytro.nikora@nure.ua
+@adminPassword = Password_123
+
+### Login test user (valid credentials)
+# @name loginUser
+POST {{host}}/api/authentication/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "{{userEmail}}",
+    "password": "{{userPassword}}"
+}
+
+### Login admin user
+# @name loginAdmin
+POST {{host}}/api/authentication/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+### Set token variables
+@userToken = {{loginUser.response.body.accessToken}}
+@adminToken = {{loginAdmin.response.body.accessToken}}
+
+### Get all games (as user, valid)
+GET {{host}}/api/games
+Authorization: Bearer {{userToken}}
+
+### Get all game names (as user, valid)
+GET {{host}}/api/games/names
+Authorization: Bearer {{userToken}}
+
+### Get game by id
+# @name getGame
+GET {{host}}/api/games/2f277e8e-4ec5-49cd-b22d-2421f97dfb71
+Authorization: Bearer {{userToken}}
+
+### Get game by invalid id (not found)
+GET {{host}}/api/categories/2f277e8e-4ec5-49cd-b22d-2421f97dfb71
+Authorization: Bearer {{userToken}}

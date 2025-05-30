@@ -11,6 +11,10 @@ public abstract class Specification<T> : ISpecification<T>
     public Expression<Func<T, object>>? OrderBy { get; private set; }
     public Expression<Func<T, object>>? OrderByDescending { get; private set; }
 
+    public int PageSize { get; private set; }
+    public int PageNumber { get; private set; }
+    public bool IsPagingEnabled { get; private set; }
+
     protected void ApplyCriteriaList(
         List<Expression<Func<T, bool>>> criteriaList)
     {
@@ -61,6 +65,13 @@ public abstract class Specification<T> : ISpecification<T>
     protected void ApplyOrderByDescending(Expression<Func<T, object>> orderByDescending)
     {
         OrderByDescending = orderByDescending;
+    }
+
+    protected void ApplyPaging(int pageNumber, int pageSize)
+    {
+        PageSize = pageSize;
+        PageNumber = pageNumber;
+        IsPagingEnabled = true;
     }
 
     const string DescendingSuffix = " desc";

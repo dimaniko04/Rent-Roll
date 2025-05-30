@@ -1,3 +1,4 @@
+using RentnRoll.Application.Contracts.Common;
 using RentnRoll.Application.Specifications.Common;
 using RentnRoll.Domain.Common;
 

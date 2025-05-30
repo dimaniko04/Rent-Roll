@@ -17,7 +17,7 @@ public class Game : Entity, IAuditable
     public int Age { get; set; }
     public int? AveragePlayTime { get; set; }
     public int? ComplexityScore { get; set; }
-    public bool isVerified { get; set; }
+    public bool IsVerified { get; set; }
     public string? VerifiedByUserId { get; set; }
 
     public ICollection<Image> Images { get; set; } = [];
