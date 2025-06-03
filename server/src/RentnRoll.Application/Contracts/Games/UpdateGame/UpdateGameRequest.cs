@@ -43,18 +43,9 @@ public record UpdateGameRequest(
         game.AveragePlayTime = AveragePlayTime;
         game.ComplexityScore = ComplexityScore;
 
-        if (genres.Any())
-        {
-            game.Genres = genres;
-        }
-        if (categories.Any())
-        {
-            game.Categories = categories;
-        }
-        if (mechanics.Any())
-        {
-            game.Mechanics = mechanics;
-        }
+        game.Genres = genres;
+        game.Categories = categories;
+        game.Mechanics = mechanics;
 
         return game;
     }

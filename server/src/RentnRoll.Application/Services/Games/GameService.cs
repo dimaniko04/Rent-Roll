@@ -153,7 +153,6 @@ public class GameService : IGameService
             genres.Value!,
             categories.Value!,
             mechanics.Value!);
-        _gameRepository.Update(game);
         await _unitOfWork.SaveChangesAsync();
 
         var gameResponse = GameDetailsResponse.FromGame(game);
@@ -184,13 +183,13 @@ public class GameService : IGameService
     private async Task<Result<List<Category>>> GetCategoriesAsync(
         ICollection<string>? categories)
     {
-        if (categories == null || !categories.Any())
+        if (categories == null || categories.Count == 0)
             return new List<Category>();
 
         var specification = new CategoryNamesSpec(categories);
         var categoryList = await _unitOfWork
             .GetRepository<ICategoryRepository>()
-            .GetAllAsync(specification);
+            .GetAllAsync(specification, trackChanges: true);
 
         if (categories.Count != categoryList.Count())
         {
@@ -206,13 +205,13 @@ public class GameService : IGameService
     private async Task<Result<List<Genre>>> GetGenresAsync(
         ICollection<string>? genres)
     {
-        if (genres == null || !genres.Any())
+        if (genres == null || genres.Count == 0)
             return new List<Genre>();
 
         var specification = new GenreNamesSpec(genres);
         var genreList = await _unitOfWork
             .GetRepository<IGenreRepository>()
-            .GetAllAsync(specification);
+            .GetAllAsync(specification, trackChanges: true);
 
         if (genres.Count != genreList.Count())
         {
@@ -228,13 +227,13 @@ public class GameService : IGameService
     private async Task<Result<List<Mechanic>>> GetMechanicsAsync(
         ICollection<string>? mechanics)
     {
-        if (mechanics == null || !mechanics.Any())
+        if (mechanics == null || mechanics.Count == 0)
             return new List<Mechanic>();
 
         var specification = new MechanicNamesSpec(mechanics);
         var mechanicList = await _unitOfWork
             .GetRepository<IMechanicRepository>()
-            .GetAllAsync(specification);
+            .GetAllAsync(specification, trackChanges: true);
 
         if (mechanics.Count != mechanicList.Count())
         {

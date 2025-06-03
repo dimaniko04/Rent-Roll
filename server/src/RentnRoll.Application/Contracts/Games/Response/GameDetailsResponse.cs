@@ -23,9 +23,9 @@ public record GameDetailsResponse(
     IEnumerable<CategoryResponse> Categories,
     IEnumerable<MechanicResponse> Mechanics,
     IEnumerable<string> Images
-)
+) : GameResponse(Id, Name, Description, ThumbnailUrl, PublishedAt, IsVerified)
 {
-    public static GameDetailsResponse FromGame(Game game)
+    public static new GameDetailsResponse FromGame(Game game)
     {
         return new GameDetailsResponse(
             game.Id,

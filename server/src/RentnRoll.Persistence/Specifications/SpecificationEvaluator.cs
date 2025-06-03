@@ -16,7 +16,7 @@ public static class SpecificationEvaluator
     {
         var query = inputQuery;
 
-        if (specification.Criteria.Any())
+        if (specification.Criteria.Count != 0)
         {
             foreach (var criteria in specification.Criteria)
             {
@@ -24,13 +24,21 @@ public static class SpecificationEvaluator
             }
         }
 
-        specification.Includes.Aggregate(
-            query,
-            (current, include) => current.Include(include));
+        if (specification.Includes.Count != 0)
+        {
+            foreach (var include in specification.Includes)
+            {
+                query = query.Include(include);
+            }
+        }
 
-        specification.IncludeStrings.Aggregate(
-            query,
-            (current, include) => current.Include(include));
+        if (specification.IncludeStrings.Count != 0)
+        {
+            foreach (var include in specification.IncludeStrings)
+            {
+                query = query.Include(include);
+            }
+        }
 
         if (specification.OrderBy != null)
         {

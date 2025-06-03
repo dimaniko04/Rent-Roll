@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +8,11 @@ using RentnRoll.Application.Contracts.Games.CreateGame;
 using RentnRoll.Application.Contracts.Games.GetAllGames;
 using RentnRoll.Application.Contracts.Games.UpdateGame;
 using RentnRoll.Application.Services.Games;
+using RentnRoll.Application.Specifications.Common;
+using RentnRoll.Application.Specifications.Games;
 using RentnRoll.Domain.Common;
 using RentnRoll.Domain.Constants;
 using RentnRoll.Domain.Entities.Games;
-
-using Serilog;
 
 namespace RentnRoll.Api.Controllers;
 
@@ -81,7 +79,9 @@ public class GameController : ApiController
         Guid gameId,
         UpdateGameRequest request)
     {
-        var authorizeResult = await AuthorizeForGameAsync(gameId);
+        var specification = new GameDetailsSpec(gameId);
+        var authorizeResult = await AuthorizeForGameAsync(
+            specification, trackChanges: true);
         if (authorizeResult.IsError)
             return Problem(authorizeResult.Errors);
 
@@ -96,7 +96,6 @@ public class GameController : ApiController
         Guid gameId,
         [FromForm] IFormFile thumbnail)
     {
-        Log.Debug(gameId.ToString());
         var authorizeResult = await AuthorizeForGameAsync(gameId);
         if (authorizeResult.IsError)
             return Problem(authorizeResult.Errors);
@@ -107,11 +106,8 @@ public class GameController : ApiController
         return result.Match(Ok, Problem);
     }
 
-    private async Task<Result<Game>> AuthorizeForGameAsync(
-        Guid gameId)
+    private Result<Game> AuthorizeForGame(Game? game)
     {
-        var game = await _gameRepository.GetByIdAsync(gameId);
-        Log.Debug(gameId.ToString());
         if (game is null)
             return Errors.Games.NotFound;
 
@@ -122,5 +118,20 @@ public class GameController : ApiController
             return Errors.User.Unauthorized;
 
         return game;
+    }
+
+    private async Task<Result<Game>> AuthorizeForGameAsync(Guid gameId)
+    {
+        var game = await _gameRepository.GetByIdAsync(gameId);
+        return AuthorizeForGame(game);
+    }
+
+    private async Task<Result<Game>> AuthorizeForGameAsync(
+        ISpecification<Game> specification,
+        bool trackChanges = false)
+    {
+        var game = await _gameRepository.GetSingleAsync(
+            specification, trackChanges);
+        return AuthorizeForGame(game);
     }
 }
