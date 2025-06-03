@@ -82,7 +82,7 @@ public class GenreService : IGenreService
         UpdateGenreRequest request)
     {
         var validationResult = await _validationService
-                    .ValidateAsync(request);
+            .ValidateAsync(request);
         if (validationResult.IsError)
             return validationResult.Errors;
 

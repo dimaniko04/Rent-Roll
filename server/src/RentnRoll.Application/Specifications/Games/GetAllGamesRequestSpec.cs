@@ -1,4 +1,4 @@
-using RentnRoll.Application.Contracts.Games;
+using RentnRoll.Application.Contracts.Games.GetAllGames;
 using RentnRoll.Application.Specifications.Common;
 using RentnRoll.Domain.Entities.Games;
 

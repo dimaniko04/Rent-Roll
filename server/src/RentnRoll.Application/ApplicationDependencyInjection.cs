@@ -2,8 +2,7 @@ using FluentValidation;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using RentnRoll.Application.Services;
-using RentnRoll.Application.Services.Validation;
+using RentnRoll.Application.Common.UserContext;
 
 namespace RentnRoll.Application;
 
@@ -13,6 +12,7 @@ public static class ApplicationDependencyInjection
         this IServiceCollection services)
     {
         services.AddServices();
+        services.AddScoped<ICurrentUserContext, CurrentUserContext>();
 
         services.AddValidatorsFromAssembly(
             typeof(IAssemblyMarker).Assembly,

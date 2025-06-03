@@ -7,6 +7,7 @@ using RentnRoll.Application.Common.AppErrors;
 using RentnRoll.Application.Common.Interfaces.Identity;
 using RentnRoll.Application.Contracts.Authentication;
 using RentnRoll.Application.Contracts.Users;
+using RentnRoll.Domain.Constants;
 
 namespace RentnRoll.Api.Controllers;
 
@@ -56,7 +57,7 @@ public class UserController : ApiController
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> GetAllUsers(
         [FromQuery] GetAllUsersRequest request)
     {
@@ -66,7 +67,7 @@ public class UserController : ApiController
     }
 
     [HttpGet("{id}", Name = nameof(GetUserById))]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> GetUserById(string id)
     {
         var result = await _userService.GetUserById(id);
@@ -75,7 +76,7 @@ public class UserController : ApiController
     }
 
     [HttpPost("admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> CreateAdminUser(
         UserRegisterRequest request)
     {
@@ -94,7 +95,7 @@ public class UserController : ApiController
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> BlockUser(string id)
     {
         var result = await _userService.BlockUserAsync(id);
@@ -103,7 +104,7 @@ public class UserController : ApiController
     }
 
     [HttpPut("{id}/restore")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> RestoreUser(string id)
     {
         var result = await _userService.RestoreUserAsync(id);

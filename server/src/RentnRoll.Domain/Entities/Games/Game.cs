@@ -10,14 +10,15 @@ public class Game : Entity, IAuditable
 {
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
-    public string ThumbnailUrl { get; set; } = null!;
+    public string? ThumbnailUrl { get; set; }
     public DateTime PublishedAt { get; set; }
     public int MinPlayers { get; set; }
     public int MaxPlayers { get; set; }
     public int Age { get; set; }
     public int? AveragePlayTime { get; set; }
     public int? ComplexityScore { get; set; }
-    public bool IsVerified { get; set; }
+    public bool IsVerified { get; set; } = true;
+    public string? CreatedByUserId { get; set; }
     public string? VerifiedByUserId { get; set; }
 
     public ICollection<Image> Images { get; set; } = [];

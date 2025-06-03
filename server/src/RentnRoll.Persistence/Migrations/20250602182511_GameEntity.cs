@@ -30,14 +30,15 @@ namespace RentnRoll.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
                     Description = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: false),
-                    ThumbnailUrl = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: false),
+                    ThumbnailUrl = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true),
                     PublishedAt = table.Column<DateTime>(type: "date", nullable: false),
                     MinPlayers = table.Column<int>(type: "int", nullable: false),
                     MaxPlayers = table.Column<int>(type: "int", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
                     AveragePlayTime = table.Column<int>(type: "int", nullable: true),
                     ComplexityScore = table.Column<int>(type: "int", nullable: true),
-                    isVerified = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     VerifiedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -46,11 +47,15 @@ namespace RentnRoll.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Game", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Game_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Game_AspNetUsers_VerifiedByUserId",
                         column: x => x.VerifiedByUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -198,6 +203,23 @@ namespace RentnRoll.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Category_Name",
+                table: "Category",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Game_CreatedByUserId",
+                table: "Game",
+                column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Game_Name",
+                table: "Game",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Game_VerifiedByUserId",
                 table: "Game",
                 column: "VerifiedByUserId");
@@ -218,9 +240,21 @@ namespace RentnRoll.Persistence.Migrations
                 column: "MechanicsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Genre_Name",
+                table: "Genre",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Image_GameId",
                 table: "Image",
                 column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Mechanic_Name",
+                table: "Mechanic",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_UserId",

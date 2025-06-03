@@ -1,5 +1,5 @@
 using RentnRoll.Application.Contracts.Common;
-using RentnRoll.Application.Contracts.Games;
+using RentnRoll.Application.Contracts.Games.Response;
 using RentnRoll.Application.Specifications.Common;
 using RentnRoll.Domain.Entities.Games;
 

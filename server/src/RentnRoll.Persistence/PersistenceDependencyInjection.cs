@@ -1,6 +1,7 @@
 using System.Text;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,10 +11,12 @@ using Microsoft.IdentityModel.Tokens;
 
 using RentnRoll.Application.Common.Interfaces.Identity;
 using RentnRoll.Application.Common.Interfaces.UnitOfWork;
+using RentnRoll.Application.Common.Policies;
 using RentnRoll.Persistence.Context;
 using RentnRoll.Persistence.Identity;
 using RentnRoll.Persistence.Identity.Services;
 using RentnRoll.Persistence.Interceptors;
+using RentnRoll.Persistence.Requirements;
 using RentnRoll.Persistence.Seeding;
 using RentnRoll.Persistence.Settings;
 using RentnRoll.Persistence.UnitOfWork;
@@ -38,7 +41,13 @@ public static class PersistenceDependencyInjection
             .AddJwtAuthentication(jwtSettings)
             .AddDbContext(configuration)
             .AddRepositories();
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(Policy.CreatorOrAdmin, policy =>
+                policy.Requirements.Add(
+                    new IsGameCreatorOrAdminRequirement()));
+        });
+        services.AddScoped<IAuthorizationHandler, IsGameCreatorOrAdminHandler>();
 
         services.AddScoped<Seeder>();
 

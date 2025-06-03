@@ -237,6 +237,9 @@ namespace RentnRoll.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CreatedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000)
@@ -262,7 +265,6 @@ namespace RentnRoll.Persistence.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("ThumbnailUrl")
-                        .IsRequired()
                         .HasMaxLength(400)
                         .HasColumnType("varchar(400)");
 
@@ -273,6 +275,8 @@ namespace RentnRoll.Persistence.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -528,8 +532,13 @@ namespace RentnRoll.Persistence.Migrations
                 {
                     b.HasOne("RentnRoll.Persistence.Identity.User", null)
                         .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("RentnRoll.Persistence.Identity.User", null)
+                        .WithMany()
                         .HasForeignKey("VerifiedByUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.OwnsMany("RentnRoll.Domain.Entities.Games.Image", "Images", b1 =>
                         {

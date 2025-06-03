@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 
 using RentnRoll.Application.Common.Interfaces.Repositories;
 using RentnRoll.Application.Contracts.Common;
-using RentnRoll.Application.Contracts.Games;
 using RentnRoll.Application.Specifications.Common;
 using RentnRoll.Domain.Entities.Games;
 using RentnRoll.Persistence.Context;
@@ -11,6 +10,7 @@ using RentnRoll.Persistence.Extensions;
 using RentnRoll.Application.Contracts.Genres;
 using RentnRoll.Application.Contracts.Categories;
 using RentnRoll.Application.Contracts.Mechanics;
+using RentnRoll.Application.Contracts.Games.Response;
 
 namespace RentnRoll.Persistence.Repositories;
 
@@ -77,6 +77,7 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
                 g.ComplexityScore,
                 g.IsVerified,
                 g.VerifiedByUserId,
+                g.CreatedByUserId,
                 g.Genres.Select(g =>
                     new GenreResponse(g.Id, g.Name)),
                 g.Categories.Select(c =>

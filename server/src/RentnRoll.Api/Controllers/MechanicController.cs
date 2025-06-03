@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using RentnRoll.Application.Contracts.Mechanics;
 using RentnRoll.Application.Services.Mechanics;
+using RentnRoll.Domain.Constants;
 
 namespace RentnRoll.Api.Controllers;
 
@@ -37,7 +38,7 @@ public class MechanicController : ApiController
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> CreateMechanic(
         CreateMechanicRequest request)
     {
@@ -47,7 +48,7 @@ public class MechanicController : ApiController
     }
 
     [HttpPut("{mechanicId:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> UpdateMechanic(
         Guid mechanicId,
         UpdateMechanicRequest request)
@@ -58,7 +59,7 @@ public class MechanicController : ApiController
     }
 
     [HttpDelete("{mechanicId:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> DeleteMechanic(
         Guid mechanicId)
     {

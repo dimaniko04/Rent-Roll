@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using RentnRoll.Application.Contracts.Categories;
 using RentnRoll.Application.Services.Categories;
+using RentnRoll.Domain.Constants;
 
 namespace RentnRoll.Api.Controllers;
 
@@ -37,7 +38,7 @@ public class CategoryController : ApiController
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> CreateCategory(
         CreateCategoryRequest request)
     {
@@ -47,7 +48,7 @@ public class CategoryController : ApiController
     }
 
     [HttpPut("{categoryId:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> UpdateCategory(
         Guid categoryId,
         UpdateCategoryRequest request)
@@ -58,7 +59,7 @@ public class CategoryController : ApiController
     }
 
     [HttpDelete("{categoryId:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> DeleteCategory(
         Guid categoryId)
     {

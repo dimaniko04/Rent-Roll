@@ -1,5 +1,6 @@
 using RentnRoll.Api.Extensions;
 using RentnRoll.Application;
+using RentnRoll.Application.Common.Options;
 using RentnRoll.Persistence;
 using RentnRoll.Persistence.Extensions;
 
@@ -8,6 +9,17 @@ using Serilog;
 var CORS_ALLOW_ALL = "AllowAll";
 
 var builder = WebApplication.CreateBuilder(args);
+
+var uploadsSubFolder = "uploads";
+var uploadsPath = Path.Combine(
+    builder.Environment.WebRootPath ?? "wwwroot",
+    uploadsSubFolder);
+
+builder.Services.Configure<FileStorageOptions>(options =>
+{
+    options.UploadRoot = uploadsPath;
+    options.UploadSubFolder = uploadsSubFolder;
+});
 
 builder.Services
     .AddPresentation(CORS_ALLOW_ALL)
@@ -42,6 +54,8 @@ else
 app.UseCors(CORS_ALLOW_ALL);
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

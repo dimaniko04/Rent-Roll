@@ -25,6 +25,7 @@ public class ApiController : ControllerBase
             ErrorType.Forbidden => StatusCodes.Status403Forbidden,
             ErrorType.InvalidRequest => StatusCodes.Status400BadRequest,
             ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+            ErrorType.Unsupported => StatusCodes.Status415UnsupportedMediaType,
             _ => StatusCodes.Status500InternalServerError
         };
 

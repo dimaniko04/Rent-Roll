@@ -36,6 +36,19 @@ public abstract class BaseRepository<TEntity>
             await query.AsNoTracking().ToListAsync();
     }
 
+    public async virtual Task<TEntity?> GetSingleAsync(
+        ISpecification<TEntity> specification,
+        bool trackChanges = false)
+    {
+        var query = _dbSet.AsQueryable();
+
+        query = SpecificationEvaluator.GetQuery(query, specification);
+
+        return trackChanges ?
+            await query.FirstOrDefaultAsync() :
+            await query.AsNoTracking().FirstOrDefaultAsync();
+    }
+
     public async virtual Task<TEntity?> GetByIdAsync(
         Guid id,
         bool trackChanges = false)

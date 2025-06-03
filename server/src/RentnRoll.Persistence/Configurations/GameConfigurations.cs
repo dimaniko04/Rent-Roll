@@ -72,11 +72,22 @@ internal sealed class GameConfigurations : IEntityTypeConfiguration<Game>
             .WithMany()
             .HasForeignKey(g => g.VerifiedByUserId)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder
+            .Property(g => g.CreatedByUserId)
+            .IsRequired(false);
+
+        builder
+            .HasOne<User>()
+            .WithMany()
+            .HasForeignKey(g => g.CreatedByUserId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder
             .Property(g => g.ThumbnailUrl)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(400)
             .HasColumnType("varchar(400)");
 

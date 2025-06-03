@@ -12,7 +12,7 @@ using RentnRoll.Persistence.Context;
 namespace RentnRoll.Persistence.Migrations
 {
     [DbContext(typeof(RentnRollDbContext))]
-    [Migration("20250529145145_GameEntity")]
+    [Migration("20250602182511_GameEntity")]
     partial class GameEntity
     {
         /// <inheritdoc />
@@ -216,6 +216,9 @@ namespace RentnRoll.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Category");
                 });
 
@@ -237,10 +240,18 @@ namespace RentnRoll.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CreatedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("varchar(2000)");
+
+                    b.Property<bool>("IsVerified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int>("MaxPlayers")
                         .HasColumnType("int");
@@ -257,7 +268,6 @@ namespace RentnRoll.Persistence.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("ThumbnailUrl")
-                        .IsRequired()
                         .HasMaxLength(400)
                         .HasColumnType("varchar(400)");
 
@@ -267,12 +277,12 @@ namespace RentnRoll.Persistence.Migrations
                     b.Property<string>("VerifiedByUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("isVerified")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.HasIndex("VerifiedByUserId");
 
@@ -292,6 +302,9 @@ namespace RentnRoll.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Genre");
                 });
 
@@ -307,6 +320,9 @@ namespace RentnRoll.Persistence.Migrations
                         .HasColumnType("varchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Mechanic");
                 });
@@ -519,8 +535,13 @@ namespace RentnRoll.Persistence.Migrations
                 {
                     b.HasOne("RentnRoll.Persistence.Identity.User", null)
                         .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("RentnRoll.Persistence.Identity.User", null)
+                        .WithMany()
                         .HasForeignKey("VerifiedByUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.OwnsMany("RentnRoll.Domain.Entities.Games.Image", "Images", b1 =>
                         {

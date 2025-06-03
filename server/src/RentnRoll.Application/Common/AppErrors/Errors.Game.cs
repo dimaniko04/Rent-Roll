@@ -15,5 +15,20 @@ public static partial class Errors
             Error.NotFound(
                 "Game.GenreNotFound",
                 "Game does not exist.");
+
+        public static Error GenresNotFound(List<string> genres) =>
+            Error.InvalidRequest(
+                "Game.GenresNotFound",
+                $"Genres {string.Join(", ", genres)} do not exist.");
+
+        public static Error CategoriesNotFound(List<string> categories) =>
+            Error.InvalidRequest(
+                "Game.CategoriesNotFound",
+                $"Categories {string.Join(", ", categories)} do not exist.");
+
+        public static Error MechanicsNotFound(List<string> mechanics) =>
+            Error.InvalidRequest(
+                "Game.MechanicsNotFound",
+                $"Mechanics {string.Join(", ", mechanics)} do not exist.");
     }
 }

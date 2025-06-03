@@ -26,6 +26,12 @@ public sealed record Error(
         string? details = null
         ) => new(code, message, details, ErrorType.InvalidRequest);
 
+    public static Error Unsupported(
+        string code = "Unsupported",
+        string message = "Unsupported media type.",
+        string? details = null
+        ) => new(code, message, details, ErrorType.Unsupported);
+
     public static Error Unauthorized(
         string code = "Unauthorized",
         string message = "Authentication required.",

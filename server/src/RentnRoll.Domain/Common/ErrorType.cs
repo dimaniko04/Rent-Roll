@@ -8,4 +8,5 @@ public enum ErrorType
     Forbidden,
     InvalidRequest,
     Unauthorized,
+    Unsupported,
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using RentnRoll.Application.Contracts.Genres;
 using RentnRoll.Application.Services.Genres;
+using RentnRoll.Domain.Constants;
 
 namespace RentnRoll.Api.Controllers;
 
@@ -37,7 +38,7 @@ public class GenreController : ApiController
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> CreateGenre(
         CreateGenreRequest request)
     {
@@ -47,7 +48,7 @@ public class GenreController : ApiController
     }
 
     [HttpPut("{genreId:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> UpdateGenre(
         Guid genreId,
         UpdateGenreRequest request)
@@ -58,7 +59,7 @@ public class GenreController : ApiController
     }
 
     [HttpDelete("{genreId:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> DeleteGenre(
         Guid genreId)
     {

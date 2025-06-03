@@ -3,13 +3,13 @@ using RentnRoll.Application.Contracts.Genres;
 using RentnRoll.Application.Contracts.Mechanics;
 using RentnRoll.Domain.Entities.Games;
 
-namespace RentnRoll.Application.Contracts.Games;
+namespace RentnRoll.Application.Contracts.Games.Response;
 
 public record GameDetailsResponse(
     Guid Id,
     string Name,
     string Description,
-    string ThumbnailUrl,
+    string? ThumbnailUrl,
     DateTime PublishedAt,
     int MinPlayers,
     int MaxPlayers,
@@ -18,6 +18,7 @@ public record GameDetailsResponse(
     int? ComplexityScore,
     bool IsVerified,
     string? VerifiedByUserId,
+    string? CreatedByUserId,
     IEnumerable<GenreResponse> Genres,
     IEnumerable<CategoryResponse> Categories,
     IEnumerable<MechanicResponse> Mechanics,
@@ -39,6 +40,7 @@ public record GameDetailsResponse(
             game.ComplexityScore,
             game.IsVerified,
             game.VerifiedByUserId,
+            game.CreatedByUserId,
             game.Genres.Select(g =>
                 new GenreResponse(g.Id, g.Name)),
             game.Categories.Select(c =>
