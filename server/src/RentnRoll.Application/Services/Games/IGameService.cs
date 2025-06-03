@@ -32,11 +32,11 @@ public interface IGameService
 
     Task<Result<List<string>>> AddGameImagesAsync(
         Game game,
-        List<IFormFile> files);
+        ICollection<IFormFile> files);
     Task<Result<List<string>>> ReplaceGameImagesAsync(
         Game game,
         ReplaceGameImagesRequest request);
     Task<Result> DeleteGameImagesAsync(
         Game game,
-        List<string> imagePath);
+        ICollection<string> imagePath);
 }

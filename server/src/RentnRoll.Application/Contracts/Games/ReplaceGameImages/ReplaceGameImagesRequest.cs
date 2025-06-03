@@ -6,5 +6,5 @@ namespace RentnRoll.Application.Contracts.Games.ReplaceGameImages;
 
 public record ReplaceGameImagesRequest(
     Collection<IFormFile> Files,
-    Collection<string>? UnmodifiedImagePaths
+    Collection<string> UnmodifiedImagePaths
 );

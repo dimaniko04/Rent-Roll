@@ -6,6 +6,7 @@ using RentnRoll.Application.Common.Interfaces.Repositories;
 using RentnRoll.Application.Common.Policies;
 using RentnRoll.Application.Contracts.Games.CreateGame;
 using RentnRoll.Application.Contracts.Games.GetAllGames;
+using RentnRoll.Application.Contracts.Games.ReplaceGameImages;
 using RentnRoll.Application.Contracts.Games.UpdateGame;
 using RentnRoll.Application.Services.Games;
 using RentnRoll.Application.Specifications.Common;
@@ -103,6 +104,66 @@ public class GameController : ApiController
         var game = authorizeResult.Value!;
         var result = await _gameService
             .UpdateGameThumbnailAsync(game, thumbnail);
+        return result.Match(Ok, Problem);
+    }
+
+    [HttpDelete("{gameId:guid}")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> DeleteGame(Guid gameId)
+    {
+        var result = await _gameService
+            .DeleteGameAsync(gameId);
+        return result.Match(Ok, Problem);
+    }
+
+    [HttpPost("{gameId:guid}/images")]
+    public async Task<IActionResult> AddGameImages(
+        Guid gameId,
+        [FromForm] ICollection<IFormFile> files)
+    {
+        var specification = new GameImageSpec(gameId);
+        var authorizeResult = await AuthorizeForGameAsync(
+            specification, trackChanges: true);
+        if (authorizeResult.IsError)
+            return Problem(authorizeResult.Errors);
+
+        var game = authorizeResult.Value!;
+        var result = await _gameService
+            .AddGameImagesAsync(game, files);
+        return result.Match(Ok, Problem);
+    }
+
+    [HttpPut("{gameId:guid}/images")]
+    public async Task<IActionResult> ReplaceGameImages(
+        Guid gameId,
+        [FromForm] ReplaceGameImagesRequest request)
+    {
+        var specification = new GameImageSpec(gameId);
+        var authorizeResult = await AuthorizeForGameAsync(
+            specification, trackChanges: true);
+        if (authorizeResult.IsError)
+            return Problem(authorizeResult.Errors);
+
+        var game = authorizeResult.Value!;
+        var result = await _gameService
+            .ReplaceGameImagesAsync(game, request);
+        return result.Match(Ok, Problem);
+    }
+
+    [HttpDelete("{gameId:guid}/images")]
+    public async Task<IActionResult> DeleteGameImages(
+        Guid gameId,
+        [FromBody] ICollection<string> imagePaths)
+    {
+        var specification = new GameImageSpec(gameId);
+        var authorizeResult = await AuthorizeForGameAsync(
+            specification, trackChanges: true);
+        if (authorizeResult.IsError)
+            return Problem(authorizeResult.Errors);
+
+        var game = authorizeResult.Value!;
+        var result = await _gameService
+            .DeleteGameImagesAsync(game, imagePaths);
         return result.Match(Ok, Problem);
     }
 

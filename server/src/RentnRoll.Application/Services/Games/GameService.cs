@@ -160,25 +160,125 @@ public class GameService : IGameService
         return gameResponse;
     }
 
-    public Task<Result> DeleteGameAsync(Guid gameId)
+    public async Task<Result> DeleteGameAsync(Guid gameId)
     {
-        throw new NotImplementedException();
+        var game = await _gameRepository.GetByIdAsync(gameId);
+        if (game == null)
+            return Result.Failure([Errors.Games.NotFound]);
+
+        if (game.ThumbnailUrl != null)
+            _fileStorageService.Delete(game.ThumbnailUrl);
+
+        if (game.Images != null)
+        {
+            foreach (var image in game.Images)
+            {
+                _fileStorageService.Delete(image.Url);
+            }
+        }
+
+        _gameRepository.Delete(game);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Success();
     }
 
-    public Task<Result<List<string>>> AddGameImagesAsync(Game game, List<IFormFile> files)
+    public async Task<Result<List<string>>> AddGameImagesAsync(
+        Game game, ICollection<IFormFile> files)
     {
-        throw new NotImplementedException();
+        var images = new List<Image>();
+
+        foreach (var file in files)
+        {
+            var uploadResult = await _fileStorageService
+                .UploadAsync(file, "games/images");
+
+            if (uploadResult.IsError)
+            {
+                foreach (var image in images)
+                {
+                    _fileStorageService.Delete(image.Url);
+                }
+
+                return uploadResult.Errors;
+            }
+
+            images.Add(new Image
+            {
+                Url = uploadResult.Value!,
+                GameId = game.Id,
+            });
+        }
+        foreach (var image in images)
+        {
+            game.Images.Add(image);
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return images
+            .Select(i => i.Url)
+            .ToList();
     }
 
-    public Task<Result<List<string>>> ReplaceGameImagesAsync(Game game, ReplaceGameImagesRequest request)
+    public async Task<Result<List<string>>> ReplaceGameImagesAsync(
+        Game game, ReplaceGameImagesRequest request)
     {
-        throw new NotImplementedException();
+        var validationResult = await _validationService
+            .ValidateAsync(request);
+        if (validationResult.IsError)
+            return validationResult.Errors;
+
+        var notFound = request.UnmodifiedImagePaths
+            .Except(game.Images.Select(i => i.Url))
+            .ToList();
+        if (notFound.Count != 0)
+            return Errors.Games.ImagesNotFound(notFound);
+
+        var toDelete = game.Images
+                .Where(i => !request.UnmodifiedImagePaths.Contains(i.Url))
+                .ToList();
+        foreach (var image in toDelete)
+        {
+            var res = _fileStorageService.Delete(image.Url);
+            if (res.IsError)
+                return res.Errors;
+            game.Images.Remove(image);
+        }
+
+        var urls = await AddGameImagesAsync(game, request.Files);
+        if (urls.IsError)
+            return urls.Errors;
+
+        return request.UnmodifiedImagePaths
+            .Concat(urls.Value!)
+            .ToList();
     }
 
-    public Task<Result> DeleteGameImagesAsync(Game game, List<string> imagePath)
+    public async Task<Result> DeleteGameImagesAsync(
+        Game game,
+        ICollection<string> imagePaths)
     {
-        throw new NotImplementedException();
+        var notFound = imagePaths
+            .Except(game.Images.Select(i => i.Url))
+            .ToList();
+        if (notFound.Count != 0)
+            return Result.Failure([Errors.Games.ImagesNotFound(notFound)]);
+
+        foreach (var path in imagePaths)
+        {
+            var res = _fileStorageService.Delete(path);
+            if (res.IsError)
+                return Result.Failure(res.Errors);
+        }
+        game.Images = game.Images
+            .Where(i => !imagePaths.Contains(i.Url))
+            .ToList();
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result.Success();
     }
+
 
     private async Task<Result<List<Category>>> GetCategoriesAsync(
         ICollection<string>? categories)

@@ -56,14 +56,25 @@ public class FileStorageService : IFileStorageService
 
     public Result Delete(string filePath)
     {
-        var fullPath = Path.Combine(_uploadRoot, filePath);
+        var fullPath = Path.Combine(
+            _uploadRoot,
+            RemoveTopDirectory(filePath)); // Remove the first segment (uploads) from the path
 
         if (!File.Exists(fullPath))
             return Result.Failure(
-                [Errors.Files.NotFound(filePath)]);
+                [Errors.Files.NotFound(fullPath)]);
 
         File.Delete(fullPath);
 
         return Result.Success();
+    }
+
+    private string RemoveTopDirectory(string filePath)
+    {
+        var parts = filePath.Split('/');
+        if (parts.Length < 2)
+            return string.Empty;
+
+        return Path.Combine(parts.Skip(1).ToArray());
     }
 }

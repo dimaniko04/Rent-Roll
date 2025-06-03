@@ -16,6 +16,11 @@ public static partial class Errors
                 "Game.GenreNotFound",
                 "Game does not exist.");
 
+        public static Error ImagesNotFound(List<string> imagePaths) =>
+            Error.InvalidRequest(
+                "Game.ImagesNotFound",
+                $"Images {string.Join(", ", imagePaths)} do not exist.");
+
         public static Error GenresNotFound(List<string> genres) =>
             Error.InvalidRequest(
                 "Game.GenresNotFound",

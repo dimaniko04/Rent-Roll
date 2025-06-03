@@ -17,11 +17,11 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
         Exception exception,
         CancellationToken cancellationToken)
     {
-        _logger.LogError(
+        /* _logger.LogError(
             exception,
             "An unhandled exception occurred: {Message} {@Exception}",
             exception.Message,
-            exception);
+            exception); */
 
         var problemDetails = new ProblemDetails
         {
