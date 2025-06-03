@@ -96,7 +96,6 @@ public class GameController : ApiController
         Guid gameId,
         [FromForm] IFormFile thumbnail)
     {
-        Log.Debug(gameId.ToString());
         var authorizeResult = await AuthorizeForGameAsync(gameId);
         if (authorizeResult.IsError)
             return Problem(authorizeResult.Errors);
@@ -111,7 +110,7 @@ public class GameController : ApiController
         Guid gameId)
     {
         var game = await _gameRepository.GetByIdAsync(gameId);
-        Log.Debug(gameId.ToString());
+
         if (game is null)
             return Errors.Games.NotFound;
 

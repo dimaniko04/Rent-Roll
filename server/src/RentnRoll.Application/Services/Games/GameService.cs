@@ -153,7 +153,6 @@ public class GameService : IGameService
             genres.Value!,
             categories.Value!,
             mechanics.Value!);
-        _gameRepository.Update(game);
         await _unitOfWork.SaveChangesAsync();
 
         var gameResponse = GameDetailsResponse.FromGame(game);
