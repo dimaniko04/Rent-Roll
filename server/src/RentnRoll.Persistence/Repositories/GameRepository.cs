@@ -34,8 +34,7 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
                 g.Description,
                 g.ThumbnailUrl,
                 g.PublishedAt,
-                g.IsVerified,
-                g.Reviews.Average(r => r.Rating)
+                g.IsVerified
             ))
             .ToPaginatedResponse(
                 specification.PageNumber,
@@ -87,31 +86,5 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
                 g.Images.Select(i => i.Url)
             ))
             .FirstOrDefaultAsync();
-    }
-
-    public async Task AddGameReviewAsync(Review review)
-    {
-        await _context.Set<Review>().AddAsync(review);
-    }
-
-    public async Task<IEnumerable<Review>> GetGameReviewsAsync(Guid gameId)
-    {
-        return await _dbSet
-            .Where(g => g.Id == gameId)
-            .SelectMany(g => g.Reviews)
-            .AsNoTracking()
-            .ToListAsync();
-    }
-
-    public async Task RemoveGameReviewAsync(Guid gameId, string userIds)
-    {
-        await _context.Set<Review>()
-            .Where(r => r.GameId == gameId && r.UserId == userIds)
-            .ExecuteDeleteAsync();
-    }
-
-    public void UpdateGameReview(Review review)
-    {
-        _context.Set<Review>().Update(review);
     }
 }

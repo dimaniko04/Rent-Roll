@@ -22,7 +22,6 @@ public class Game : Entity, IAuditable
     public string? VerifiedByUserId { get; set; }
 
     public ICollection<Image> Images { get; set; } = [];
-    public ICollection<Review> Reviews { get; set; } = [];
 
     public ICollection<Genre> Genres { get; set; } = [];
     public ICollection<Category> Categories { get; set; } = [];

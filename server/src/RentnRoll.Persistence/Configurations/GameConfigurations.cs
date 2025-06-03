@@ -95,9 +95,6 @@ internal sealed class GameConfigurations : IEntityTypeConfiguration<Game>
             .OwnsMany(g => g.Images, ConfigureGameImages);
 
         builder
-            .OwnsMany(g => g.Reviews, ConfigureGameReviews);
-
-        builder
             .HasMany(g => g.Genres)
             .WithMany(g => g.Games)
             .UsingEntity(j => j.ToTable("GameGenre"));
@@ -128,33 +125,5 @@ internal sealed class GameConfigurations : IEntityTypeConfiguration<Game>
         builder
             .WithOwner(g => g.Game)
             .HasForeignKey(i => i.GameId);
-    }
-
-    private void ConfigureGameReviews(
-        OwnedNavigationBuilder<Game, Review> builder)
-    {
-        builder
-            .HasKey(r => new { r.GameId, r.UserId });
-
-        builder
-            .Property(r => r.Rating)
-            .IsRequired();
-
-        builder
-            .Property(r => r.Content)
-            .IsRequired()
-            .HasMaxLength(1000)
-            .HasColumnType("varchar(1000)");
-
-        builder
-            .WithOwner(r => r.Game)
-            .HasForeignKey(r => r.GameId);
-
-        builder
-            .HasOne<User>()
-            .WithMany()
-            .HasForeignKey(r => r.UserId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

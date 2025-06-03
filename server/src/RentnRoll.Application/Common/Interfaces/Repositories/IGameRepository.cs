@@ -13,8 +13,4 @@ public interface IGameRepository : IBaseRepository<Game>
         ISpecification<Game> specification);
     Task<GameDetailsResponse?> GetGameDetailsAsync(
         ISpecification<Game> specification);
-    Task<IEnumerable<Review>> GetGameReviewsAsync(Guid gameId);
-    Task AddGameReviewAsync(Review review);
-    void UpdateGameReview(Review review);
-    Task RemoveGameReviewAsync(Guid gameId, string userIds);
 }

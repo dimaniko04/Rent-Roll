@@ -8,24 +8,18 @@ public record GameResponse(
     string Description,
     string? ThumbnailUrl,
     DateTime PublishedAt,
-    bool IsVerified,
-    double? AverageRating
+    bool IsVerified
 )
 {
     public static GameResponse FromGame(Game game)
     {
-        double? averageRating = game.Reviews.Any()
-            ? game.Reviews.Average(r => r.Rating)
-            : null;
-
         return new GameResponse(
             game.Id,
             game.Name,
             game.Description,
             game.ThumbnailUrl,
             game.PublishedAt,
-            game.IsVerified,
-            averageRating
+            game.IsVerified
         );
     }
 };
