@@ -10,6 +10,9 @@ public interface IBaseRepository<TEntity> : IRepository
     Task<IEnumerable<TEntity>> GetAllAsync(
         ISpecification<TEntity>? specification,
         bool trackChanges = false);
+    Task<PaginatedResponse<TEntity>> GetPaginatedAsync(
+        ISpecification<TEntity> specification,
+        bool trackChanges = false);
     Task<TEntity?> GetSingleAsync(
         ISpecification<TEntity> specification,
         bool trackChanges = false);

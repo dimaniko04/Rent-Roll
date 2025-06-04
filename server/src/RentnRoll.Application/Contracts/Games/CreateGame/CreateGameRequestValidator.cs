@@ -22,7 +22,9 @@ public class CreateGameRequestValidator
             .NotEmpty()
             .WithMessage("Name is required.")
             .MaximumLength(300)
-            .WithMessage("Name must not exceed 300 characters.")
+            .WithMessage("Name must not exceed 300 characters.");
+
+        RuleFor(x => x.Name)
             .MustAsync(async (name, cancellation) =>
             {
                 var specification = new GameNameSpec(name);

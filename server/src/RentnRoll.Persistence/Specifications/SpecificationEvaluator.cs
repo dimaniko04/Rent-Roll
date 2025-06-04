@@ -1,7 +1,4 @@
-using System.Linq.Expressions;
-
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 using RentnRoll.Application.Specifications.Common;
 
@@ -15,6 +12,11 @@ public static class SpecificationEvaluator
         where TEntity : class
     {
         var query = inputQuery;
+
+        if (specification.IsIgnoreQueryFilters)
+        {
+            query = query.IgnoreQueryFilters();
+        }
 
         if (specification.Criteria.Count != 0)
         {

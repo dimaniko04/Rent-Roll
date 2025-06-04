@@ -11,6 +11,9 @@ internal sealed class BusinessConfigurations
 {
     public void Configure(EntityTypeBuilder<Business> builder)
     {
+        builder
+            .HasQueryFilter(b => !b.IsDeleted);
+
         builder.HasKey(b => b.Id);
 
         builder

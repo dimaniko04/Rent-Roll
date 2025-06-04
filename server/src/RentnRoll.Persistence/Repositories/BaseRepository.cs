@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 
 using RentnRoll.Application.Common.Interfaces.Repositories;
+using RentnRoll.Application.Contracts.Common;
 using RentnRoll.Application.Specifications.Common;
 using RentnRoll.Domain.Common;
 using RentnRoll.Persistence.Context;
+using RentnRoll.Persistence.Extensions;
 using RentnRoll.Persistence.Specifications;
 
 namespace RentnRoll.Persistence.Repositories;
@@ -34,6 +36,32 @@ public abstract class BaseRepository<TEntity>
         return trackChanges ?
             await query.ToListAsync() :
             await query.AsNoTracking().ToListAsync();
+    }
+
+    public async virtual Task<PaginatedResponse<TEntity>> GetPaginatedAsync(
+        ISpecification<TEntity> specification,
+        bool trackChanges = false)
+    {
+        if (!specification.IsPagingEnabled)
+        {
+            throw new ArgumentException("Paging is not enabled for this specification.");
+        }
+
+        var pageNumber = specification.PageNumber;
+        var pageSize = specification.PageSize;
+        var query = _dbSet.AsQueryable();
+
+        if (specification != null)
+        {
+            query = SpecificationEvaluator.GetQuery(query, specification);
+        }
+
+        if (!trackChanges)
+        {
+            query = query.AsNoTracking();
+        }
+
+        return await query.ToPaginatedResponse(pageNumber, pageSize);
     }
 
     public async virtual Task<TEntity?> GetSingleAsync(

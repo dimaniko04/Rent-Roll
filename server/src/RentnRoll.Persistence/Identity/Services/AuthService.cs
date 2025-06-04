@@ -82,7 +82,8 @@ public class AuthService : IAuthService
     }
 
     public async Task<Result<AuthResponse>> RegisterAsync(
-        UserRegisterRequest request)
+        UserRegisterRequest request,
+        string role = Roles.User)
     {
         var validationResult = await _validationService
             .ValidateAsync(request);
@@ -119,7 +120,7 @@ public class AuthService : IAuthService
                 .ToList();
         }
 
-        result = await _userManager.AddToRoleAsync(user, Roles.User);
+        result = await _userManager.AddToRoleAsync(user, role);
 
         if (!result.Succeeded)
         {

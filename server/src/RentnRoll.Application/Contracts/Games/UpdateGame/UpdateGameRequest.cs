@@ -28,7 +28,7 @@ public record UpdateGameRequest(
     Age
 )
 {
-    public Result<Game> UpdateGame(
+    public Game UpdateGame(
         Game game,
         List<Genre> genres,
         List<Category> categories,

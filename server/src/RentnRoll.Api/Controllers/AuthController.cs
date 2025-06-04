@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using RentnRoll.Application.Common.AppErrors;
 using RentnRoll.Application.Common.Interfaces.Identity;
 using RentnRoll.Application.Contracts.Authentication;
+using RentnRoll.Domain.Constants;
 
 namespace RentnRoll.Api.Controllers;
 
@@ -24,6 +25,16 @@ public class AuthController : ApiController
     public async Task<IActionResult> Register(UserRegisterRequest request)
     {
         var result = await _userService.RegisterAsync(request);
+
+        return result.Match(Ok, Problem);
+    }
+
+    [HttpPost("register/business")]
+    public async Task<IActionResult> RegisterBusinessOwner(
+        UserRegisterRequest request)
+    {
+        var result = await _userService
+            .RegisterAsync(request, Roles.Business);
 
         return result.Match(Ok, Problem);
     }

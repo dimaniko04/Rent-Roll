@@ -14,6 +14,7 @@ public abstract class Specification<T> : ISpecification<T>
     public int PageSize { get; private set; }
     public int PageNumber { get; private set; }
     public bool IsPagingEnabled { get; private set; }
+    public bool IsIgnoreQueryFilters { get; private set; }
 
     protected void ApplyCriteriaList(
         List<Expression<Func<T, bool>>> criteriaList)
@@ -72,6 +73,11 @@ public abstract class Specification<T> : ISpecification<T>
         PageSize = pageSize;
         PageNumber = pageNumber;
         IsPagingEnabled = true;
+    }
+
+    protected void IgnoreQueryFilters()
+    {
+        IsIgnoreQueryFilters = true;
     }
 
     const string DescendingSuffix = " desc";

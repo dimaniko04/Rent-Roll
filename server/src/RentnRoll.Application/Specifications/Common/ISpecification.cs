@@ -12,4 +12,5 @@ public interface ISpecification<T>
     int PageNumber { get; }
     int PageSize { get; }
     bool IsPagingEnabled { get; }
+    bool IsIgnoreQueryFilters { get; }
 }
