@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -7,6 +8,38 @@ namespace RentnRoll.Api.Controllers;
 
 public class ApiController : ControllerBase
 {
+
+
+    protected async Task<Result> AuthorizeForResource(
+        object? resource,
+        string policy)
+    {
+        var authorizationService = HttpContext
+            .RequestServices
+            .GetService(typeof(IAuthorizationService))
+            as IAuthorizationService;
+
+        var authorizationResult = await authorizationService!
+            .AuthorizeAsync(User, resource, policy);
+
+        if (!authorizationResult.Succeeded)
+        {
+            var errorMessages = authorizationResult.Failure
+                .FailureReasons
+                .Select(reason => reason.Message)
+                .ToList();
+            return Result.Failure([
+                Error.Forbidden(
+                    "Authorization.Forbidden",
+                    $"You are not authorized to access this resource. " +
+                    $"{string.Join(", ", errorMessages)}"
+                )]);
+        }
+
+        return Result.Success();
+    }
+
+
     protected IActionResult Problem(List<Error> errors)
     {
         if (errors.All(e => e.Type == ErrorType.Validation))

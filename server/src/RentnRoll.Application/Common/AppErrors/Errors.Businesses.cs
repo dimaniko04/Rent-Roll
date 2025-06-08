@@ -1,4 +1,3 @@
-using RentnRoll.Application.Contracts.Businesses.Response;
 using RentnRoll.Domain.Common;
 
 namespace RentnRoll.Application.Common.AppErrors;

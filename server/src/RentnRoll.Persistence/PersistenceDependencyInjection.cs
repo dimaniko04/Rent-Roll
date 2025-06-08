@@ -17,6 +17,8 @@ using RentnRoll.Persistence.Identity;
 using RentnRoll.Persistence.Identity.Services;
 using RentnRoll.Persistence.Interceptors;
 using RentnRoll.Persistence.Requirements;
+using RentnRoll.Persistence.Requirements.Businesses;
+using RentnRoll.Persistence.Requirements.Games;
 using RentnRoll.Persistence.Seeding;
 using RentnRoll.Persistence.Settings;
 using RentnRoll.Persistence.UnitOfWork;
@@ -39,15 +41,9 @@ public static class PersistenceDependencyInjection
         services
             .AddIdentity()
             .AddJwtAuthentication(jwtSettings)
+            .AddAuthorization()
             .AddDbContext(configuration)
             .AddRepositories();
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy(Policy.CreatorOrAdmin, policy =>
-                policy.Requirements.Add(
-                    new IsGameCreatorOrAdminRequirement()));
-        });
-        services.AddScoped<IAuthorizationHandler, IsGameCreatorOrAdminHandler>();
 
         services.AddScoped<Seeder>();
 
@@ -126,6 +122,30 @@ public static class PersistenceDependencyInjection
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });
+
+        return services;
+    }
+
+    private static IServiceCollection AddAuthorization(
+        this IServiceCollection services)
+    {
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(Policy.CreatorOrAdmin, policy =>
+                policy.Requirements.Add(
+                    new IsGameCreatorOrAdminRequirement()));
+            options.AddPolicy(Policy.OwnerOnly, policy =>
+                policy.Requirements.Add(
+                    new IsBusinessOwnerRequirement()));
+            options.AddPolicy(Policy.OwnerOrAdmin, policy =>
+                policy.Requirements.Add(
+                    new IsBusinessOwnerOrAdminRequirement()));
+        });
+
+        services.AddScoped<IAuthorizationHandler, IsGameCreatorOrAdminHandler>();
+        services.AddScoped<IAuthorizationHandler, IsBusinessOwnerHandler>();
+        services.AddScoped<IAuthorizationHandler, IsBusinessOwnerOrAdminHandler>();
+
 
         return services;
     }

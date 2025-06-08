@@ -9,4 +9,11 @@ public static class RuleBuilderExtensions
     {
         return ruleBuilder.SetValidator(new PhoneValidator<T>());
     }
+
+    public static IRuleBuilderOptions<T, string> IsEnumName<T, TEnum>(
+        this IRuleBuilder<T, string> ruleBuilder)
+        where TEnum : struct, Enum
+    {
+        return ruleBuilder.SetValidator(new EnumValidator<T, TEnum>());
+    }
 }

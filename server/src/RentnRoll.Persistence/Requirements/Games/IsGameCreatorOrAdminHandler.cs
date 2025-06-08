@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using RentnRoll.Domain.Constants;
 using RentnRoll.Domain.Entities.Games;
 
-namespace RentnRoll.Persistence.Requirements;
+namespace RentnRoll.Persistence.Requirements.Games;
 
 public class IsGameCreatorOrAdminHandler
     : AuthorizationHandler<IsGameCreatorOrAdminRequirement, Game>

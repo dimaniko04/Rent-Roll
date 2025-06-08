@@ -8,8 +8,12 @@ public sealed class GetAllGamesRequestSpec : Specification<Game>
 {
     public GetAllGamesRequestSpec(GetAllGamesRequest request)
     {
-        AddCriteria(g => g.IsVerified == request.IsVerified &&
-                    g.Age >= request.Age);
+        AddCriteria(g => g.Age >= request.Age);
+
+        if (request.IsVerified.HasValue)
+        {
+            AddCriteria(g => g.IsVerified == request.IsVerified.Value);
+        }
 
         if (!string.IsNullOrEmpty(request.Search))
         {

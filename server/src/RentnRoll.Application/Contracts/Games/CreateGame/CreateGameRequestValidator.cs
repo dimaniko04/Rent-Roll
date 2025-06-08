@@ -1,7 +1,5 @@
 using FluentValidation;
 
-using Microsoft.Extensions.Logging;
-
 using RentnRoll.Application.Common.Interfaces.Repositories;
 using RentnRoll.Application.Common.Interfaces.UnitOfWork;
 using RentnRoll.Application.Specifications.Games;

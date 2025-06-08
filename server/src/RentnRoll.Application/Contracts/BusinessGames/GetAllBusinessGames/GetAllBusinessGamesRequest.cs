@@ -1,8 +1,11 @@
 using RentnRoll.Application.Contracts.Common;
+using RentnRoll.Domain.Entities.Tags;
 
-namespace RentnRoll.Application.Contracts.Games.GetAllGames;
+namespace RentnRoll.Application.Contracts.BusinessGames.GetAllBusinessGames;
 
-public record GetAllGamesRequest(
+public record GetAllBusinessGamesRequest(
+    Tag? Tag,
+    bool? isVerified,
     int? MinPlayers,
     int? MaxPlayers,
     int? MinPlayTime,
@@ -10,6 +13,6 @@ public record GetAllGamesRequest(
     IEnumerable<string>? Genres,
     IEnumerable<string>? Categories,
     IEnumerable<string>? Mechanics,
-    bool? IsVerified,
-    int Age = 0
+    int Age = 0,
+    List<Guid>? ExcludeIds = null
 ) : QueryParams;
