@@ -5,4 +5,10 @@ public record Address(
     string City,
     string State,
     string Country,
-    string ZipCode);
+    string ZipCode)
+{
+    override public string ToString()
+    {
+        return $"{Street} {City}, {State}, {Country} {ZipCode}";
+    }
+};

@@ -8,8 +8,6 @@ namespace RentnRoll.Api.Controllers;
 
 public class ApiController : ControllerBase
 {
-
-
     protected async Task<Result> AuthorizeForResource(
         object? resource,
         string policy)
