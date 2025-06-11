@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "author": "Dimaniko",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": 0,
+      "left": 50.1,
+      "rotate": 90,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-relay-module",
+      "id": "relay1",
+      "top": 80,
+      "left": 270.6,
+      "rotate": 0,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 0,
+      "left": 350.6,
+      "rotate": 0,
+      "attrs": { "color": "green" }
+    },
+    {
+      "type": "wokwi-relay-module",
+      "id": "relay2",
+      "top": 160,
+      "left": 270.6,
+      "rotate": 0,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": 240,
+      "left": 350.6,
+      "rotate": 180,
+      "attrs": { "color": "purple" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "esp:5V", "relay1:VCC", "red", [ "v-20", "h210", "v0" ] ],
+    [ "esp:GND.1", "relay1:GND", "black", [ "v-10", "h170", "v0" ] ],
+    [ "esp:5", "relay1:IN", "green", ["v10", "h120", "v0"]],
+    [ "esp:GND.1", "led1:C", "black", [ "v-15", "h0" ] ],
+    [ "relay1:NO", "led1:A", "green", ["v0"]],
+    [ "esp:3V3", "relay1:COM", "red", ["v-5", "h120", "v0"]],
+    [ "esp:5V", "relay2:VCC", "red", [ "h-10", "v120", "h210", "v0" ] ],
+    [ "esp:GND.2", "relay2:GND", "black", [ "v30", "h0" ] ],
+    [ "esp:17", "relay2:IN", "green", ["v40", "h120", "v0"]],
+    [ "esp:GND.2", "led2:C", "black", [ "h-10", "v70", "h0" ] ],
+    [ "relay2:NO", "led2:A", "green", ["v0"]],
+    [ "esp:3V3", "relay2:COM", "red", [ "h-10", "v80", "h120", "v0"]]
+  ],
+  "dependencies": {}
+}
