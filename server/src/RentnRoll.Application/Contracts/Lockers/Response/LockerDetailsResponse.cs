@@ -8,8 +8,8 @@ public record LockerDetailsResponse(
     Guid Id,
     string Name,
     Address Address,
-    ICollection<CellResponse> CellIds,
-    ICollection<PricingPolicyResponse> PricingPolicyIds,
+    ICollection<CellResponse> Cells,
+    ICollection<PricingPolicyResponse> PricingPolicies,
     bool? IsDeleted = null,
     DateTime? DeletedAt = null
 )

@@ -20,30 +20,14 @@ public class LockerConfigurations : IEntityTypeConfiguration<Locker>
             .HasMaxLength(200)
             .HasColumnType("varchar(200)");
 
-        builder
-            .ComplexProperty(l => l.Address, a =>
-            {
-                a.Property(ad => ad.Street)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .HasColumnType("varchar(200)");
-                a.Property(ad => ad.City)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .HasColumnType("varchar(100)");
-                a.Property(ad => ad.State)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .HasColumnType("varchar(100)");
-                a.Property(ad => ad.Country)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .HasColumnType("varchar(100)");
-                a.Property(ad => ad.ZipCode)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .HasColumnType("varchar(20)");
-            });
+        builder.OwnsOne(s => s.Address, a =>
+        {
+            a.WithOwner();
+            a.Property(ad => ad.Street).HasMaxLength(200);
+            a.Property(ad => ad.City).HasMaxLength(100);
+            a.Property(ad => ad.State).HasMaxLength(50);
+            a.Property(ad => ad.ZipCode).HasMaxLength(20);
+        });
 
         builder
             .Property(b => b.IsDeleted)

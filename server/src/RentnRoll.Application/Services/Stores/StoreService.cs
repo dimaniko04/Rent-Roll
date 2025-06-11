@@ -21,14 +21,12 @@ public class StoreService : IStoreService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IStoreRepository _storeRepository;
     private readonly IValidationService _validationService;
-    private readonly ILogger<StoreService> _logger;
 
     public StoreService(
         IUnitOfWork unitOfWork,
         ILogger<StoreService> logger,
         IValidationService validationService)
     {
-        _logger = logger;
         _unitOfWork = unitOfWork;
         _validationService = validationService;
         _storeRepository = unitOfWork
