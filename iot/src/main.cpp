@@ -16,9 +16,10 @@ std::map<String, int> lockerPinMap;
 void configureLockers(JsonDocument &doc)
 {
   Serial.println("Configuring lockers...");
-  for (JsonObject locker : doc["lockers"].as<JsonArray>())
+  lockerPinMap.clear();
+  for (JsonObject locker : doc["cells"].as<JsonArray>())
   {
-    String id = locker["lockerId"];
+    String id = locker["cellId"];
     int pin = locker["pin"];
 
     Serial.print("Configuring locker: ");

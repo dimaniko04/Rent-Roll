@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using RentnRoll.Application.Contracts.Lockers.ConfigureCells;
 using RentnRoll.Application.Contracts.Lockers.CreateLocker;
 using RentnRoll.Application.Contracts.Lockers.GetAllLockers;
 using RentnRoll.Application.Services.Lockers;
@@ -46,6 +47,27 @@ public class LockerController : ApiController
     {
         var result = await _lockerService
             .CreateLockerAsync(request);
+        return result.Match(Ok, Problem);
+    }
+
+    [HttpPut("{lockerId:guid}/cells/configure")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> ConfigureCells(
+        Guid lockerId,
+        [FromBody] ConfigureCellsRequest request)
+    {
+        var result = await _lockerService
+            .ConfigureCellsAsync(lockerId, request);
+        return result.Match(Ok, Problem);
+    }
+
+    [HttpDelete("cells/configure/{deviceId}")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> RemoveCellConfiguration(
+        string deviceId)
+    {
+        var result = await _lockerService
+            .DeleteConfigurationAsync(deviceId);
         return result.Match(Ok, Problem);
     }
 }

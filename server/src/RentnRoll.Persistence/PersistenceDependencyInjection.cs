@@ -10,16 +10,17 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 using RentnRoll.Application.Common.Interfaces.Identity;
+using RentnRoll.Application.Common.Interfaces.Services;
 using RentnRoll.Application.Common.Interfaces.UnitOfWork;
 using RentnRoll.Application.Common.Policies;
 using RentnRoll.Persistence.Context;
 using RentnRoll.Persistence.Identity;
 using RentnRoll.Persistence.Identity.Services;
 using RentnRoll.Persistence.Interceptors;
-using RentnRoll.Persistence.Requirements;
 using RentnRoll.Persistence.Requirements.Businesses;
 using RentnRoll.Persistence.Requirements.Games;
 using RentnRoll.Persistence.Seeding;
+using RentnRoll.Persistence.Services.MqttPublisher;
 using RentnRoll.Persistence.Settings;
 using RentnRoll.Persistence.UnitOfWork;
 
@@ -43,17 +44,37 @@ public static class PersistenceDependencyInjection
             .AddJwtAuthentication(jwtSettings)
             .AddAuthorization()
             .AddDbContext(configuration)
+            .AddServices()
             .AddRepositories();
 
         services.AddScoped<Seeder>();
 
         services.AddSingleton(Options.Create(jwtSettings));
 
+        services.AddScoped<IUnitOfWork, RentnRollUnitOfWork>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddServices(
+        this IServiceCollection services)
+    {
+        services.Configure<HiveMqSettings>(options =>
+        {
+            options.Host = Environment
+                .GetEnvironmentVariable("MQTT_HOST") ?? "";
+            options.Port = int.Parse(Environment
+                .GetEnvironmentVariable("MQTT_PORT") ?? "8883");
+            options.Username = Environment
+                .GetEnvironmentVariable("MQTT_USERNAME") ?? "";
+            options.Password = Environment
+                .GetEnvironmentVariable("MQTT_PASSWORD") ?? "";
+        });
+
+        services.AddScoped<IMqttPublisher, HiveMqPublisher>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITokenService, TokenService>();
-
-        services.AddScoped<IUnitOfWork, RentnRollUnitOfWork>();
 
         return services;
     }

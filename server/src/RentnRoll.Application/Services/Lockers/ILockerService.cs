@@ -1,3 +1,4 @@
+using RentnRoll.Application.Contracts.Lockers.ConfigureCells;
 using RentnRoll.Application.Contracts.Lockers.CreateLocker;
 using RentnRoll.Application.Contracts.Lockers.GetAllLockers;
 using RentnRoll.Application.Contracts.Lockers.Response;
@@ -13,4 +14,9 @@ public interface ILockerService
         Guid lockerId);
     Task<Result<LockerResponse>> CreateLockerAsync(
         CreateLockerRequest request);
+    Task<Result<ICollection<CellResponse>>> ConfigureCellsAsync(
+        Guid lockerId,
+        ConfigureCellsRequest request);
+    Task<Result> DeleteConfigurationAsync(
+        string deviceId);
 }
