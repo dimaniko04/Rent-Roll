@@ -14,7 +14,7 @@ public static partial class Errors
         public static Error NotFound =>
             Error.NotFound(
                 "Lockers.NotFound",
-                "Locker is inactive or does not exist.");
+                "Locker is deactivated or does not exist.");
 
         public static Error DeviceNotConfigured(
             string deviceId) =>
@@ -35,7 +35,22 @@ public static partial class Errors
             int availableCells) =>
             Error.InvalidRequest(
                 "Lockers.NotEnoughCells",
-                $"Locker with ID {lockerId} has not enough available cells. Required: {requiredCells}, Available: {availableCells}.");
+                $"Locker with ID {lockerId} has not enough available cells." +
+                $"Required: {requiredCells}, Available: {availableCells}.");
+
+        public static Error CannotDeleteActiveCells(
+            ICollection<Guid> cellIds) =>
+            Error.InvalidRequest(
+                "Lockers.CannotDeleteActiveCells",
+                $"Cannot delete active cells with IDs: {string.Join(", ", cellIds)}. " +
+                "Please remove all cell configurations and assignments before deleting them.");
+
+        public static Error HasActiveRentals(
+            Guid lockerId) =>
+            Error.InvalidRequest(
+                "Lockers.HasActiveRentals",
+                $"Cannot delete active locker with ID {lockerId}. " +
+                "Please ensure there are no active rentals associated with this locker.");
 
         public static Error DeviceAlreadyConfigured(
             string deviceId) =>

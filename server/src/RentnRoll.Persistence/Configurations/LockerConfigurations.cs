@@ -10,7 +10,8 @@ public class LockerConfigurations : IEntityTypeConfiguration<Locker>
 {
     public void Configure(EntityTypeBuilder<Locker> builder)
     {
-        builder.HasQueryFilter(l => !l.IsDeleted);
+        builder
+            .HasQueryFilter(l => l.IsActive);
 
         builder.HasKey(l => l.Id);
 
@@ -30,12 +31,8 @@ public class LockerConfigurations : IEntityTypeConfiguration<Locker>
         });
 
         builder
-            .Property(b => b.IsDeleted)
-            .HasDefaultValue(false);
-
-        builder
-            .Property(b => b.DeletedAt)
-            .IsRequired(false);
+            .Property(l => l.IsActive)
+            .IsRequired();
 
         builder
             .Property(b => b.CreatedAt)

@@ -7,8 +7,7 @@ public record LockerResponse(
     Guid Id,
     string Name,
     Address Address,
-    bool? IsDeleted,
-    DateTime? DeletedAt
+    bool IsActive
 )
 {
     public static LockerResponse FromLocker(Locker locker)
@@ -17,8 +16,7 @@ public record LockerResponse(
             locker.Id,
             locker.Name,
             locker.Address,
-            locker.IsDeleted,
-            locker.DeletedAt
+            locker.IsActive
         );
     }
 }

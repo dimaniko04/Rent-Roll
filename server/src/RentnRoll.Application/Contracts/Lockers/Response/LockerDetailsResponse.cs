@@ -10,8 +10,7 @@ public record LockerDetailsResponse(
     Address Address,
     ICollection<CellResponse> Cells,
     ICollection<PricingPolicyResponse> PricingPolicies,
-    bool? IsDeleted = null,
-    DateTime? DeletedAt = null
+    bool IsActive
 )
 {
     public static LockerDetailsResponse FromLocker(Locker locker)
@@ -26,8 +25,7 @@ public record LockerDetailsResponse(
             [.. locker
                 .PricingPolicies
                 .Select(PricingPolicyResponse.FromPricingPolicy)],
-            locker.IsDeleted,
-            locker.DeletedAt
+            locker.IsActive
         );
     }
 }

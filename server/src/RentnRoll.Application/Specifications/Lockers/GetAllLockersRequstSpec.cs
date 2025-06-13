@@ -9,7 +9,7 @@ public sealed class GetAllLockersRequestSpec : Specification<Locker>
     public GetAllLockersRequestSpec(GetAllLockersRequest request)
     {
         IgnoreQueryFilters();
-        AddCriteria(l => l.IsDeleted == request.IsDeleted);
+        AddCriteria(l => l.IsActive == request.IsActive);
 
         if (!string.IsNullOrWhiteSpace(request.Country))
         {

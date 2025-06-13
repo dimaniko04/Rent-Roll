@@ -158,7 +158,7 @@ public class StoreService : IStoreService
             businessId, policyId.Value);
         var policy = await _unitOfWork
             .GetRepository<IPricingPolicyRepository>()
-            .GetSingleAsync(policySpec);
+            .GetSingleAsync(policySpec, trackChanges: true);
 
         if (policy == null)
             return Errors.Stores.PolicyNotFound(policyId.Value);

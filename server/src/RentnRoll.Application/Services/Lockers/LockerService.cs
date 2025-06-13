@@ -6,9 +6,12 @@ using RentnRoll.Application.Contracts.Lockers.ConfigureCells;
 using RentnRoll.Application.Contracts.Lockers.CreateLocker;
 using RentnRoll.Application.Contracts.Lockers.GetAllLockers;
 using RentnRoll.Application.Contracts.Lockers.Response;
+using RentnRoll.Application.Contracts.Lockers.UpdateLocker;
 using RentnRoll.Application.Services.Validation;
 using RentnRoll.Application.Specifications.Lockers;
 using RentnRoll.Domain.Common;
+using RentnRoll.Domain.Entities.Lockers;
+using RentnRoll.Domain.Entities.Lockers.Enums;
 
 namespace RentnRoll.Application.Services.Lockers;
 
@@ -159,6 +162,145 @@ public class LockerService : ILockerService
         {
             cell.IotDeviceId = null;
         }
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result.Success();
+    }
+
+    public async Task<Result<LockerDetailsResponse>>
+        UpdateLockerAsync(Guid lockerId, UpdateLockerRequest request)
+    {
+        var validationResult = await _validationService
+            .ValidateAsync(request);
+        if (validationResult.IsError)
+            return validationResult.Errors;
+
+        var specification = new GetLockerDetailsSpec(
+            lockerId);
+        var locker = await _lockerRepository
+            .GetSingleAsync(specification, true);
+
+        if (locker == null)
+            return Errors.Lockers.NotFound;
+
+        var cells = locker.Cells;
+        var configuredCells = cells
+            .Where(c => c.IotDeviceId != null ||
+                        c.BusinessId != null)
+            .ToList();
+
+        if (configuredCells.Count > request.NumberOfCells)
+            return Errors.Lockers.CannotDeleteActiveCells(
+                configuredCells
+                    .Select(c => c.Id)
+                    .ToList());
+
+        if (cells.Count > request.NumberOfCells)
+        {
+            cells = cells
+                .OrderByDescending(c => c.IotDeviceId != null)
+                .ThenByDescending(c => c.BusinessId != null)
+                .Take(request.NumberOfCells)
+                .ToList();
+        }
+        else
+        {
+            var quantityToAdd = request.NumberOfCells - cells.Count;
+            var newCells = Enumerable
+                .Range(1, quantityToAdd)
+                .Select(i => new Cell())
+                .ToList();
+            cells = cells
+                .Concat(newCells)
+                .ToList();
+        }
+
+        locker.Name = request.Name;
+        locker.Address = request.Address;
+        locker.Cells = cells;
+
+        await _unitOfWork.SaveChangesAsync();
+
+        var lockerResponse = LockerDetailsResponse
+            .FromLocker(locker);
+
+        return lockerResponse;
+    }
+
+    public async Task<Result<LockerResponse>>
+        DeactivateLockerAsync(Guid lockerId)
+    {
+        var locker = await _lockerRepository
+            .GetByIdAsync(lockerId, true);
+
+        if (locker == null)
+            return Errors.Lockers.NotFound;
+
+        locker.IsActive = false;
+        await _unitOfWork.SaveChangesAsync();
+
+        var lockerResponse = LockerResponse
+            .FromLocker(locker);
+
+        return lockerResponse;
+    }
+
+    public async Task<Result<LockerResponse>>
+        ActivateLockerAsync(Guid lockerId)
+    {
+        var specification = new LockerIdSpec(lockerId);
+        var locker = await _lockerRepository
+            .GetSingleAsync(specification, true);
+
+        if (locker == null)
+            return Errors.Lockers.NotFound;
+
+        locker.IsActive = true;
+        await _unitOfWork.SaveChangesAsync();
+
+        var lockerResponse = LockerResponse
+            .FromLocker(locker);
+
+        return lockerResponse;
+    }
+
+    public async Task<Result> DeleteLockerAsync(Guid lockerId)
+    {
+        var specification = new LockerIdSpec(lockerId);
+        var locker = await _lockerRepository
+            .GetSingleAsync(specification);
+
+        if (locker == null)
+            return Result.Failure([Errors.Lockers.NotFound]);
+
+        var activeCells = locker.Cells
+            .Where(c => c.Status == CellStatus.Reserved)
+            .ToList();
+
+        if (activeCells.Any())
+            return Result.Failure(
+                [Errors.Lockers.HasActiveRentals(lockerId)]);
+
+        var nonEmptyCells = locker.Cells
+            .Where(c => c.BusinessGameId != null)
+            .ToList();
+
+        if (nonEmptyCells.Any())
+            return Result.Failure(
+                [Errors.Lockers.CellsNotEmpty(nonEmptyCells
+                    .Select(c => c.Id).ToList())]);
+
+        foreach (var cell in locker.Cells)
+        {
+            if (cell.IotDeviceId != null)
+            {
+                await _mqttPublisher
+                    .PublishLockerConfigAsync(
+                        cell.IotDeviceId, []);
+            }
+        }
+
+        _lockerRepository.Delete(locker);
         await _unitOfWork.SaveChangesAsync();
 
         return Result.Success();

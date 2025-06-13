@@ -10,7 +10,7 @@ public sealed class GetLockerDetailsSpec : Specification<Locker>
         IgnoreQueryFilters();
         AddCriteria(l => l.Id == lockerId);
 
-        AddInclude(store => store.Address);
+        AddInclude(l => l.Address);
         AddInclude(l => l.PricingPolicies);
         AddInclude(l => l.Cells);
         AddInclude("Cells.Business");
