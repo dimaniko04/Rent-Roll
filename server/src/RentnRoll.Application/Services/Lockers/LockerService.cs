@@ -53,6 +53,23 @@ public class LockerService : ILockerService
         return lockerResponses;
     }
 
+    public async Task<ICollection<BusinessLockerResponse>>
+        GetAllBusinessLockersAsync(
+            Guid businessId,
+            GetAllLockersRequest request)
+    {
+        var specification = new GetAllBusinessLockersRequestSpec(
+            businessId, request);
+        var lockers = await _lockerRepository
+            .GetAllAsync(specification, false);
+
+        var lockerResponses = lockers
+            .Select(BusinessLockerResponse.FromLocker)
+            .ToList();
+
+        return lockerResponses;
+    }
+
     public async Task<Result<LockerDetailsResponse>>
         GetLockerByIdAsync(Guid lockerId)
     {

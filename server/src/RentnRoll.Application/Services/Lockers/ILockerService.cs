@@ -14,6 +14,10 @@ public interface ILockerService
 {
     Task<ICollection<LockerResponse>> GetAllLockersAsync(
         GetAllLockersRequest request);
+    Task<ICollection<BusinessLockerResponse>>
+        GetAllBusinessLockersAsync(
+            Guid businessId,
+            GetAllLockersRequest request);
     Task<Result<LockerDetailsResponse>> GetLockerByIdAsync(
         Guid lockerId);
     Task<Result<LockerResponse>> CreateLockerAsync(

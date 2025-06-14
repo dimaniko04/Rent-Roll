@@ -36,6 +36,23 @@ public class LockerController : ApiController
         return Ok(result);
     }
 
+    [HttpGet("businesses/{businessId:guid}")]
+    public async Task<IActionResult> AssignPolicyToLocker(
+        Guid businessId,
+        [FromQuery] GetAllLockersRequest request)
+    {
+        var authorizeResult = await AuthorizeForResource(
+            businessId, Policy.OwnerOnly);
+
+        if (authorizeResult.IsError)
+            return Problem(authorizeResult.Errors);
+
+        var result = await _lockerService
+            .GetAllBusinessLockersAsync(businessId, request);
+
+        return Ok(result);
+    }
+
     [HttpGet("{lockerId:guid}")]
     [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> GetLockerById(Guid lockerId)
