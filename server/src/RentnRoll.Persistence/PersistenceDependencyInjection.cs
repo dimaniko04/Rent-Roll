@@ -18,7 +18,9 @@ using RentnRoll.Persistence.Identity;
 using RentnRoll.Persistence.Identity.Services;
 using RentnRoll.Persistence.Interceptors;
 using RentnRoll.Persistence.Requirements.Businesses;
+using RentnRoll.Persistence.Requirements.Cells;
 using RentnRoll.Persistence.Requirements.Games;
+using RentnRoll.Persistence.Requirements.Lockers;
 using RentnRoll.Persistence.Seeding;
 using RentnRoll.Persistence.Services.MqttPublisher;
 using RentnRoll.Persistence.Settings;
@@ -161,11 +163,19 @@ public static class PersistenceDependencyInjection
             options.AddPolicy(Policy.OwnerOrAdmin, policy =>
                 policy.Requirements.Add(
                     new IsBusinessOwnerOrAdminRequirement()));
+            options.AddPolicy(Policy.AssignedBusinessOwner, policy =>
+                policy.Requirements.Add(
+                    new IsAssignedBusinessOwnerRequirement()));
+            options.AddPolicy(Policy.HasCellAssignments, policy =>
+                policy.Requirements.Add(
+                    new HasCellAssignmentsRequirement()));
         });
 
         services.AddScoped<IAuthorizationHandler, IsGameCreatorOrAdminHandler>();
         services.AddScoped<IAuthorizationHandler, IsBusinessOwnerHandler>();
         services.AddScoped<IAuthorizationHandler, IsBusinessOwnerOrAdminHandler>();
+        services.AddScoped<IAuthorizationHandler, IsAssignedBusinessOwnerHandler>();
+        services.AddScoped<IAuthorizationHandler, HasCellAssignmentsHandler>();
 
 
         return services;

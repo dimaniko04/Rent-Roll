@@ -1,3 +1,6 @@
+using RentnRoll.Application.Contracts.Lockers.AssignBusiness;
+using RentnRoll.Application.Contracts.Lockers.AssignGames;
+using RentnRoll.Application.Contracts.Lockers.AssignPricingPolicy;
 using RentnRoll.Application.Contracts.Lockers.ConfigureCells;
 using RentnRoll.Application.Contracts.Lockers.CreateLocker;
 using RentnRoll.Application.Contracts.Lockers.GetAllLockers;
@@ -28,4 +31,15 @@ public interface ILockerService
         ConfigureCellsRequest request);
     Task<Result> DeleteConfigurationAsync(
         string deviceId);
+    Task<Result<ICollection<CellResponse>>> AssignBusinessAsync(
+        Guid lockerId,
+        AssignBusinessRequest request);
+    Task<Result<ICollection<CellResponse>>> AssignGamesAsync(
+        Guid lockerId,
+        Guid businessId,
+        AssignGamesRequest request);
+    Task<Result<LockerDetailsResponse>> AssignPricingPolicyAsync(
+        Guid lockerId,
+        Guid businessId,
+        AssignPricingPolicyRequest request);
 }

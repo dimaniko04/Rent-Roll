@@ -58,5 +58,19 @@ public static partial class Errors
                 "Lockers.DeviceAlreadyConfigured",
                 $"Device with ID {deviceId} is already configured. " +
                 "Please delete the existing configuration before creating a new one.");
+
+        public static Error CellsNotFound(
+            ICollection<Guid> cellIds) =>
+            Error.NotFound(
+                "Lockers.CellsNotFound",
+                $"Cells with IDs {string.Join(", ", cellIds)} not found. ");
+
+        public static Error CellsNotBelongToBusiness(
+            Guid businessId,
+            ICollection<Guid> cellIds) =>
+            Error.InvalidRequest(
+                "Lockers.CellsNotBelongToBusiness",
+                $"Cells with IDs {string.Join(", ", cellIds)} do" +
+                $"not belong to the business with ID {businessId}.");
     }
 }

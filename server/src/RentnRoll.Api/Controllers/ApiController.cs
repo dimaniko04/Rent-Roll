@@ -1,8 +1,12 @@
+using System.Text.Json;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 using RentnRoll.Domain.Common;
+
+using Serilog;
 
 namespace RentnRoll.Api.Controllers;
 
@@ -17,6 +21,8 @@ public class ApiController : ControllerBase
             .GetService(typeof(IAuthorizationService))
             as IAuthorizationService;
 
+        Log.Debug(JsonSerializer.Serialize(authorizationService));
+
         var authorizationResult = await authorizationService!
             .AuthorizeAsync(User, resource, policy);
 
@@ -26,6 +32,14 @@ public class ApiController : ControllerBase
                 .FailureReasons
                 .Select(reason => reason.Message)
                 .ToList();
+
+            Log.Error(
+                "Authorization failed on resource {Resource} with policy {Policy}. Errors: {Errors}",
+                resource,
+                policy,
+                string.Join(", ", errorMessages)
+            );
+
             return Result.Failure([
                 Error.Forbidden(
                     "Authorization.Forbidden",

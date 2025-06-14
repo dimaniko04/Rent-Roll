@@ -10,4 +10,10 @@ public interface ILockerRepository : IBaseRepository<Locker>
         GetCellsByIotDeviceIdAsync(string iotDeviceId);
     public Task<Locker?>
         GetByIotDeviceIdAsync(string iotDeviceId);
+    public Task<Locker?>
+        GetConfiguredUnassigned(Guid lockerId);
+    public Task<Locker?>
+        GetCellsByIdsAsync(
+            Guid lockerId,
+            ICollection<Guid> cellIds);
 }

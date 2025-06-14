@@ -17,6 +17,13 @@ public class BusinessRepository : BaseRepository<Business>, IBusinessRepository
     {
     }
 
+    public Task<Business?> GetByOwnerIdAsync(string ownerId)
+    {
+        return _dbSet
+            .AsNoTracking()
+            .FirstOrDefaultAsync(b => b.OwnerId == ownerId);
+    }
+
     public async Task<PaginatedResponse<BusinessWithOwnerResponse>>
         GetPaginatedWithOwnerAsync(
             ISpecification<Business> specification)

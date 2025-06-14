@@ -2,13 +2,18 @@ using RentnRoll.Application.Common.AppErrors;
 using RentnRoll.Application.Common.Interfaces.Repositories;
 using RentnRoll.Application.Common.Interfaces.Services;
 using RentnRoll.Application.Common.Interfaces.UnitOfWork;
+using RentnRoll.Application.Contracts.Lockers.AssignBusiness;
+using RentnRoll.Application.Contracts.Lockers.AssignGames;
+using RentnRoll.Application.Contracts.Lockers.AssignPricingPolicy;
 using RentnRoll.Application.Contracts.Lockers.ConfigureCells;
 using RentnRoll.Application.Contracts.Lockers.CreateLocker;
 using RentnRoll.Application.Contracts.Lockers.GetAllLockers;
 using RentnRoll.Application.Contracts.Lockers.Response;
 using RentnRoll.Application.Contracts.Lockers.UpdateLocker;
 using RentnRoll.Application.Services.Validation;
+using RentnRoll.Application.Specifications.BusinessGames;
 using RentnRoll.Application.Specifications.Lockers;
+using RentnRoll.Application.Specifications.PricingPolicies;
 using RentnRoll.Domain.Common;
 using RentnRoll.Domain.Entities.Lockers;
 using RentnRoll.Domain.Entities.Lockers.Enums;
@@ -304,5 +309,157 @@ public class LockerService : ILockerService
         await _unitOfWork.SaveChangesAsync();
 
         return Result.Success();
+    }
+
+    public async Task<Result<ICollection<CellResponse>>>
+        AssignBusinessAsync(
+            Guid lockerId,
+            AssignBusinessRequest request)
+    {
+        var validationResult = await _validationService
+            .ValidateAsync(request);
+        if (validationResult.IsError)
+            return validationResult.Errors;
+
+        var locker = await _lockerRepository
+            .GetConfiguredUnassigned(lockerId);
+
+        if (locker == null)
+            return Errors.Lockers.NotFound;
+
+        var unassigned = locker.Cells;
+
+        if (unassigned.Count < request.CellCount)
+            return Errors.Lockers.NotEnoughCells(
+                lockerId, request.CellCount, unassigned.Count);
+
+        unassigned = unassigned
+            .OrderBy(c => c.IotDeviceId != null)
+            .Take(request.CellCount)
+            .ToList();
+
+        foreach (var cell in unassigned)
+        {
+            cell.BusinessId = request.BusinessId;
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+
+        var cellResponses = unassigned
+            .Select(CellResponse.FromCell)
+            .ToList();
+
+        return cellResponses;
+    }
+
+    public async Task<Result<ICollection<CellResponse>>>
+        AssignGamesAsync(
+            Guid lockerId,
+            Guid businessId,
+            AssignGamesRequest request)
+    {
+        var validationResult = await _validationService
+            .ValidateAsync(request);
+        if (validationResult.IsError)
+            return validationResult.Errors;
+
+        var cellIds = request.GameAssignments
+            .Select(ga => ga.CellId)
+            .ToList();
+        var gameIds = request.GameAssignments
+            .Select(ga => ga.BusinessGameId)
+            .ToList();
+
+        var locker = await _lockerRepository
+            .GetCellsByIdsAsync(lockerId, cellIds);
+
+        if (locker == null)
+            return Errors.Lockers.NotFound;
+
+        var cells = locker.Cells;
+
+        if (cells.Count != cellIds.Count)
+            return Errors.Lockers.CellsNotFound(
+                cellIds.Except(cells.Select(c => c.Id)).ToList());
+
+        if (cells.Any(c => c.BusinessId != businessId))
+            return Errors.Lockers.CellsNotBelongToBusiness(
+                businessId,
+                cells.Where(c => c.BusinessId != businessId)
+                    .Select(c => c.Id).ToList());
+
+        var specification = new GetBusinessGamesByIdsSpec(
+            businessId, gameIds);
+        var games = await _unitOfWork
+            .GetRepository<IBusinessGameRepository>()
+            .GetAllAsync(specification);
+
+        if (games.Count() != gameIds.Count)
+            return Errors.BusinessGames.IdsNotFound(
+                [.. gameIds.Except(games.Select(g => g.Id))]);
+
+        cells = cells.Join(
+            request.GameAssignments,
+            cell => cell.Id,
+            assignment => assignment.CellId,
+            (cell, assignment) =>
+            {
+                cell.BusinessGameId = assignment.BusinessGameId;
+                cell.Status = CellStatus.Available;
+                return cell;
+            })
+            .ToList();
+
+        await _unitOfWork.SaveChangesAsync();
+
+        var cellResponses = cells
+            .Select(CellResponse.FromCell)
+            .ToList();
+
+        return cellResponses;
+    }
+
+    public async Task<Result<LockerDetailsResponse>> AssignPricingPolicyAsync(
+        Guid lockerId,
+        Guid businessId,
+        AssignPricingPolicyRequest request)
+    {
+        var validationResult = await _validationService
+            .ValidateAsync(request);
+        if (validationResult.IsError)
+            return validationResult.Errors;
+
+        var specification = new GetLockerDetailsSpec(lockerId);
+        var locker = await _lockerRepository
+            .GetSingleAsync(specification, true);
+
+        if (locker == null)
+            return Errors.Lockers.NotFound;
+
+        var policySpecification = new GetPricingPolicyDetailsSpec(
+            businessId,
+            request.PricingPolicyId);
+        var pricingPolicy = await _unitOfWork
+            .GetRepository<IPricingPolicyRepository>()
+            .GetSingleAsync(policySpecification, false);
+
+        if (pricingPolicy == null)
+            return Errors.PricingPolicies.NotFound;
+
+
+        var existingPolicy = locker.PricingPolicies.FirstOrDefault(
+            p => p.BusinessId == businessId);
+
+        if (existingPolicy != null)
+        {
+            locker.PricingPolicies.Remove(existingPolicy);
+        }
+
+        locker.PricingPolicies.Add(pricingPolicy);
+
+        var lockerResponse = LockerDetailsResponse
+            .FromLocker(locker);
+
+        return lockerResponse;
     }
 }

@@ -42,4 +42,29 @@ public class LockerRepository
             .Where(l => l.Cells.Any(c => c.IotDeviceId == iotDeviceId))
             .FirstOrDefaultAsync();
     }
+
+    public async Task<Locker?>
+        GetConfiguredUnassigned(Guid lockerId)
+    {
+        return await _dbSet
+            .Where(l => l.Id == lockerId)
+            .Where(l => l.IsActive)
+            .Include(l => l.Cells
+                .Where(c => c.IotDeviceId != null)
+                .Where(c => c.BusinessId == null))
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<Locker?> GetCellsByIdsAsync(
+        Guid lockerId,
+        ICollection<Guid> cellIds)
+    {
+        return await _dbSet
+            .Where(l => l.Id == lockerId)
+            .Where(l => l.IsActive)
+            .Include(l => l.Cells
+                .Where(c => cellIds.Contains(c.Id)))
+            .ThenInclude(c => c.Business)
+            .FirstOrDefaultAsync();
+    }
 }

@@ -12,4 +12,6 @@ public interface IBusinessRepository : IBaseRepository<Business>
             ISpecification<Business> specification);
     Task<BusinessWithOwnerResponse?> GetSingleWithOwnerAsync(
         ISpecification<Business> specification);
+    Task<Business?> GetByOwnerIdAsync(
+        string ownerId);
 }
