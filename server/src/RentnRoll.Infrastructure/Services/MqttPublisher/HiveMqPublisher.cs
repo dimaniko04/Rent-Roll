@@ -7,7 +7,6 @@ using MQTTnet;
 using MQTTnet.Protocol;
 
 using RentnRoll.Application.Common.Interfaces.Services;
-using RentnRoll.Persistence.Settings;
 
 namespace RentnRoll.Infrastructure.Services.MqttPublisher;
 

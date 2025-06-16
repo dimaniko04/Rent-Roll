@@ -22,6 +22,8 @@ public class User : IdentityUser, ISoftDeletable, IAuditable
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiry { get; set; }
 
+    public string FullName => $"{LastName} {FirstName}";
+
     internal UserResponse ToUserResponse()
     {
         return new UserResponse(

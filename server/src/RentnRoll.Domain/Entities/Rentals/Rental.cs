@@ -1,5 +1,7 @@
 using RentnRoll.Domain.Common;
+using RentnRoll.Domain.Entities.Businesses;
 using RentnRoll.Domain.Entities.BusinessGames;
+using RentnRoll.Domain.Entities.Games;
 using RentnRoll.Domain.Entities.Rentals.Enums;
 using RentnRoll.Domain.ValueObjects;
 
@@ -16,4 +18,13 @@ public class Rental : Entity
 
     public LockerRental? LockerRental { get; set; }
     public StoreRental? StoreRental { get; set; }
+
+    public Business Business =>
+        LockerRental?.Cell?.Business ??
+        StoreRental?.StoreAsset?.Store?.Business ??
+        throw new InvalidOperationException("Rental has not associated business");
+    public Game Game =>
+        LockerRental?.Cell?.BusinessGame?.Game ??
+        StoreRental?.StoreAsset?.BusinessGame?.Game ??
+        throw new InvalidOperationException("Rental has not associated game");
 }

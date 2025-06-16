@@ -60,18 +60,6 @@ public static class PersistenceDependencyInjection
     private static IServiceCollection AddServices(
         this IServiceCollection services)
     {
-        services.Configure<HiveMqSettings>(options =>
-        {
-            options.Host = Environment
-                .GetEnvironmentVariable("MQTT_HOST") ?? "";
-            options.Port = int.Parse(Environment
-                .GetEnvironmentVariable("MQTT_PORT") ?? "8883");
-            options.Username = Environment
-                .GetEnvironmentVariable("MQTT_USERNAME") ?? "";
-            options.Password = Environment
-                .GetEnvironmentVariable("MQTT_PASSWORD") ?? "";
-        });
-
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITokenService, TokenService>();

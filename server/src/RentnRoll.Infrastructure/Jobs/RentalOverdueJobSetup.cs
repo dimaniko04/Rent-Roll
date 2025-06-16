@@ -18,7 +18,7 @@ public class RentalOverdueJobSetup : IConfigureOptions<QuartzOptions>
                 .WithIdentity($"{jobKey.Name}-trigger")
                 .WithSimpleSchedule(schedule =>
                     schedule
-                        .WithInterval(TimeSpan.FromSeconds(30))
+                        .WithInterval(TimeSpan.FromMinutes(20))
                         .RepeatForever()));
     }
 }

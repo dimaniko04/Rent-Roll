@@ -130,7 +130,18 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
             .Where(r => r.Status == RentalStatus.Active &&
                         r.EndDate < DateTime.UtcNow)
             .Include(r => r.LockerRental)
-            .ThenInclude(lr => lr!.Cell);
+            .ThenInclude(lr => lr!.Cell)
+            .ThenInclude(c => c!.BusinessGame)
+            .ThenInclude(bg => bg!.Game)
+            .Include(r => r.LockerRental!.Cell)
+            .ThenInclude(c => c!.Business)
+            .Include(r => r.StoreRental)
+            .ThenInclude(sr => sr!.StoreAsset)
+            .ThenInclude(sa => sa!.BusinessGame)
+            .ThenInclude(bg => bg!.Game)
+            .Include(r => r.StoreRental!.StoreAsset)
+            .ThenInclude(sa => sa!.Store)
+            .ThenInclude(s => s!.Business);
 
         var overdue = await query.ToListAsync();
 

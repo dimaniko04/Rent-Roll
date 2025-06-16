@@ -1,4 +1,4 @@
-namespace RentnRoll.Persistence.Settings;
+namespace RentnRoll.Infrastructure.Services.MqttPublisher;
 
 public class HiveMqSettings
 {
