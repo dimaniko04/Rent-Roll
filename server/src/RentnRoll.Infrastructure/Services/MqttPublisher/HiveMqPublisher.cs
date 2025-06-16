@@ -9,7 +9,7 @@ using MQTTnet.Protocol;
 using RentnRoll.Application.Common.Interfaces.Services;
 using RentnRoll.Persistence.Settings;
 
-namespace RentnRoll.Persistence.Services.MqttPublisher;
+namespace RentnRoll.Infrastructure.Services.MqttPublisher;
 
 public class HiveMqPublisher : IMqttPublisher
 {

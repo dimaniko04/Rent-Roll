@@ -1,6 +1,7 @@
 using RentnRoll.Api.Extensions;
 using RentnRoll.Application;
 using RentnRoll.Application.Common.Options;
+using RentnRoll.Infrastructure;
 using RentnRoll.Persistence;
 using RentnRoll.Persistence.Extensions;
 
@@ -24,6 +25,7 @@ builder.Services.Configure<FileStorageOptions>(options =>
 builder.Services
     .AddPresentation(CORS_ALLOW_ALL)
     .AddApplication()
+    .AddInfrastructure()
     .AddPersistence(builder.Configuration);
 
 builder.AddSerilog();

@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\RentnRoll.Application\RentnRoll.Application.csproj" />
     <ProjectReference Include="..\RentnRoll.Persistence\RentnRoll.Persistence.csproj" />
+    <ProjectReference Include="..\RentnRoll.Infrastructure\RentnRoll.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -22,7 +22,6 @@ using RentnRoll.Persistence.Requirements.Cells;
 using RentnRoll.Persistence.Requirements.Games;
 using RentnRoll.Persistence.Requirements.Lockers;
 using RentnRoll.Persistence.Seeding;
-using RentnRoll.Persistence.Services.MqttPublisher;
 using RentnRoll.Persistence.Settings;
 using RentnRoll.Persistence.UnitOfWork;
 
@@ -73,7 +72,6 @@ public static class PersistenceDependencyInjection
                 .GetEnvironmentVariable("MQTT_PASSWORD") ?? "";
         });
 
-        services.AddScoped<IMqttPublisher, HiveMqPublisher>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITokenService, TokenService>();
