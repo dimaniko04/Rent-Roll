@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using RentnRoll.Application.Contracts.Businesses.CreateBusiness;
 using RentnRoll.Application.Contracts.Businesses.GetAllBusinesses;
 using RentnRoll.Application.Contracts.Businesses.UpdateBusiness;
+using RentnRoll.Application.Contracts.Rentals.GetAllRentals;
 using RentnRoll.Application.Services.Businesses;
 using RentnRoll.Domain.Constants;
 
@@ -70,6 +71,17 @@ public class BusinessController : ApiController
     {
         var result = await _businessService
             .GetMyBusinessAsync();
+
+        return result.Match(Ok, Problem);
+    }
+
+    [HttpGet("my/rentals")]
+    [Authorize(Roles = Roles.Business)]
+    public async Task<IActionResult> GetMyBusinessRentals(
+        [FromQuery] GetAllRentalsRequest request)
+    {
+        var result = await _businessService
+            .GetMyRentalsAsync(request);
 
         return result.Match(Ok, Problem);
     }

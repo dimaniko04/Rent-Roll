@@ -1,5 +1,6 @@
 using RentnRoll.Application.Contracts.Authentication;
 using RentnRoll.Application.Contracts.Common;
+using RentnRoll.Application.Contracts.Rentals.Response;
 using RentnRoll.Application.Contracts.Users;
 using RentnRoll.Domain.Common;
 
@@ -9,6 +10,8 @@ public interface IUserService
 {
     Task<Result<DetailedUserResponse>> GetCurrentUserAsync(
         string userId);
+    Task<Result<ICollection<UserRentalResponse>>>
+        GetCurrentUserRentalsAsync(string userId);
     Task<Result<DetailedUserResponse>> UpdateCurrentUserAsync(
         string userId,
         UpdateUserRequest request);

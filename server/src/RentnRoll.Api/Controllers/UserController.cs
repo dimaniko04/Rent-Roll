@@ -36,6 +36,22 @@ public class UserController : ApiController
         var result = await _userService.GetCurrentUserAsync(userId);
 
         return result.Match(Ok, Problem);
+    }
+
+    [HttpGet("me/rentals")]
+    public async Task<IActionResult> GetCurrentUserRentals()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Problem([Errors.User.Unauthorized]);
+        }
+
+        var result = await _userService
+            .GetCurrentUserRentalsAsync(userId);
+
+        return result.Match(Ok, Problem);
 
     }
 

@@ -4,8 +4,10 @@ using Microsoft.Extensions.Logging;
 
 using RentnRoll.Application.Common.AppErrors;
 using RentnRoll.Application.Common.Interfaces.Identity;
+using RentnRoll.Application.Common.Interfaces.Repositories;
 using RentnRoll.Application.Contracts.Authentication;
 using RentnRoll.Application.Contracts.Common;
+using RentnRoll.Application.Contracts.Rentals.Response;
 using RentnRoll.Application.Contracts.Users;
 using RentnRoll.Application.Services.Validation;
 using RentnRoll.Domain.Common;
@@ -19,6 +21,7 @@ namespace RentnRoll.Persistence.Identity.Services;
 public class UserService : IUserService
 {
     private readonly RentnRollDbContext _dbContext;
+    private readonly IRentalRepository _rentalRepository;
     private readonly ILogger<UserService> _logger;
     private readonly UserManager<User> _userManager;
     private readonly IValidationService _validationService;
@@ -27,11 +30,13 @@ public class UserService : IUserService
         ILogger<UserService> logger,
         RentnRollDbContext dbContext,
         UserManager<User> userManager,
+        IRentalRepository rentalRepository,
         IValidationService validationService)
     {
         _logger = logger;
         _dbContext = dbContext;
         _userManager = userManager;
+        _rentalRepository = rentalRepository;
         _validationService = validationService;
     }
 
@@ -281,6 +286,29 @@ public class UserService : IUserService
         var userResponse = user.ToDetailedUserResponse(roles);
 
         return userResponse;
+    }
+
+    public async Task<Result<ICollection<UserRentalResponse>>>
+        GetCurrentUserRentalsAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+        {
+            _logger.LogError(
+                "User with id {UserId} is blocked",
+                userId
+            );
+            return Errors.User.Blocked;
+        }
+
+        var rentals = await _rentalRepository
+            .GetAllUserRentalsAsync(userId);
+        var rentalsList = rentals
+            .Select(r => r)
+            .ToList();
+
+        return rentalsList;
     }
 
     public async Task<Result<DetailedUserResponse>> UpdateCurrentUserAsync(

@@ -12,7 +12,7 @@ using RentnRoll.Persistence.Context;
 namespace RentnRoll.Persistence.Migrations
 {
     [DbContext(typeof(RentnRollDbContext))]
-    [Migration("20250615084952_RentalsEntity")]
+    [Migration("20250615130402_RentalsEntity")]
     partial class RentalsEntity
     {
         /// <inheritdoc />
@@ -505,34 +505,32 @@ namespace RentnRoll.Persistence.Migrations
                     b.ToTable("PricingPolicy");
                 });
 
+            modelBuilder.Entity("RentnRoll.Domain.Entities.Rentals.LockerRental", b =>
+                {
+                    b.Property<Guid>("RentalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LockerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RentalId");
+
+                    b.HasIndex("LockerId");
+
+                    b.ToTable("LockerRental");
+                });
+
             modelBuilder.Entity("RentnRoll.Domain.Entities.Rentals.Rental", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
+                    b.Property<Guid>("BusinessGameId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime");
-
-                    b.Property<string>("GameName")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("varchar(300)");
-
-                    b.Property<string>("IotDeviceId")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime");
@@ -552,9 +550,26 @@ namespace RentnRoll.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusinessGameId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Rental");
+                });
+
+            modelBuilder.Entity("RentnRoll.Domain.Entities.Rentals.StoreRental", b =>
+                {
+                    b.Property<Guid>("RentalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RentalId");
+
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("StoreRental");
                 });
 
             modelBuilder.Entity("RentnRoll.Domain.Entities.Stores.Store", b =>
@@ -1072,13 +1087,56 @@ namespace RentnRoll.Persistence.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("RentnRoll.Domain.Entities.Rentals.LockerRental", b =>
+                {
+                    b.HasOne("RentnRoll.Domain.Entities.Lockers.Locker", "Locker")
+                        .WithMany()
+                        .HasForeignKey("LockerId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("RentnRoll.Domain.Entities.Rentals.Rental", "Rental")
+                        .WithOne("LockerRental")
+                        .HasForeignKey("RentnRoll.Domain.Entities.Rentals.LockerRental", "RentalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Locker");
+
+                    b.Navigation("Rental");
+                });
+
             modelBuilder.Entity("RentnRoll.Domain.Entities.Rentals.Rental", b =>
                 {
+                    b.HasOne("RentnRoll.Domain.Entities.BusinessGames.BusinessGame", "BusinessGame")
+                        .WithMany()
+                        .HasForeignKey("BusinessGameId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("RentnRoll.Persistence.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BusinessGame");
+                });
+
+            modelBuilder.Entity("RentnRoll.Domain.Entities.Rentals.StoreRental", b =>
+                {
+                    b.HasOne("RentnRoll.Domain.Entities.Rentals.Rental", "Rental")
+                        .WithOne("StoreRental")
+                        .HasForeignKey("RentnRoll.Domain.Entities.Rentals.StoreRental", "RentalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RentnRoll.Domain.Entities.Stores.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Rental");
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("RentnRoll.Domain.Entities.Stores.Store", b =>
@@ -1194,6 +1252,13 @@ namespace RentnRoll.Persistence.Migrations
                     b.Navigation("Stores");
 
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("RentnRoll.Domain.Entities.Rentals.Rental", b =>
+                {
+                    b.Navigation("LockerRental");
+
+                    b.Navigation("StoreRental");
                 });
 #pragma warning restore 612, 618
         }

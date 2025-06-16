@@ -1,4 +1,5 @@
 using RentnRoll.Application.Contracts.Common;
+using RentnRoll.Application.Contracts.Games.GetAllGames;
 using RentnRoll.Application.Contracts.Games.Response;
 using RentnRoll.Application.Specifications.Common;
 using RentnRoll.Domain.Entities.Games;
@@ -13,4 +14,11 @@ public interface IGameRepository : IBaseRepository<Game>
         ISpecification<Game> specification);
     Task<GameDetailsResponse?> GetGameDetailsAsync(
         ISpecification<Game> specification);
+    Task<PaginatedResponse<RentableGameResponse>>
+        GetRentableGamesAsync(
+            GetAllRentableGamesRequest request);
+    Task<RentableGameDetailsResponse?>
+        GetRentableGameDetailsAsync(
+            Guid businessGameId,
+            Guid locationId);
 }

@@ -7,6 +7,8 @@ using RentnRoll.Application.Contracts.Businesses.GetAllBusinesses;
 using RentnRoll.Application.Contracts.Businesses.Response;
 using RentnRoll.Application.Contracts.Businesses.UpdateBusiness;
 using RentnRoll.Application.Contracts.Common;
+using RentnRoll.Application.Contracts.Rentals.GetAllRentals;
+using RentnRoll.Application.Contracts.Rentals.Response;
 using RentnRoll.Application.Services.Validation;
 using RentnRoll.Application.Specifications.Businesses;
 using RentnRoll.Domain.Common;
@@ -101,6 +103,20 @@ public class BusinessService : IBusinessService
         return business;
     }
 
+    public async Task<Result<PaginatedResponse<RentalResponse>>>
+        GetMyRentalsAsync(GetAllRentalsRequest request)
+    {
+        var result = await GetOwnBusinessAsync();
+        if (result.IsError)
+            return result.Errors;
+
+        var businessId = result.Value!.Id;
+        var rentals = await _unitOfWork
+            .GetRepository<IRentalRepository>()
+            .GetAllRentalsAsync(request, businessId: businessId);
+
+        return rentals;
+    }
 
     public async Task<Result<BusinessResponse>> CreateAsync(
         CreateBusinessRequest request)

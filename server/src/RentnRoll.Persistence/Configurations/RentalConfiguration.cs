@@ -45,24 +45,54 @@ public class RentalConfiguration
             .IsRequired();
 
         builder
-            .Property(r => r.GameName)
-            .IsRequired()
-            .HasMaxLength(300)
-            .HasColumnType("varchar(300)");
+            .HasOne(b => b.BusinessGame)
+            .WithMany()
+            .HasForeignKey(b => b.BusinessGameId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.NoAction);
+    }
+}
+
+public class LockerRentalConfiguration
+    : IEntityTypeConfiguration<LockerRental>
+{
+    public void Configure(EntityTypeBuilder<LockerRental> builder)
+    {
+        builder.HasKey(lr => lr.RentalId);
 
         builder
-            .Property(r => r.Address)
-            .IsRequired()
-            .HasMaxLength(400);
+            .HasOne(lr => lr.Rental)
+            .WithOne(r => r.LockerRental)
+            .HasForeignKey<LockerRental>(lr => lr.RentalId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .Property(r => r.LocationName)
-            .IsRequired()
-            .HasMaxLength(200);
+            .HasOne(lr => lr.Locker)
+            .WithMany()
+            .HasForeignKey(lr => lr.LockerId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.NoAction);
+    }
+}
+
+public class StoreRentalConfiguration
+    : IEntityTypeConfiguration<StoreRental>
+{
+    public void Configure(EntityTypeBuilder<StoreRental> builder)
+    {
+        builder.HasKey(sr => sr.RentalId);
 
         builder
-            .Property(r => r.IotDeviceId)
-            .IsRequired()
-            .HasMaxLength(100);
+            .HasOne(sr => sr.Rental)
+            .WithOne(r => r.StoreRental)
+            .HasForeignKey<StoreRental>(sr => sr.RentalId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasOne(sr => sr.Store)
+            .WithMany()
+            .HasForeignKey(sr => sr.StoreId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }
