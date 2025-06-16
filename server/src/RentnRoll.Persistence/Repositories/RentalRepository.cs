@@ -5,6 +5,7 @@ using RentnRoll.Application.Contracts.Common;
 using RentnRoll.Application.Contracts.Rentals.GetAllRentals;
 using RentnRoll.Application.Contracts.Rentals.Response;
 using RentnRoll.Domain.Entities.Rentals;
+using RentnRoll.Domain.Entities.Rentals.Enums;
 using RentnRoll.Persistence.Context;
 using RentnRoll.Persistence.Extensions;
 
@@ -25,15 +26,15 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
         var joinQuery = _dbSet
             .AsNoTracking()
             .Include(r => r.StoreRental)
-            .Include(r => r.StoreRental!.Store)
-            .Include(r => r.StoreRental!.Store!.Assets
-                .Where(a => a.BusinessGameId == r.BusinessGameId))
+            .Include(r => r.StoreRental!.StoreAsset)
             .ThenInclude(a => a!.BusinessGame)
             .ThenInclude(bg => bg.Game)
+            .Include(r => r.StoreRental!.StoreAsset!.Store)
             .Include(r => r.LockerRental)
-            .Include(r => r.LockerRental!.Locker)
-            .Include(r => r.LockerRental!.Locker!.Cells
-                .Where(c => c.BusinessGameId == r.BusinessGameId))
+            .Include(r => r.LockerRental!.Cell)
+            .ThenInclude(c => c!.BusinessGame)
+            .ThenInclude(bg => bg!.Game)
+            .Include(r => r.LockerRental!.Cell!.Locker)
             .Join(
                 _context.Users,
                 r => r.UserId,
@@ -47,9 +48,14 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
         if (businessId != null)
         {
             joinQuery = joinQuery
-                .Where(j => j.Rental.LockerRental!.Locker!.Cells
-                    .First().BusinessId == businessId ||
-                j.Rental.StoreRental!.Store!.BusinessId == businessId);
+                .Where(j =>
+                    j.Rental
+                    .LockerRental!
+                    .Cell!.BusinessId == businessId ||
+                    j.Rental
+                    .StoreRental!
+                    .StoreAsset!
+                    .Store.BusinessId == businessId);
         }
 
         var query = joinQuery
@@ -62,14 +68,14 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
                 j.Rental.EndDate,
                 j.Rental.TotalPrice,
                 j.Rental.StoreRental != null
-                    ? j.Rental.StoreRental.Store!.Address.ToString()
-                    : j.Rental.LockerRental!.Locker!.Address.ToString(),
+                    ? j.Rental.StoreRental.StoreAsset!.Store.Address.ToString()
+                    : j.Rental.LockerRental!.Cell!.Locker!.Address.ToString(),
                 j.Rental.StoreRental != null
-                    ? j.Rental.StoreRental.Store!.Assets!.First().BusinessGame.Game.Name
-                    : j.Rental.LockerRental!.Locker!.Cells!.First().BusinessGame!.Game.Name,
+                    ? j.Rental.StoreRental.StoreAsset!.BusinessGame.Game.Name
+                    : j.Rental.LockerRental!.Cell!.BusinessGame!.Game.Name,
                 j.Rental.StoreRental != null
-                    ? j.Rental.StoreRental.Store!.Name
-                    : j.Rental.LockerRental!.Locker!.Name
+                    ? j.Rental.StoreRental.StoreAsset!.Store.Name
+                    : j.Rental.LockerRental!.Cell!.Locker!.Name
             ));
 
         return query.ToPaginatedResponse(
@@ -82,17 +88,16 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
     {
         var query = _dbSet
             .AsNoTracking()
-            .Where(r => r.UserId == userId)
             .Include(r => r.StoreRental)
-            .Include(r => r.StoreRental!.Store)
-            .Include(r => r.StoreRental!.Store!.Assets
-                .Where(a => a.BusinessGameId == r.BusinessGameId))
+            .Include(r => r.StoreRental!.StoreAsset)
             .ThenInclude(a => a!.BusinessGame)
             .ThenInclude(bg => bg.Game)
+            .Include(r => r.StoreRental!.StoreAsset!.Store)
             .Include(r => r.LockerRental)
-            .Include(r => r.LockerRental!.Locker)
-            .Include(r => r.LockerRental!.Locker!.Cells
-                .Where(c => c.BusinessGameId == r.BusinessGameId));
+            .Include(r => r.LockerRental!.Cell)
+            .ThenInclude(c => c!.BusinessGame)
+            .ThenInclude(bg => bg!.Game)
+            .Include(r => r.LockerRental!.Cell!.Locker);
 
         var rentals = await query
             .Select(r => new UserRentalResponse(
@@ -102,20 +107,33 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
                 r.EndDate,
                 r.TotalPrice,
                 r.StoreRental != null
-                    ? r.StoreRental.Store!.Address.ToString()
-                    : r.LockerRental!.Locker!.Address.ToString(),
+                    ? r.StoreRental.StoreAsset!.Store.Address.ToString()
+                    : r.LockerRental!.Cell!.Locker!.Address.ToString(),
                 r.StoreRental != null
-                    ? r.StoreRental.Store!.Assets!.First().BusinessGame.Game.Name
-                    : r.LockerRental!.Locker!.Cells!.First().BusinessGame!.Game.Name,
+                    ? r.StoreRental.StoreAsset!.BusinessGame.Game.Name
+                    : r.LockerRental!.Cell!.BusinessGame!.Game.Name,
                 r.StoreRental != null
-                    ? r.StoreRental.Store!.Name
-                    : r.LockerRental!.Locker!.Name,
+                    ? r.StoreRental.StoreAsset!.Store.Name
+                    : r.LockerRental!.Cell!.Locker!.Name,
                 r.LockerRental != null
-                    ? r.LockerRental!.Locker!.Cells.First().IotDeviceId
+                    ? r.LockerRental!.Cell!.IotDeviceId
                     : null
             ))
             .ToListAsync();
 
         return rentals;
+    }
+
+    public async Task<ICollection<Rental>> GetOverdueRentalsAsync()
+    {
+        var query = _dbSet
+            .Where(r => r.Status == RentalStatus.Active &&
+                        r.EndDate < DateTime.UtcNow)
+            .Include(r => r.LockerRental)
+            .ThenInclude(lr => lr!.Cell);
+
+        var overdue = await query.ToListAsync();
+
+        return overdue;
     }
 }

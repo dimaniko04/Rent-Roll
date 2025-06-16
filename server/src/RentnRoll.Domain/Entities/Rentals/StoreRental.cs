@@ -7,6 +7,6 @@ public class StoreRental
     public Guid RentalId { get; set; }
     public Rental Rental { get; set; } = null!;
 
-    public Guid StoreId { get; set; }
-    public Store? Store { get; set; }
+    public Guid StoreAssetId { get; set; }
+    public StoreAsset? StoreAsset { get; set; }
 }

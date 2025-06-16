@@ -1,8 +1,9 @@
+using RentnRoll.Domain.Common;
 using RentnRoll.Domain.Entities.BusinessGames;
 
 namespace RentnRoll.Domain.Entities.Stores;
 
-public class StoreAsset
+public class StoreAsset : Entity
 {
     public Guid StoreId { get; set; }
     public Store Store { get; set; } = null!;

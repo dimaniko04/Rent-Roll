@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using RentnRoll.Domain.Entities.Lockers;
-using RentnRoll.Domain.Entities.Lockers.Enums;
 
 namespace RentnRoll.Persistence.Configurations;
 
@@ -46,43 +45,5 @@ public class LockerConfigurations : IEntityTypeConfiguration<Locker>
             .HasMany(l => l.PricingPolicies)
             .WithMany()
             .UsingEntity(j => j.ToTable("LockerPricingPolicies"));
-
-        builder
-            .OwnsMany(l => l.Cells, ConfigureCell);
-    }
-
-    private void ConfigureCell(
-        OwnedNavigationBuilder<Locker, Cell> builder)
-    {
-        builder
-            .HasKey(c => c.Id);
-
-        builder
-            .Property(c => c.Status)
-            .IsRequired()
-            .HasDefaultValue(CellStatus.Empty)
-            .HasConversion<string>();
-
-        builder
-            .Property(c => c.IotDeviceId)
-            .IsRequired(false)
-            .HasMaxLength(100)
-            .HasColumnType("varchar(100)");
-
-        builder
-            .HasOne(c => c.Business)
-            .WithMany()
-            .HasForeignKey(c => c.BusinessId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
-        builder
-            .HasOne(c => c.BusinessGame)
-            .WithMany()
-            .HasForeignKey(c => c.BusinessGameId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
-        builder
-            .WithOwner(c => c.Locker)
-            .HasForeignKey(c => c.LockerId);
     }
 }

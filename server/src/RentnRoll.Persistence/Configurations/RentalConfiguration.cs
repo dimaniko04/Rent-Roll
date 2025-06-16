@@ -43,13 +43,6 @@ public class RentalConfiguration
         builder
             .Property(r => r.TotalPrice)
             .IsRequired();
-
-        builder
-            .HasOne(b => b.BusinessGame)
-            .WithMany()
-            .HasForeignKey(b => b.BusinessGameId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.NoAction);
     }
 }
 
@@ -67,9 +60,9 @@ public class LockerRentalConfiguration
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasOne(lr => lr.Locker)
+            .HasOne(lr => lr.Cell)
             .WithMany()
-            .HasForeignKey(lr => lr.LockerId)
+            .HasForeignKey(lr => lr.CellId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
     }
@@ -89,9 +82,9 @@ public class StoreRentalConfiguration
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasOne(sr => sr.Store)
+            .HasOne(sr => sr.StoreAsset)
             .WithMany()
-            .HasForeignKey(sr => sr.StoreId)
+            .HasForeignKey(sr => sr.StoreAssetId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
     }

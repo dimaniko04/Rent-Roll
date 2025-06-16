@@ -47,19 +47,18 @@ public class StoreConfigurations : IEntityTypeConfiguration<Store>
 
         builder.Property(s => s.UpdatedAt)
             .IsRequired(false);
-
-        builder
-            .OwnsMany(s => s.Assets, ConfigureStoreAsset);
     }
+}
 
-    private void ConfigureStoreAsset(
-        OwnedNavigationBuilder<Store, StoreAsset> builder)
+public class StoreAssetConfigurations
+    : IEntityTypeConfiguration<StoreAsset>
+{
+    public void Configure(EntityTypeBuilder<StoreAsset> builder)
     {
-        builder
-            .WithOwner(sa => sa.Store)
-            .HasForeignKey(sa => sa.StoreId);
+        builder.HasQueryFilter(
+            sa => !sa.Store.Business.IsDeleted);
 
-        builder.HasKey(sa => new { sa.StoreId, sa.BusinessGameId });
+        builder.HasKey(sa => sa.Id);
 
         builder
             .HasOne(sa => sa.BusinessGame)
@@ -71,5 +70,11 @@ public class StoreConfigurations : IEntityTypeConfiguration<Store>
             .Property(sa => sa.Quantity)
             .IsRequired()
             .HasDefaultValue(1);
+
+        builder
+            .HasOne(sa => sa.Store)
+            .WithMany(s => s.Assets)
+            .HasForeignKey(sa => sa.StoreId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

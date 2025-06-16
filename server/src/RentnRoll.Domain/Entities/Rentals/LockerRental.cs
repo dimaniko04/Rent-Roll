@@ -7,6 +7,6 @@ public class LockerRental
     public Guid RentalId { get; set; }
     public Rental Rental { get; set; } = null!;
 
-    public Guid LockerId { get; set; }
-    public Locker? Locker { get; set; }
+    public Guid CellId { get; set; }
+    public Cell? Cell { get; set; }
 }

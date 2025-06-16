@@ -14,4 +14,6 @@ public interface IRentalRepository : IBaseRepository<Rental>
 
     public Task<ICollection<UserRentalResponse>>
         GetAllUserRentalsAsync(string userId);
+
+    public Task<ICollection<Rental>> GetOverdueRentalsAsync();
 }
