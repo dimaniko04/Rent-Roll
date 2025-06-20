@@ -1,0 +1,44 @@
+[
+    {
+        "Name": "Smart Locker Berlin Center",
+        "Address": {
+            "Country": "Germany",
+            "City": "Berlin",
+            "Street": "Friedrichstraße 123",
+            "State": "Berlin",
+            "ZipCode": "10117"
+        },
+        "Cells": [
+            {
+                "IotDeviceId": "locker-device-001",
+                "BusinessName": "TableTop Empire",
+                "BusinessGameName": "Terraforming Mars"
+            },
+            {
+                "IotDeviceId": "locker-device-001",
+                "BusinessName": "TableTop Empire",
+                "BusinessGameName": "Wingspan"
+            }
+        ],
+        "PricingPolicies": [
+            {
+                "Name": "Locker Berlin Rate",
+                "BusinessName": "TableTop Empire",
+                "Description": "Standard daily pricing for locker rentals",
+                "PricePercent": 10,
+                "TimeUnit": "Day",
+                "UnitCount": 1,
+                "Items": [
+                    {
+                        "GameName": "Terraforming Mars",
+                        "Price": 125
+                    },
+                    {
+                        "GameName": "Wingspan",
+                        "Price": 105
+                    }
+                ]
+            }
+        ]
+    }
+]

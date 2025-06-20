@@ -1,0 +1,578 @@
+[
+    {
+        "Name": "Acting"
+    },
+    {
+        "Name": "Action / Event"
+    },
+    {
+        "Name": "Action Drafting"
+    },
+    {
+        "Name": "Action Points"
+    },
+    {
+        "Name": "Action Queue"
+    },
+    {
+        "Name": "Action Retrieval"
+    },
+    {
+        "Name": "Action Timer"
+    },
+    {
+        "Name": "Advantage Token"
+    },
+    {
+        "Name": "Alliances"
+    },
+    {
+        "Name": "Area Majority / Influence"
+    },
+    {
+        "Name": "Area Movement"
+    },
+    {
+        "Name": "Area-Impulse"
+    },
+    {
+        "Name": "Auction / Bidding"
+    },
+    {
+        "Name": "Auction Compensation"
+    },
+    {
+        "Name": "Auction: Dexterity"
+    },
+    {
+        "Name": "Auction: Dutch"
+    },
+    {
+        "Name": "Auction: Dutch Priority"
+    },
+    {
+        "Name": "Auction: English"
+    },
+    {
+        "Name": "Auction: Fixed Placement"
+    },
+    {
+        "Name": "Auction: Multiple Lot"
+    },
+    {
+        "Name": "Auction: Once Around"
+    },
+    {
+        "Name": "Auction: Sealed Bid"
+    },
+    {
+        "Name": "Auction: Turn Order Until Pass"
+    },
+    {
+        "Name": "Automatic Resource Growth"
+    },
+    {
+        "Name": "Betting and Bluffing"
+    },
+    {
+        "Name": "Bias"
+    },
+    {
+        "Name": "Bids As Wagers"
+    },
+    {
+        "Name": "Bingo"
+    },
+    {
+        "Name": "Bribery"
+    },
+    {
+        "Name": "Campaign / Battle Card Driven"
+    },
+    {
+        "Name": "Card Play Conflict Resolution"
+    },
+    {
+        "Name": "Catch the Leader"
+    },
+    {
+        "Name": "Chaining"
+    },
+    {
+        "Name": "Chit-Pull System"
+    },
+    {
+        "Name": "Closed Drafting"
+    },
+    {
+        "Name": "Closed Economy Auction"
+    },
+    {
+        "Name": "Command Cards"
+    },
+    {
+        "Name": "Commodity Speculation"
+    },
+    {
+        "Name": "Communication Limits"
+    },
+    {
+        "Name": "Connections"
+    },
+    {
+        "Name": "Constrained Bidding"
+    },
+    {
+        "Name": "Contracts"
+    },
+    {
+        "Name": "Cooperative Game"
+    },
+    {
+        "Name": "Crayon Rail System"
+    },
+    {
+        "Name": "Critical Hits and Failures"
+    },
+    {
+        "Name": "Cube Tower"
+    },
+    {
+        "Name": "Deck Construction"
+    },
+    {
+        "Name": "Deck, Bag, and Pool Building"
+    },
+    {
+        "Name": "Deduction"
+    },
+    {
+        "Name": "Delayed Purchase"
+    },
+    {
+        "Name": "Dice Rolling"
+    },
+    {
+        "Name": "Die Icon Resolution"
+    },
+    {
+        "Name": "Different Dice Movement"
+    },
+    {
+        "Name": "Drawing"
+    },
+    {
+        "Name": "Elapsed Real Time Ending"
+    },
+    {
+        "Name": "Enclosure"
+    },
+    {
+        "Name": "End Game Bonuses"
+    },
+    {
+        "Name": "Events"
+    },
+    {
+        "Name": "Finale Ending"
+    },
+    {
+        "Name": "Flicking"
+    },
+    {
+        "Name": "Follow"
+    },
+    {
+        "Name": "Force Commitment"
+    },
+    {
+        "Name": "Grid Coverage"
+    },
+    {
+        "Name": "Grid Movement"
+    },
+    {
+        "Name": "Hand Management"
+    },
+    {
+        "Name": "Hexagon Grid"
+    },
+    {
+        "Name": "Hidden Movement"
+    },
+    {
+        "Name": "Hidden Roles"
+    },
+    {
+        "Name": "Hidden Victory Points"
+    },
+    {
+        "Name": "Highest-Lowest Scoring"
+    },
+    {
+        "Name": "Hot Potato"
+    },
+    {
+        "Name": "I Cut, You Choose"
+    },
+    {
+        "Name": "Impulse Movement"
+    },
+    {
+        "Name": "Income"
+    },
+    {
+        "Name": "Increase Value of Unchosen Resources"
+    },
+    {
+        "Name": "Induction"
+    },
+    {
+        "Name": "Interrupts"
+    },
+    {
+        "Name": "Investment"
+    },
+    {
+        "Name": "Kill Steal"
+    },
+    {
+        "Name": "King of the Hill"
+    },
+    {
+        "Name": "Ladder Climbing"
+    },
+    {
+        "Name": "Layering"
+    },
+    {
+        "Name": "Legacy Game"
+    },
+    {
+        "Name": "Line Drawing"
+    },
+    {
+        "Name": "Line of Sight"
+    },
+    {
+        "Name": "Loans"
+    },
+    {
+        "Name": "Lose a Turn"
+    },
+    {
+        "Name": "Mancala"
+    },
+    {
+        "Name": "Map Addition"
+    },
+    {
+        "Name": "Map Deformation"
+    },
+    {
+        "Name": "Map Reduction"
+    },
+    {
+        "Name": "Market"
+    },
+    {
+        "Name": "Matching"
+    },
+    {
+        "Name": "Measurement Movement"
+    },
+    {
+        "Name": "Melding and Splaying"
+    },
+    {
+        "Name": "Memory"
+    },
+    {
+        "Name": "Minimap Resolution"
+    },
+    {
+        "Name": "Modular Board"
+    },
+    {
+        "Name": "Move Through Deck"
+    },
+    {
+        "Name": "Movement Points"
+    },
+    {
+        "Name": "Movement Template"
+    },
+    {
+        "Name": "Moving Multiple Units"
+    },
+    {
+        "Name": "Multi-Use Cards"
+    },
+    {
+        "Name": "Multiple Maps"
+    },
+    {
+        "Name": "Narrative Choice / Paragraph"
+    },
+    {
+        "Name": "Negotiation"
+    },
+    {
+        "Name": "Neighbor Scope"
+    },
+    {
+        "Name": "Network and Route Building"
+    },
+    {
+        "Name": "Once-Per-Game Abilities"
+    },
+    {
+        "Name": "Open Drafting"
+    },
+    {
+        "Name": "Order Counters"
+    },
+    {
+        "Name": "Ordering"
+    },
+    {
+        "Name": "Ownership"
+    },
+    {
+        "Name": "Paper-and-Pencil"
+    },
+    {
+        "Name": "Passed Action Token"
+    },
+    {
+        "Name": "Pattern Building"
+    },
+    {
+        "Name": "Pattern Movement"
+    },
+    {
+        "Name": "Pattern Recognition"
+    },
+    {
+        "Name": "Physical Removal"
+    },
+    {
+        "Name": "Pick-up and Deliver"
+    },
+    {
+        "Name": "Pieces as Map"
+    },
+    {
+        "Name": "Player Elimination"
+    },
+    {
+        "Name": "Player Judge"
+    },
+    {
+        "Name": "Point to Point Movement"
+    },
+    {
+        "Name": "Predictive Bid"
+    },
+    {
+        "Name": "Prisoner's Dilemma"
+    },
+    {
+        "Name": "Programmed Movement"
+    },
+    {
+        "Name": "Push Your Luck"
+    },
+    {
+        "Name": "Questions and Answers"
+    },
+    {
+        "Name": "Race"
+    },
+    {
+        "Name": "Random Production"
+    },
+    {
+        "Name": "Ratio / Combat Results Table"
+    },
+    {
+        "Name": "Re-rolling and Locking"
+    },
+    {
+        "Name": "Real-Time"
+    },
+    {
+        "Name": "Relative Movement"
+    },
+    {
+        "Name": "Resource Queue"
+    },
+    {
+        "Name": "Resource to Move"
+    },
+    {
+        "Name": "Rock-Paper-Scissors"
+    },
+    {
+        "Name": "Role Playing"
+    },
+    {
+        "Name": "Roles with Asymmetric Information"
+    },
+    {
+        "Name": "Roll / Spin and Move"
+    },
+    {
+        "Name": "Rondel"
+    },
+    {
+        "Name": "Scenario / Mission / Campaign Game"
+    },
+    {
+        "Name": "Score-and-Reset Game"
+    },
+    {
+        "Name": "Secret Unit Deployment"
+    },
+    {
+        "Name": "Selection Order Bid"
+    },
+    {
+        "Name": "Semi-Cooperative Game"
+    },
+    {
+        "Name": "Set Collection"
+    },
+    {
+        "Name": "Simulation"
+    },
+    {
+        "Name": "Simultaneous Action Selection"
+    },
+    {
+        "Name": "Singing"
+    },
+    {
+        "Name": "Single Loser Game"
+    },
+    {
+        "Name": "Slide / Push"
+    },
+    {
+        "Name": "Solo / Solitaire Game"
+    },
+    {
+        "Name": "Speed Matching"
+    },
+    {
+        "Name": "Spelling"
+    },
+    {
+        "Name": "Square Grid"
+    },
+    {
+        "Name": "Stacking and Balancing"
+    },
+    {
+        "Name": "Stat Check Resolution"
+    },
+    {
+        "Name": "Static Capture"
+    },
+    {
+        "Name": "Stock Holding"
+    },
+    {
+        "Name": "Storytelling"
+    },
+    {
+        "Name": "Sudden Death Ending"
+    },
+    {
+        "Name": "Tags"
+    },
+    {
+        "Name": "Take That"
+    },
+    {
+        "Name": "Targeted Clues"
+    },
+    {
+        "Name": "Team-Based Game"
+    },
+    {
+        "Name": "Tech Trees / Tech Tracks"
+    },
+    {
+        "Name": "Three Dimensional Movement"
+    },
+    {
+        "Name": "Tile Placement"
+    },
+    {
+        "Name": "Track Movement"
+    },
+    {
+        "Name": "Trading"
+    },
+    {
+        "Name": "Traitor Game"
+    },
+    {
+        "Name": "Trick-taking"
+    },
+    {
+        "Name": "Tug of War"
+    },
+    {
+        "Name": "Turn Order: Auction"
+    },
+    {
+        "Name": "Turn Order: Claim Action"
+    },
+    {
+        "Name": "Turn Order: Pass Order"
+    },
+    {
+        "Name": "Turn Order: Progressive"
+    },
+    {
+        "Name": "Turn Order: Random"
+    },
+    {
+        "Name": "Turn Order: Role Order"
+    },
+    {
+        "Name": "Turn Order: Stat-Based"
+    },
+    {
+        "Name": "Turn Order: Time Track"
+    },
+    {
+        "Name": "Variable Phase Order"
+    },
+    {
+        "Name": "Variable Player Powers"
+    },
+    {
+        "Name": "Variable Set-up"
+    },
+    {
+        "Name": "Victory Points as a Resource"
+    },
+    {
+        "Name": "Voting"
+    },
+    {
+        "Name": "Worker Placement"
+    },
+    {
+        "Name": "Worker Placement with Dice Workers"
+    },
+    {
+        "Name": "Worker Placement, Different Worker Types"
+    },
+    {
+        "Name": "Zone of Control"
+    }
+]

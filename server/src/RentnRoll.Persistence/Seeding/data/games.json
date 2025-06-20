@@ -1,0 +1,543 @@
+[
+  {
+    "Name": "Terraforming Mars",
+    "Description": "Terraforming Mars is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2018-07-27T00:00:00Z",
+    "MinPlayers": 1,
+    "MaxPlayers": 5,
+    "Age": 14,
+    "AveragePlayTime": 75,
+    "ComplexityScore": 315,
+    "Genres": [
+      "Card Game",
+      "Cooperative"
+    ],
+    "Categories": [
+      "Economic",
+      "Sci-Fi",
+      "Nature",
+      "Exploration"
+    ],
+    "Mechanics": [
+      "Deck Building",
+      "Worker Placement",
+      "Cooperative Play"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/76d0f967-7489-4415-90fa-7d3afb6d9398_2025-06-19T18:03:32.jpg",
+    "Images": [
+      "uploads/games/images/5e09695b-b86b-4e02-ae48-38bdec470410_2025-06-19T18:17:05.jpg",
+      "uploads/games/images/6cb839e2-7f4d-4ac1-add0-a9bd99abfc11_2025-06-19T18:17:04.jpg",
+      "uploads/games/images/6f635aa0-0cd0-40bd-8fce-c6bb230905ab_2025-06-19T18:17:03.jpg",
+      "uploads/games/images/12d115e7-6e45-43d1-a7f5-7e06969523d4_2025-06-19T18:17:05.jpg",
+      "uploads/games/images/fde4d4aa-7b9c-4c19-9a08-8bef12bd09e4_2025-06-19T18:17:06.jpg",
+      "uploads/games/images/feac5024-31df-49d5-ba33-db7f8eb5cc1b_2025-06-19T18:17:03.jpg"
+    ]
+  },
+  {
+    "Name": "Catan",
+    "Description": "Catan is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2019-07-13T00:00:00Z",
+    "MinPlayers": 3,
+    "MaxPlayers": 4,
+    "Age": 16,
+    "AveragePlayTime": 45,
+    "ComplexityScore": 258,
+    "Genres": [
+      "Cooperative",
+      "Strategy"
+    ],
+    "Categories": [
+      "Nature",
+      "City Building"
+    ],
+    "Mechanics": [
+      "Deck Building",
+      "Area Control",
+      "Drafting"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/8df02694-93c3-4336-80d0-949b5a5a6e31_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Wingspan",
+    "Description": "Wingspan is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2020-04-22T00:00:00Z",
+    "MinPlayers": 3,
+    "MaxPlayers": 6,
+    "Age": 10,
+    "AveragePlayTime": 45,
+    "ComplexityScore": 458,
+    "Genres": [
+      "Card Game"
+    ],
+    "Categories": [
+      "Exploration",
+      "War"
+    ],
+    "Mechanics": [
+      "Cooperative Play",
+      "Deck Building",
+      "Engine Building",
+      "Area Control"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/293a2250-c1f8-4b28-b961-811258b86fe1_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Gloomhaven",
+    "Description": "Gloomhaven is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2020-09-06T00:00:00Z",
+    "MinPlayers": 3,
+    "MaxPlayers": 6,
+    "Age": 14,
+    "AveragePlayTime": 90,
+    "ComplexityScore": 351,
+    "Genres": [
+      "Abstract"
+    ],
+    "Categories": [
+      "Nature",
+      "City Building",
+      "War"
+    ],
+    "Mechanics": [
+      "Drafting",
+      "Worker Placement",
+      "Cooperative Play",
+      "Deck Building",
+      "Engine Building"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/459e52e6-3457-468f-b4a1-ca57f2108291_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Azul",
+    "Description": "Azul is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2015-07-01T00:00:00Z",
+    "MinPlayers": 3,
+    "MaxPlayers": 4,
+    "Age": 10,
+    "AveragePlayTime": 45,
+    "ComplexityScore": 356,
+    "Genres": [
+      "Card Game",
+      "Adventure"
+    ],
+    "Categories": [
+      "War",
+      "City Building",
+      "Sci-Fi"
+    ],
+    "Mechanics": [
+      "Drafting",
+      "Worker Placement",
+      "Cooperative Play"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/0fb71159-53ff-49e6-8ac2-62dde11f0899_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "7 Wonders",
+    "Description": "7 Wonders is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2019-05-25T00:00:00Z",
+    "MinPlayers": 1,
+    "MaxPlayers": 4,
+    "Age": 10,
+    "AveragePlayTime": 75,
+    "ComplexityScore": 350,
+    "Genres": [
+      "Strategy",
+      "Abstract"
+    ],
+    "Categories": [
+      "Exploration",
+      "Economic",
+      "War"
+    ],
+    "Mechanics": [
+      "Worker Placement",
+      "Area Control",
+      "Engine Building",
+      "Cooperative Play"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/cbfff504-5c3e-4bf3-9786-193d73614be0_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Carcassonne",
+    "Description": "Carcassonne is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2016-01-28T00:00:00Z",
+    "MinPlayers": 2,
+    "MaxPlayers": 4,
+    "Age": 12,
+    "AveragePlayTime": 30,
+    "ComplexityScore": 401,
+    "Genres": [
+      "Abstract",
+      "Strategy"
+    ],
+    "Categories": [
+      "Sci-Fi",
+      "Exploration",
+      "War"
+    ],
+    "Mechanics": [
+      "Worker Placement",
+      "Deck Building",
+      "Drafting",
+      "Engine Building"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/3e854d54-bb00-4028-816c-f9a0cf95fa55_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Dominion",
+    "Description": "Dominion is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2021-05-31T00:00:00Z",
+    "MinPlayers": 3,
+    "MaxPlayers": 4,
+    "Age": 16,
+    "AveragePlayTime": 120,
+    "ComplexityScore": 453,
+    "Genres": [
+      "Card Game",
+      "Cooperative"
+    ],
+    "Categories": [
+      "City Building",
+      "Sci-Fi"
+    ],
+    "Mechanics": [
+      "Deck Building",
+      "Drafting",
+      "Worker Placement",
+      "Cooperative Play",
+      "Area Control"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/6968c8f4-e4b8-4d8f-b037-0299b57424f8_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Scythe",
+    "Description": "Scythe is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2022-03-21T00:00:00Z",
+    "MinPlayers": 1,
+    "MaxPlayers": 4,
+    "Age": 16,
+    "AveragePlayTime": 60,
+    "ComplexityScore": 305,
+    "Genres": [
+      "Family",
+      "Adventure"
+    ],
+    "Categories": [
+      "Fantasy",
+      "Nature"
+    ],
+    "Mechanics": [
+      "Worker Placement",
+      "Drafting",
+      "Cooperative Play",
+      "Engine Building",
+      "Deck Building"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/560373e5-d593-4e4e-8d0d-614dece67a00_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Pandemic",
+    "Description": "Pandemic is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2017-06-14T00:00:00Z",
+    "MinPlayers": 1,
+    "MaxPlayers": 5,
+    "Age": 16,
+    "AveragePlayTime": 120,
+    "ComplexityScore": 283,
+    "Genres": [
+      "Family",
+      "Cooperative"
+    ],
+    "Categories": [
+      "Fantasy",
+      "Sci-Fi",
+      "Nature",
+      "War"
+    ],
+    "Mechanics": [
+      "Cooperative Play",
+      "Drafting",
+      "Deck Building"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/6ea6554a-235e-42f9-9f62-d67a2b499afb_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Ticket to Ride",
+    "Description": "Ticket to Ride is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2022-11-29T00:00:00Z",
+    "MinPlayers": 1,
+    "MaxPlayers": 6,
+    "Age": 14,
+    "AveragePlayTime": 90,
+    "ComplexityScore": 247,
+    "Genres": [
+      "Strategy",
+      "Family"
+    ],
+    "Categories": [
+      "Sci-Fi",
+      "War",
+      "Exploration",
+      "Nature"
+    ],
+    "Mechanics": [
+      "Area Control",
+      "Engine Building",
+      "Worker Placement",
+      "Cooperative Play"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/72d6d206-9e3c-425f-b1c0-3464fb50da48_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Ark Nova",
+    "Description": "Ark Nova is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2019-08-26T00:00:00Z",
+    "MinPlayers": 2,
+    "MaxPlayers": 6,
+    "Age": 12,
+    "AveragePlayTime": 75,
+    "ComplexityScore": 359,
+    "Genres": [
+      "Abstract",
+      "Strategy"
+    ],
+    "Categories": [
+      "Nature",
+      "Economic",
+      "Fantasy"
+    ],
+    "Mechanics": [
+      "Cooperative Play",
+      "Engine Building",
+      "Drafting",
+      "Deck Building"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/921a5a61-3f04-4478-a940-9850a83a0a28_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Viticulture",
+    "Description": "Viticulture is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2015-02-11T00:00:00Z",
+    "MinPlayers": 1,
+    "MaxPlayers": 4,
+    "Age": 12,
+    "AveragePlayTime": 120,
+    "ComplexityScore": 350,
+    "Genres": [
+      "Family"
+    ],
+    "Categories": [
+      "Sci-Fi",
+      "Exploration",
+      "City Building",
+      "Nature"
+    ],
+    "Mechanics": [
+      "Engine Building",
+      "Drafting",
+      "Area Control"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/c61ba8c8-55d9-450e-b735-27ceead56b83_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Everdell",
+    "Description": "Everdell is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2021-11-01T00:00:00Z",
+    "MinPlayers": 3,
+    "MaxPlayers": 4,
+    "Age": 16,
+    "AveragePlayTime": 120,
+    "ComplexityScore": 312,
+    "Genres": [
+      "Adventure",
+      "Abstract"
+    ],
+    "Categories": [
+      "Nature",
+      "War"
+    ],
+    "Mechanics": [
+      "Drafting",
+      "Engine Building",
+      "Area Control",
+      "Deck Building",
+      "Worker Placement"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/cef16465-4f9b-4870-9767-a542d882b01e_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Root",
+    "Description": "Root is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2020-02-11T00:00:00Z",
+    "MinPlayers": 2,
+    "MaxPlayers": 6,
+    "Age": 14,
+    "AveragePlayTime": 45,
+    "ComplexityScore": 219,
+    "Genres": [
+      "Cooperative"
+    ],
+    "Categories": [
+      "Exploration",
+      "City Building",
+      "Nature"
+    ],
+    "Mechanics": [
+      "Drafting",
+      "Cooperative Play",
+      "Area Control"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/7f5d1b3d-a846-4b3a-b382-9e292dd11855_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "The Crew",
+    "Description": "The Crew is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2017-05-10T00:00:00Z",
+    "MinPlayers": 2,
+    "MaxPlayers": 6,
+    "Age": 10,
+    "AveragePlayTime": 30,
+    "ComplexityScore": 395,
+    "Genres": [
+      "Abstract",
+      "Cooperative"
+    ],
+    "Categories": [
+      "Sci-Fi",
+      "Economic",
+      "Nature"
+    ],
+    "Mechanics": [
+      "Cooperative Play",
+      "Engine Building",
+      "Drafting",
+      "Worker Placement",
+      "Area Control"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/87a44358-843c-4563-8016-7f738b32f97e_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Parks",
+    "Description": "Parks is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2016-03-08T00:00:00Z",
+    "MinPlayers": 3,
+    "MaxPlayers": 4,
+    "Age": 14,
+    "AveragePlayTime": 90,
+    "ComplexityScore": 283,
+    "Genres": [
+      "Family",
+      "Abstract"
+    ],
+    "Categories": [
+      "Fantasy",
+      "Nature",
+      "Exploration",
+      "Sci-Fi"
+    ],
+    "Mechanics": [
+      "Area Control",
+      "Drafting",
+      "Worker Placement"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/a8802eae-ff35-43f4-9d9e-60599d30e127_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Spirit Island",
+    "Description": "Spirit Island is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2015-09-20T00:00:00Z",
+    "MinPlayers": 1,
+    "MaxPlayers": 6,
+    "Age": 16,
+    "AveragePlayTime": 120,
+    "ComplexityScore": 341,
+    "Genres": [
+      "Adventure"
+    ],
+    "Categories": [
+      "Sci-Fi",
+      "Exploration",
+      "City Building",
+      "Nature"
+    ],
+    "Mechanics": [
+      "Drafting",
+      "Deck Building",
+      "Area Control"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/a131aa1a-30b0-46d1-84c9-49b5d886f844_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Clank!",
+    "Description": "Clank! is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2023-01-01T00:00:00Z",
+    "MinPlayers": 2,
+    "MaxPlayers": 4,
+    "Age": 16,
+    "AveragePlayTime": 30,
+    "ComplexityScore": 357,
+    "Genres": [
+      "Card Game",
+      "Abstract"
+    ],
+    "Categories": [
+      "Economic",
+      "War"
+    ],
+    "Mechanics": [
+      "Worker Placement",
+      "Drafting",
+      "Cooperative Play",
+      "Engine Building"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/94e0aa6f-a6f5-4768-bf35-c639061a4f3b_2025-06-19T18:03:32.jpg",
+    "Images": []
+  },
+  {
+    "Name": "Lost Ruins of Arnak",
+    "Description": "Lost Ruins of Arnak is a highly engaging game that blends strategy and thematic elements in a unique way.",
+    "PublishedAt": "2020-01-04T00:00:00Z",
+    "MinPlayers": 2,
+    "MaxPlayers": 4,
+    "Age": 16,
+    "AveragePlayTime": 60,
+    "ComplexityScore": 346,
+    "Genres": [
+      "Card Game",
+      "Family"
+    ],
+    "Categories": [
+      "War",
+      "Nature",
+      "Exploration",
+      "Fantasy"
+    ],
+    "Mechanics": [
+      "Deck Building",
+      "Engine Building",
+      "Drafting",
+      "Worker Placement",
+      "Cooperative Play"
+    ],
+    "ThumbnailUrl": "uploads/games/thumbnails/91ff7ae9-e77f-46e9-b5dd-535555b91326_2025-06-19T18:03:32.jpg",
+    "Images": []
+  }
+]

@@ -1,0 +1,340 @@
+[
+    {
+        "Name": "TableTop Empire",
+        "Description": "The largest network of board game clubs in the region.",
+        "Owner": {
+            "FirstName": "Alex",
+            "LastName": "Morrison",
+            "Email": "alex.morrison@example.com",
+            "Password": "SecurePass123!"
+        },
+        "Games": [
+            {
+                "Quantity": 5,
+                "GameName": "Terraforming Mars"
+            },
+            {
+                "Quantity": 3,
+                "GameName": "Wingspan"
+            }
+        ],
+        "Stores": [
+            {
+                "Name": "TableTop Empire – Central",
+                "Description": "The main store in the city center.",
+                "Address": {
+                    "Country": "Germany",
+                    "City": "Berlin",
+                    "Street": "Alexanderplatz 1",
+                    "State": "Berlin",
+                    "ZipCode": "10178"
+                },
+                "Policy": {
+                    "Name": "Berlin Daily Rate",
+                    "Description": "Standard daily pricing for Berlin region",
+                    "PricePercent": 10,
+                    "TimeUnit": "Day",
+                    "UnitCount": 1,
+                    "Items": [
+                        {
+                            "GameName": "Terraforming Mars",
+                            "Price": 120
+                        },
+                        {
+                            "GameName": "Wingspan",
+                            "Price": 100
+                        }
+                    ]
+                },
+                "Items": [
+                    {
+                        "GameName": "Terraforming Mars",
+                        "Quantity": 3
+                    },
+                    {
+                        "GameName": "Wingspan",
+                        "Quantity": 2
+                    }
+                ]
+            },
+            {
+                "Name": "TableTop Empire – Mall Branch",
+                "Description": "Branch located in a large shopping mall.",
+                "Address": {
+                    "Country": "Germany",
+                    "City": "Berlin",
+                    "Street": "Kurfürstendamm 12",
+                    "State": "Berlin",
+                    "ZipCode": "10719"
+                },
+                "Policy": {
+                    "Name": "Mall Branch Rate",
+                    "Description": "Local pricing for mall customers",
+                    "PricePercent": 12,
+                    "TimeUnit": "Day",
+                    "UnitCount": 1,
+                    "Items": [
+                        {
+                            "GameName": "Terraforming Mars",
+                            "Price": 130
+                        },
+                        {
+                            "GameName": "Wingspan",
+                            "Price": 110
+                        }
+                    ]
+                },
+                "Items": [
+                    {
+                        "GameName": "Terraforming Mars",
+                        "Quantity": 2
+                    },
+                    {
+                        "GameName": "Wingspan",
+                        "Quantity": 1
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Name": "Meeple Galaxy",
+        "Description": "Premium game rental platform with delivery.",
+        "Owner": {
+            "FirstName": "Sophie",
+            "LastName": "Nguyen",
+            "Email": "sophie.nguyen@meeplegalaxy.com",
+            "Password": "SecureMeeple123"
+        },
+        "Games": [
+            {
+                "Quantity": 4,
+                "GameName": "Gloomhaven"
+            },
+            {
+                "Quantity": 2,
+                "GameName": "Catan"
+            }
+        ],
+        "Stores": [
+            {
+                "Name": "Meeple Galaxy Hub",
+                "Description": "Warehouse with automated parcel lockers.",
+                "Address": {
+                    "Country": "France",
+                    "City": "Lyon",
+                    "Street": "Rue Victor Hugo 11",
+                    "State": "Auvergne-Rhône-Alpes",
+                    "ZipCode": "69002"
+                },
+                "Policy": {
+                    "Name": "Lyon Base Rate",
+                    "Description": "Regular rates for rentals in Lyon",
+                    "PricePercent": 15,
+                    "TimeUnit": "Day",
+                    "UnitCount": 3,
+                    "Items": [
+                        {
+                            "GameName": "Catan",
+                            "Price": 90
+                        },
+                        {
+                            "GameName": "Gloomhaven",
+                            "Price": 300
+                        }
+                    ]
+                },
+                "Items": [
+                    {
+                        "GameName": "Catan",
+                        "Quantity": 2
+                    },
+                    {
+                        "GameName": "Gloomhaven",
+                        "Quantity": 4
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Name": "Dice & Dragons",
+        "Description": "Board games in the fantasy and role-play genre.",
+        "Owner": {
+            "FirstName": "Ivan",
+            "LastName": "Petrov",
+            "Email": "ivan.petrov@dndgames.ru",
+            "Password": "DND123Strong!"
+        },
+        "Games": [
+            {
+                "Quantity": 3,
+                "GameName": "Scythe"
+            },
+            {
+                "Quantity": 5,
+                "GameName": "Dominion"
+            }
+        ],
+        "Stores": [
+            {
+                "Name": "DnD Fantasy Hall",
+                "Description": "A hall dedicated to fantasy gaming sessions.",
+                "Address": {
+                    "Country": "Russia",
+                    "City": "Moscow",
+                    "Street": "Arbat St. 25",
+                    "State": "Moscow",
+                    "ZipCode": "119002"
+                },
+                "Policy": {
+                    "Name": "Moscow Pricing Tier",
+                    "Description": "Default pricing for fantasy category games in Moscow",
+                    "PricePercent": 18,
+                    "TimeUnit": "Day",
+                    "UnitCount": 2,
+                    "Items": [
+                        {
+                            "GameName": "Scythe",
+                            "Price": 150
+                        },
+                        {
+                            "GameName": "Dominion",
+                            "Price": 90
+                        }
+                    ]
+                },
+                "Items": [
+                    {
+                        "GameName": "Scythe",
+                        "Quantity": 3
+                    },
+                    {
+                        "GameName": "Dominion",
+                        "Quantity": 5
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Name": "Nordic Board Hub",
+        "Description": "A Nordic service for game rentals and exchanges.",
+        "Owner": {
+            "FirstName": "Emma",
+            "LastName": "Hansen",
+            "Email": "emma@nordichub.dk",
+            "Password": "NordicPass321!"
+        },
+        "Games": [
+            {
+                "Quantity": 4,
+                "GameName": "Azul"
+            },
+            {
+                "Quantity": 6,
+                "GameName": "Pandemic"
+            }
+        ],
+        "Stores": [
+            {
+                "Name": "NBH Warehouse",
+                "Description": "Main fulfillment center.",
+                "Address": {
+                    "Country": "Denmark",
+                    "City": "Copenhagen",
+                    "Street": "Strøget 22",
+                    "State": "Hovedstaden",
+                    "ZipCode": "1550"
+                },
+                "Policy": {
+                    "Name": "Copenhagen Rental Rate",
+                    "Description": "Default rates for Copenhagen area",
+                    "PricePercent": 10,
+                    "TimeUnit": "Day",
+                    "UnitCount": 2,
+                    "Items": [
+                        {
+                            "GameName": "Azul",
+                            "Price": 60
+                        },
+                        {
+                            "GameName": "Pandemic",
+                            "Price": 75
+                        }
+                    ]
+                },
+                "Items": [
+                    {
+                        "GameName": "Azul",
+                        "Quantity": 4
+                    },
+                    {
+                        "GameName": "Pandemic",
+                        "Quantity": 6
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Name": "Cardboard Kingdom",
+        "Description": "A local club chain in the UK.",
+        "Owner": {
+            "FirstName": "Oliver",
+            "LastName": "Smith",
+            "Email": "oliver@cardboardkingdom.uk",
+            "Password": "CardKing123!"
+        },
+        "Games": [
+            {
+                "Quantity": 2,
+                "GameName": "7 Wonders"
+            },
+            {
+                "Quantity": 4,
+                "GameName": "Carcassonne"
+            }
+        ],
+        "Stores": [
+            {
+                "Name": "CK Main Club",
+                "Description": "Main city center club.",
+                "Address": {
+                    "Country": "United Kingdom",
+                    "City": "Manchester",
+                    "Street": "Oxford Road 42",
+                    "State": "England",
+                    "ZipCode": "4101"
+                },
+                "Policy": {
+                    "Name": "Manchester Standard Plan",
+                    "Description": "Standard hourly rental terms",
+                    "PricePercent": 20,
+                    "TimeUnit": "Hour",
+                    "UnitCount": 4,
+                    "Items": [
+                        {
+                            "GameName": "7 Wonders",
+                            "Price": 40
+                        },
+                        {
+                            "GameName": "Carcassonne",
+                            "Price": 35
+                        }
+                    ]
+                },
+                "Items": [
+                    {
+                        "GameName": "7 Wonders",
+                        "Quantity": 2
+                    },
+                    {
+                        "GameName": "Carcassonne",
+                        "Quantity": 4
+                    }
+                ]
+            }
+        ]
+    }
+]
