@@ -8,10 +8,8 @@ namespace RentnRoll.Persistence.Identity;
 
 public class User : IdentityUser, ISoftDeletable, IAuditable
 {
-    public string FirstName { get; set; } = null!;
-    public string LastName { get; set; } = null!;
+    public string FullName { get; set; } = null!;
     public string? Country { get; set; }
-    public DateTime? BirthDate { get; set; }
 
     public bool IsDeleted { get; set; } = false;
     public DateTime? DeletedAt { get; set; }
@@ -22,18 +20,14 @@ public class User : IdentityUser, ISoftDeletable, IAuditable
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiry { get; set; }
 
-    public string FullName => $"{LastName} {FirstName}";
 
     internal UserResponse ToUserResponse()
     {
         return new UserResponse(
             Id,
             Email!,
-            FirstName,
-            LastName,
-            PhoneNumber,
-            Country,
-            BirthDate
+            FullName!,
+            Country
         );
     }
 
@@ -43,11 +37,8 @@ public class User : IdentityUser, ISoftDeletable, IAuditable
         return new DetailedUserResponse(
             Id,
             Email!,
-            FirstName,
-            LastName,
-            PhoneNumber,
+            FullName!,
             Country,
-            BirthDate,
             CreatedAt,
             UpdatedAt,
             DeletedAt,
@@ -59,13 +50,10 @@ public class User : IdentityUser, ISoftDeletable, IAuditable
     {
         return new User
         {
-            FirstName = request.FirstName,
-            LastName = request.LastName,
             Email = request.Email,
             UserName = request.Email,
-            PhoneNumber = request.PhoneNumber,
             Country = request.Country,
-            BirthDate = request.BirthDate,
+            FullName = request.FullName,
             CreatedAt = DateTime.UtcNow
         };
     }

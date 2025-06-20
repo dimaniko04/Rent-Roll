@@ -3,7 +3,7 @@ namespace RentnRoll.Application.Contracts.Rentals.Response;
 public record RentalResponse(
     Guid Id,
     string UserId,
-    string UserName,
+    string FullName,
     string Status,
     DateTime StartDate,
     DateTime EndDate,

@@ -3,8 +3,7 @@
         "Name": "TableTop Empire",
         "Description": "The largest network of board game clubs in the region.",
         "Owner": {
-            "FirstName": "Alex",
-            "LastName": "Morrison",
+            "FullName": "Alex Morrison",
             "Email": "alex.morrison@example.com",
             "Password": "SecurePass123!"
         },
@@ -101,8 +100,7 @@
         "Name": "Meeple Galaxy",
         "Description": "Premium game rental platform with delivery.",
         "Owner": {
-            "FirstName": "Sophie",
-            "LastName": "Nguyen",
+            "FullName": "Sophie Nguyen",
             "Email": "sophie.nguyen@meeplegalaxy.com",
             "Password": "SecureMeeple123"
         },
@@ -161,8 +159,7 @@
         "Name": "Dice & Dragons",
         "Description": "Board games in the fantasy and role-play genre.",
         "Owner": {
-            "FirstName": "Ivan",
-            "LastName": "Petrov",
+            "FullName": "Ivan Petrov",
             "Email": "ivan.petrov@dndgames.ru",
             "Password": "DND123Strong!"
         },
@@ -221,8 +218,7 @@
         "Name": "Nordic Board Hub",
         "Description": "A Nordic service for game rentals and exchanges.",
         "Owner": {
-            "FirstName": "Emma",
-            "LastName": "Hansen",
+            "FullName": "Emma Hansen",
             "Email": "emma@nordichub.dk",
             "Password": "NordicPass321!"
         },
@@ -281,8 +277,7 @@
         "Name": "Cardboard Kingdom",
         "Description": "A local club chain in the UK.",
         "Owner": {
-            "FirstName": "Oliver",
-            "LastName": "Smith",
+            "FullName": "Oliver Smith",
             "Email": "oliver@cardboardkingdom.uk",
             "Password": "CardKing123!"
         },

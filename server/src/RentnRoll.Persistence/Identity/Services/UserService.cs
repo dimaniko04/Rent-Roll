@@ -359,12 +359,9 @@ public class UserService : IUserService
         User user,
         UpdateUserRequest request)
     {
-        user.FirstName = request.FirstName;
-        user.LastName = request.LastName;
-        user.PhoneNumber = request.PhoneNumber;
+        user.FullName = request.FullName;
         user.Country = request.Country;
-        user.BirthDate = request.BirthDate;
         user.Email = request.Email;
-        user.UserName = request.Email;
+        user.FullName = request.Email;
     }
 }

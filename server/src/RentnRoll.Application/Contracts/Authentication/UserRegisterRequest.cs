@@ -1,11 +1,8 @@
 namespace RentnRoll.Application.Contracts.Authentication;
 
 public record UserRegisterRequest(
-    string FirstName,
-    string LastName,
+    string FullName,
     string Email,
-    DateTime BirthDate,
     string Country,
-    string Password,
-    string PhoneNumber
+    string Password
 );

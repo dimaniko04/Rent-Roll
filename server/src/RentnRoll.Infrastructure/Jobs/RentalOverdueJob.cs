@@ -119,14 +119,14 @@ public class RentalOverdueJob : IJob
         await _notificationService
             .SendOverdueEmailToUserAsync(
                 user.Email!,
-                user.FullName,
+                user.FullName!,
                 overdue);
         await _notificationService
             .SendOverdueEmailToOwnerAsync(
                 user.Email!,
-                user.FullName,
+                user.FullName!,
                 owner.Email!,
-                owner.FullName,
+                owner.FullName!,
                 overdue);
     }
 }

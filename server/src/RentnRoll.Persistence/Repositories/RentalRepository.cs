@@ -42,7 +42,7 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
                 (r, u) => new
                 {
                     Rental = r,
-                    UserName = u.LastName + " " + u.FirstName
+                    u.FullName
                 });
 
         if (businessId != null)
@@ -62,7 +62,7 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
             .Select(j => new RentalResponse(
                 j.Rental.Id,
                 j.Rental.UserId,
-                j.UserName,
+                j.FullName,
                 Enum.GetName(j.Rental.Status) ?? "Unknown",
                 j.Rental.StartDate,
                 j.Rental.EndDate,

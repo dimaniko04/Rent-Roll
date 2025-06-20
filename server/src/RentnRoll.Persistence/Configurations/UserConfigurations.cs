@@ -17,27 +17,16 @@ internal sealed class UserConfigurations : IEntityTypeConfiguration<User>
             .HasFilter("IsDeleted = 0");
 
         builder
-            .Property(u => u.FirstName)
+            .Property(u => u.FullName)
             .IsRequired()
-            .HasMaxLength(100)
-            .HasColumnType("varchar(100)");
-
-        builder
-            .Property(u => u.LastName)
-            .IsRequired()
-            .HasMaxLength(200)
-            .HasColumnType("varchar(200)");
+            .HasMaxLength(400)
+            .HasColumnType("varchar(400)");
 
         builder
             .Property(u => u.Country)
             .IsRequired(false)
             .HasMaxLength(100)
             .HasColumnType("varchar(100)");
-
-        builder
-            .Property(u => u.BirthDate)
-            .IsRequired(false)
-            .HasColumnType("date");
 
         builder
             .Property(u => u.CreatedAt)

@@ -101,13 +101,6 @@ public class TokenService : ITokenService
         {
             claims.Add(new Claim(ClaimTypes.Country, user.Country));
         }
-        if (user.BirthDate != null)
-        {
-            claims.Add(new Claim(
-                ClaimTypes.DateOfBirth,
-                user.BirthDate.ToString()!
-            ));
-        }
 
         claims.AddRange(user.Roles
             .Select(role => new Claim(ClaimTypes.Role, role)));

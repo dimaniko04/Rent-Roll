@@ -27,7 +27,7 @@ public record BusinessWithOwnerResponse(
             business.Name,
             business.Description,
             owner.Id,
-            owner.LastName + " " + owner.FirstName,
+            owner.FullName,
             owner.Email,
             business.CreatedAt,
             business.UpdatedAt,

@@ -95,9 +95,7 @@ public class Seeder
         {
             Email = _adminSettings.Email,
             UserName = _adminSettings.Email,
-            PhoneNumber = _adminSettings.PhoneNumber,
-            FirstName = _adminSettings.FirstName,
-            LastName = _adminSettings.LastName,
+            FullName = _adminSettings.FullName
         };
 
         var result = await _userManager
@@ -259,8 +257,7 @@ public class Seeder
     }
 
     private record JsonUser(
-        string FirstName,
-        string LastName,
+        string FullName,
         string Email,
         string Password
     );
@@ -328,10 +325,9 @@ public class Seeder
         {
             var owner = new User
             {
-                FirstName = item.Owner.FirstName,
-                LastName = item.Owner.LastName,
                 Email = item.Owner.Email,
                 UserName = item.Owner.Email,
+                FullName = item.Owner.FullName,
             };
             await _userManager.CreateAsync(owner, item.Owner.Password);
             await _userManager.AddToRoleAsync(owner, Roles.Business);

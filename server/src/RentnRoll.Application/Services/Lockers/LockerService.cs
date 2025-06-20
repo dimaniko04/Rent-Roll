@@ -139,7 +139,7 @@ public class LockerService : ILockerService
 
         if (cells.Count < request.Pins.Count)
             return Errors.Lockers.NotEnoughCells(
-                lockerId, cells.Count, request.Pins.Count);
+                lockerId, request.Pins.Count, cells.Count);
 
         var configuration = request.Pins
             .Select((pin, index) => (cells[index].Id, pin))
