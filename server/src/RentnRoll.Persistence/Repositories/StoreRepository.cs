@@ -55,4 +55,12 @@ public class StoreRepository : BaseRepository<Store>, IStoreRepository
 
         return assets;
     }
+
+    public async Task<StoreAsset?> GetStoreAssetByIdAsync(
+        Guid storeAssetId)
+    {
+        return await _context.Set<StoreAsset>()
+            .Include(sa => sa.Store)
+            .FirstOrDefaultAsync(sa => sa.Id == storeAssetId);
+    }
 }

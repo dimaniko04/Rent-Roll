@@ -25,5 +25,15 @@ public static partial class Errors
             Error.NotFound(
                 "Stores.GamesNotFound",
                 $"Games with following ids: {string.Join(", ", gameIds)} do not exist in business catalog.");
+
+        public static Error AssetNotFound(Guid assetId) =>
+            Error.NotFound(
+                "Stores.AssetNotFound",
+                $"Asset with id: {assetId} not found.");
+
+        public static Error OutOfStock(Guid assetId) =>
+            Error.InvalidRequest(
+                "Stores.OutOfStock",
+                $"Asset with id: {assetId} is out of stock. Please check availability before proceeding.");
     }
 }

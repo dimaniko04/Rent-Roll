@@ -1,9 +1,7 @@
 using RentnRoll.Domain.Common;
 using RentnRoll.Domain.Entities.Businesses;
-using RentnRoll.Domain.Entities.BusinessGames;
 using RentnRoll.Domain.Entities.Games;
 using RentnRoll.Domain.Entities.Rentals.Enums;
-using RentnRoll.Domain.ValueObjects;
 
 namespace RentnRoll.Domain.Entities.Rentals;
 

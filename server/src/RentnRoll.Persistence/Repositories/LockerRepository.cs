@@ -67,4 +67,12 @@ public class LockerRepository
             .ThenInclude(c => c.Business)
             .FirstOrDefaultAsync();
     }
+
+    public async Task<Cell?> GetCellByIdAsync(Guid cellId)
+    {
+        return await _dbSet
+            .SelectMany(l => l.Cells)
+            .Where(c => c.Id == cellId)
+            .FirstOrDefaultAsync();
+    }
 }

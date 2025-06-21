@@ -105,6 +105,7 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
             .SqlQuery<RentableGameResponse>(@$"
             SELECT 
                 U.Id,
+                U.GameId,
                 BusinessGameId,
                 LocationId, 
                 LocationType,
@@ -114,12 +115,13 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
                 U.PublishedAt,
                 U.IsVerified,
                 Price,
-                Address_City AS City,
+                U.Address,
                 TimeUnit
             FROM
             (
             SELECT 
-                    g.Id,
+                    sa.Id AS Id,
+                    g.Id AS GameId,
                     bg.Id AS BusinessGameId,
                     g.Name,
                     g.Description,
@@ -127,7 +129,13 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
                     g.PublishedAt,
                     g.IsVerified,
                     s.Id as LocationId,
-                    s.Address_City,
+                    s.Address_Street +
+                        s.Address_City +
+                        ',' +
+                        s.Address_State +
+                        ',' +
+                        s.Address_Country +
+                        s.Address_ZipCode AS Address,
                     ppi.Price, 
                     pp.TimeUnit, 
                     'GameStore' AS LocationType 
@@ -144,8 +152,10 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
                 INNER JOIN PricingPolicyItem ppi
                     ON ppi.GameId = bg.Id
                     AND ppi.PolicyId = s.PolicyId
+                WHERE sa.Quantity > 0
             UNION
             SELECT
+                    c.Id,
                     g.Id,
                     bg.Id AS BusinessGameId,
                     g.Name,
@@ -154,7 +164,13 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
                     g.PublishedAt,
                     g.IsVerified,
                     l.Id as LocationId,
-                    l.Address_City,
+                    l.Address_Street +
+                        l.Address_City +
+                        ',' +
+                        l.Address_State +
+                        ',' +
+                        l.Address_Country +
+                        l.Address_ZipCode,
                     ppi.Price, 
                     pp.TimeUnit,  
                     'Locker' 
@@ -172,10 +188,11 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
                 INNER JOIN PricingPolicyItem ppi
                     ON ppi.GameId = bg.Id
                     AND ppi.PolicyId = lpp.PricingPoliciesId
+                WHERE c.Status = 'Available'
             ) U")
             .Join(
                 _context.Set<Game>(),
-                u => u.Id,
+                u => u.GameId,
                 g => g.Id,
                 (u, game) => new { u, game }
             );
@@ -189,7 +206,7 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
         if (!string.IsNullOrEmpty(request.City))
         {
             query = query
-                .Where(j => j.u.City == request.City);
+                .Where(j => j.u.Address.Contains(request.City));
         }
 
         if (request.MinPrice != null && request.MinPrice > 0)

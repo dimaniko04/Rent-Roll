@@ -16,4 +16,6 @@ public interface ILockerRepository : IBaseRepository<Locker>
         GetCellsByIdsAsync(
             Guid lockerId,
             ICollection<Guid> cellIds);
+    public Task<Cell?>
+        GetCellByIdAsync(Guid cellId);
 }

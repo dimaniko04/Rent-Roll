@@ -65,6 +65,16 @@ public static partial class Errors
                 "Lockers.CellsNotFound",
                 $"Cells with IDs {string.Join(", ", cellIds)} not found. ");
 
+        public static Error CellNotFound(Guid cellId) =>
+            Error.NotFound(
+                "Lockers.CellNotFound",
+                $"Cell with ID {cellId} not found.");
+
+        public static Error CellNotAvailable(Guid cellId) =>
+            Error.InvalidRequest(
+                "Lockers.CellNotAvailable",
+                $"Cell with ID {cellId} is not available for rental.");
+
         public static Error CellsNotBelongToBusiness(
             Guid businessId,
             ICollection<Guid> cellIds) =>

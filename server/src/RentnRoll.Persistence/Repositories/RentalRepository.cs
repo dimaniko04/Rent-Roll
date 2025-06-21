@@ -1,3 +1,5 @@
+using Humanizer.Localisation;
+
 using Microsoft.EntityFrameworkCore;
 
 using RentnRoll.Application.Common.Interfaces.Repositories;
@@ -75,7 +77,10 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
                     : j.Rental.LockerRental!.Cell!.BusinessGame!.Game.Name,
                 j.Rental.StoreRental != null
                     ? j.Rental.StoreRental.StoreAsset!.Store.Name
-                    : j.Rental.LockerRental!.Cell!.Locker!.Name
+                    : j.Rental.LockerRental!.Cell!.Locker!.Name,
+                j.Rental.LockerRental != null
+                    ? j.Rental.LockerRental!.Cell!.IotDeviceId
+                    : null
             ));
 
         return query.ToPaginatedResponse(

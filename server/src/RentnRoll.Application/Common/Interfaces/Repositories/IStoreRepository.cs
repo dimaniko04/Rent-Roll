@@ -11,4 +11,6 @@ public interface IStoreRepository : IBaseRepository<Store>
         GetPaginatedStoreAssetsAsync(
             Specification<StoreAsset> specification,
             bool trackChanges = false);
+    Task<StoreAsset?> GetStoreAssetByIdAsync(
+        Guid storeAssetId);
 }

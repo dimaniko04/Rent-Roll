@@ -1,5 +1,9 @@
 using FluentValidation;
 
+using RentnRoll.Application.Validators;
+using RentnRoll.Domain.Entities.PricingPolicies.Enums;
+using RentnRoll.Domain.Enums;
+
 namespace RentnRoll.Application.Contracts.Rentals.CreateRental;
 
 public class CreateRentalRequestValidator
@@ -7,25 +11,21 @@ public class CreateRentalRequestValidator
 {
     public CreateRentalRequestValidator()
     {
-        RuleFor(x => x.StoreAssetId)
+        RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage("Either cell id or store game id must be provided.")
-            .When(x => x.CellId == Guid.Empty, ApplyConditionTo.CurrentValidator);
+            .WithMessage("Either store asset or cell id must be provided.");
 
-        RuleFor(x => x.CellId)
+        RuleFor(x => x.Type)
             .NotEmpty()
-            .WithMessage("Either cell id or store game id must be provided.")
-            .When(x => x.StoreAssetId == Guid.Empty, ApplyConditionTo.CurrentValidator);
+            .WithMessage("Rental type must either \"Locker\" or \"GameStore\".")
+            .IsEnumName<CreateRentalRequest, LocationType>()
+            .WithMessage("Rental type must either \"Locker\" or \"GameStore\".");
 
-        RuleFor(x => x.StoreAssetId)
-            .Empty()
-            .WithMessage("Cell id and store game id can't be both specified.")
-            .When(x => x.CellId != Guid.Empty, ApplyConditionTo.CurrentValidator);
-
-        RuleFor(x => x.CellId)
-            .Empty()
-            .WithMessage("Cell id and store game id can't be both specified.")
-            .When(x => x.StoreAssetId != Guid.Empty, ApplyConditionTo.CurrentValidator);
+        RuleFor(x => x.Unit)
+            .NotEmpty()
+            .WithMessage("Rental unit is required e.g. \"Hour\", \"Day\" etc.")
+            .IsEnumName<CreateRentalRequest, TimeUnit>()
+            .WithMessage("Unsupported unit.");
 
         RuleFor(x => x.Term)
             .GreaterThan(0)
