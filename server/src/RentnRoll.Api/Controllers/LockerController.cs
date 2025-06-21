@@ -37,7 +37,7 @@ public class LockerController : ApiController
     }
 
     [HttpGet("businesses/{businessId:guid}")]
-    public async Task<IActionResult> AssignPolicyToLocker(
+    public async Task<IActionResult> GetAllBusinessLockers(
         Guid businessId,
         [FromQuery] GetAllLockersRequest request)
     {
@@ -144,7 +144,6 @@ public class LockerController : ApiController
 
     [HttpPut("{lockerId:guid}/{businessId:guid}/games/assign")]
     public async Task<IActionResult> AssignGamesToCells(
-        Guid lockerId,
         Guid businessId,
         [FromBody] AssignGamesRequest request)
     {
@@ -161,7 +160,7 @@ public class LockerController : ApiController
             return Problem(authorizeResult.Errors);
 
         var result = await _lockerService
-            .AssignGamesAsync(lockerId, businessId, request);
+            .AssignGamesAsync(businessId, request);
         return result.Match(Ok, Problem);
     }
 

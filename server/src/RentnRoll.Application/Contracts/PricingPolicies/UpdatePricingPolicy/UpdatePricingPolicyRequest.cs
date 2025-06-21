@@ -32,7 +32,6 @@ public record UpdatePricingPolicyRequest(
             policy.Items = Items
                 .Select(item => new PricingPolicyItem
                 {
-                    PolicyId = policy.Id,
                     GameId = item.BusinessGameId,
                     Price = item.Price
                 })

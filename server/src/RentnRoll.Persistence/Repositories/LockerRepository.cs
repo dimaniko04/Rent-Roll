@@ -23,6 +23,16 @@ public class LockerRepository
             .FirstOrDefaultAsync();
     }
 
+    public override async Task<Locker?>
+        GetByIdAsync(Guid id, bool trackChanges = false)
+    {
+        return await _dbSet
+            .Include(l => l.PricingPolicies)
+            .Include(l => l.Cells)
+            .Include(l => l.Address)
+            .FirstOrDefaultAsync(l => l.Id == id);
+    }
+
     public async Task<ICollection<Cell>>
         GetCellsByIotDeviceIdAsync(string iotDeviceId)
     {
@@ -55,17 +65,14 @@ public class LockerRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<Locker?> GetCellsByIdsAsync(
-        Guid lockerId,
+    public async Task<ICollection<Cell>> GetCellsByIdsAsync(
         ICollection<Guid> cellIds)
     {
         return await _dbSet
-            .Where(l => l.Id == lockerId)
-            .Where(l => l.IsActive)
-            .Include(l => l.Cells
-                .Where(c => cellIds.Contains(c.Id)))
-            .ThenInclude(c => c.Business)
-            .FirstOrDefaultAsync();
+            .SelectMany(l => l.Cells)
+            .Where(c => cellIds.Contains(c.Id))
+            .Include(c => c.Business)
+            .ToListAsync();
     }
 
     public async Task<Cell?> GetCellByIdAsync(Guid cellId)

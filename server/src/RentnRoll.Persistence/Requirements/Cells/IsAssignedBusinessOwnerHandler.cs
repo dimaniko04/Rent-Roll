@@ -31,15 +31,10 @@ public class IsAssignedBusinessOwnerHandler
         IsAssignedBusinessOwnerRequirement requirement,
         AssignGamesRequest resource)
     {
-        var lockerId = new Guid("86287c9b-e28a-4966-b85f-08ddaa5b8100");
         var cellIds = resource
             .GameAssignments
             .Select(ga => ga.CellId)
             .ToList();
-
-        _logger.LogDebug(
-            "Handling IsAssignedBusinessOwnerRequirement for lockerId: {LockerId}, cellIds: {CellIds}",
-            lockerId, string.Join(", ", cellIds));
 
         var isOwner = context
             .User
@@ -80,22 +75,11 @@ public class IsAssignedBusinessOwnerHandler
             "Business {BusinessId} found for user {UserId}, checking locker and cells.",
             business.Id, userId);
 
-        var locker = await _unitOfWork
+        var cells = await _unitOfWork
             .GetRepository<ILockerRepository>()
-            .GetCellsByIdsAsync(lockerId, cellIds);
+            .GetCellsByIdsAsync(cellIds);
 
-        if (locker == null)
-        {
-            context.Fail(new AuthorizationFailureReason(
-                this, "Locker does not exist."));
-            return;
-        }
-
-        _logger.LogDebug(
-            "Locker {LockerId} found, checking if cells are assigned to the business.",
-            locker.Id);
-
-        if (locker.Cells.Any(c => c.BusinessId != business.Id))
+        if (cells.Any(c => c.BusinessId != business.Id))
         {
             context.Fail(new AuthorizationFailureReason(
                 this, "Not all cells are assigned to the business."));

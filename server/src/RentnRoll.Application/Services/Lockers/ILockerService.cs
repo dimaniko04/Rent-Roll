@@ -39,7 +39,6 @@ public interface ILockerService
         Guid lockerId,
         AssignBusinessRequest request);
     Task<Result<ICollection<CellResponse>>> AssignGamesAsync(
-        Guid lockerId,
         Guid businessId,
         AssignGamesRequest request);
     Task<Result<LockerDetailsResponse>> AssignPricingPolicyAsync(

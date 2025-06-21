@@ -371,7 +371,6 @@ public class LockerService : ILockerService
 
     public async Task<Result<ICollection<CellResponse>>>
         AssignGamesAsync(
-            Guid lockerId,
             Guid businessId,
             AssignGamesRequest request)
     {
@@ -387,13 +386,8 @@ public class LockerService : ILockerService
             .Select(ga => ga.BusinessGameId)
             .ToList();
 
-        var locker = await _lockerRepository
-            .GetCellsByIdsAsync(lockerId, cellIds);
-
-        if (locker == null)
-            return Errors.Lockers.NotFound;
-
-        var cells = locker.Cells;
+        var cells = await _lockerRepository
+            .GetCellsByIdsAsync(cellIds);
 
         if (cells.Count != cellIds.Count)
             return Errors.Lockers.CellsNotFound(
@@ -446,9 +440,8 @@ public class LockerService : ILockerService
         if (validationResult.IsError)
             return validationResult.Errors;
 
-        var specification = new GetLockerDetailsSpec(lockerId);
         var locker = await _lockerRepository
-            .GetSingleAsync(specification, true);
+            .GetByIdAsync(lockerId, true);
 
         if (locker == null)
             return Errors.Lockers.NotFound;
@@ -458,11 +451,10 @@ public class LockerService : ILockerService
             request.PricingPolicyId);
         var pricingPolicy = await _unitOfWork
             .GetRepository<IPricingPolicyRepository>()
-            .GetSingleAsync(policySpecification, false);
+            .GetSingleAsync(policySpecification, true);
 
         if (pricingPolicy == null)
             return Errors.PricingPolicies.NotFound;
-
 
         var existingPolicy = locker.PricingPolicies.FirstOrDefault(
             p => p.BusinessId == businessId);
@@ -470,9 +462,10 @@ public class LockerService : ILockerService
         if (existingPolicy != null)
         {
             locker.PricingPolicies.Remove(existingPolicy);
+            await _unitOfWork.SaveChangesAsync();
         }
-
         locker.PricingPolicies.Add(pricingPolicy);
+        await _unitOfWork.SaveChangesAsync();
 
         var lockerResponse = LockerDetailsResponse
             .FromLocker(locker);

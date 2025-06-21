@@ -12,6 +12,7 @@ public sealed class GetAllBusinessLockersRequestSpec
         GetAllLockersRequest request)
     {
         AddCriteria(l => l.IsActive == request.IsActive);
+        AddCriteria(l => l.Cells.Any(c => c.BusinessId == businessId));
 
         if (!string.IsNullOrWhiteSpace(request.Country))
         {
