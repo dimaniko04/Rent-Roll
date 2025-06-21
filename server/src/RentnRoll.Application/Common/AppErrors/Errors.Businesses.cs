@@ -25,5 +25,10 @@ public static partial class Errors
             Error.InvalidRequest(
                 "Business.Blocked",
                 "Business was blocked by administration.");
+
+        public static Error NotOwner =>
+            Error.InvalidRequest(
+                "Business.NotOwner",
+                "User is not the owner of the business.");
     }
 }

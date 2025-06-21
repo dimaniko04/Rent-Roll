@@ -107,6 +107,7 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
     {
         var query = _dbSet
             .AsNoTracking()
+            .Where(r => r.UserId == userId)
             .Include(r => r.StoreRental)
             .Include(r => r.StoreRental!.StoreAsset)
             .ThenInclude(a => a!.BusinessGame)

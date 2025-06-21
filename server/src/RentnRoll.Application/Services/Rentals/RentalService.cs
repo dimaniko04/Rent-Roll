@@ -216,21 +216,173 @@ public class RentalService : IRentalService
         throw new NotImplementedException();
     }
 
-    public Task<Result> ConfirmStorePickUpAsync(
+    public async Task<Result> ConfirmStorePickUpAsync(
         Guid rentalId)
     {
-        throw new NotImplementedException();
+        var rental = await _rentalRepository
+            .GetByIdAsync(rentalId, trackChanges: true);
+
+        if (rental == null)
+        {
+            return Result.Failure(
+                [Errors.Rentals.RentalNotFound(rentalId)]);
+        }
+
+        var isOwner = await IsStoreOwner(rental);
+        if (isOwner.IsError)
+        {
+            return isOwner;
+        }
+
+        if (rental.Status != RentalStatus.Expectation)
+        {
+            return Result.Failure(
+                [Errors.Rentals.RentalAlreadyActive(rentalId)]);
+        }
+
+        rental.Status = RentalStatus.Active;
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result.Success();
     }
 
-    public Task<Result> ConfirmStoreReturnAsync(
+    public async Task<Result> ConfirmStoreReturnAsync(
         Guid rentalId)
     {
-        throw new NotImplementedException();
+        var rental = await _rentalRepository
+            .GetByIdAsync(rentalId, trackChanges: true);
+
+        if (rental == null)
+        {
+            return Result.Failure(
+                [Errors.Rentals.RentalNotFound(rentalId)]);
+        }
+
+        var isOwner = await IsStoreOwner(rental);
+        if (isOwner.IsError)
+        {
+            return isOwner;
+        }
+
+        if (rental.Status != RentalStatus.Active &&
+            rental.Status != RentalStatus.Overdue)
+        {
+            return Result.Failure(
+                [Errors.Rentals.RentalNotActive(rentalId)]);
+        }
+
+        var asset = await _unitOfWork
+               .GetRepository<IStoreRepository>()
+               .GetStoreAssetByIdAsync(rental.StoreRental!.StoreAssetId);
+
+        if (asset == null)
+        {
+            return Result.Failure(
+                [Errors.Stores.AssetNotFound(rental.StoreRental.StoreAssetId)]);
+        }
+
+        asset.Quantity++;
+        rental.Status = RentalStatus.Returned;
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result.Success();
     }
 
-    public Task<Result> SolveMaintenance(
+    public async Task<Result> SolveMaintenance(
         Guid rentalId, string solution)
     {
-        throw new NotImplementedException();
+        var rental = await _rentalRepository
+            .GetByIdAsync(rentalId, trackChanges: true);
+
+        if (rental == null)
+        {
+            return Result.Failure(
+                [Errors.Rentals.RentalNotFound(rentalId)]);
+        }
+
+        var isOwner = await IsCellOwner(rental);
+        if (isOwner.IsError)
+        {
+            return isOwner;
+        }
+
+        var cell = rental.LockerRental?.Cell;
+
+        if (cell?.Status != CellStatus.Maintenance)
+        {
+            return Result.Failure(
+                [Errors.Rentals.CellNotInMaintenance(rentalId)]);
+        }
+
+        if (!Enum.TryParse<MaintenanceSolution>(solution, out var parsedSolution))
+        {
+            return Result.Failure(
+                [Error.InvalidRequest(
+                    "Rentals.InvalidMaintenanceSolution",
+                    $"Invalid maintenance solution: {solution}. Expected \"GameAvailable\" or \"GameLost\" ")]);
+        }
+
+        if (parsedSolution == MaintenanceSolution.GameAvailable)
+        {
+            cell.Status = CellStatus.Available;
+        }
+        else if (parsedSolution == MaintenanceSolution.GameLost)
+        {
+            cell.Status = CellStatus.Empty;
+            cell.BusinessGame = null;
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result.Success();
+    }
+
+    private async Task<Result> IsStoreOwner(Rental rental)
+    {
+        if (rental.StoreRental?.StoreAsset?.StoreId == null)
+        {
+            return Result.Failure(
+                [Errors.Rentals.NoRelatedStore(rental.Id)]);
+        }
+
+        var business = await _unitOfWork
+            .GetRepository<IBusinessRepository>()
+            .GetByOwnerIdAsync(_userContext.UserId);
+        var store = await _unitOfWork
+            .GetRepository<IStoreRepository>()
+            .GetByIdAsync(rental.StoreRental.StoreAsset.StoreId);
+
+        if (business == null ||
+            store == null ||
+            business.Id != store.BusinessId)
+        {
+            return Result.Failure(
+                [Errors.Businesses.NotOwner]);
+        }
+
+        return Result.Success();
+    }
+
+    private async Task<Result> IsCellOwner(Rental rental)
+    {
+        if (rental.LockerRental?.Cell == null)
+        {
+            return Result.Failure(
+                [Errors.Rentals.NoRelatedStore(rental.Id)]);
+        }
+
+        var cell = rental.LockerRental.Cell;
+        var business = await _unitOfWork
+            .GetRepository<IBusinessRepository>()
+            .GetByOwnerIdAsync(_userContext.UserId);
+
+        if (business == null ||
+            business.Id != cell.BusinessId)
+        {
+            return Result.Failure(
+                [Errors.Businesses.NotOwner]);
+        }
+
+        return Result.Success();
     }
 }

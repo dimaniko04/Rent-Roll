@@ -82,7 +82,7 @@ public class RentalController : ApiController
     public async Task<IActionResult> ConfirmPickUp(Guid id)
     {
         var result = await _rentalService
-            .CancelRentalAsync(id);
+            .ConfirmStorePickUpAsync(id);
 
         return result.Match(NoContent, Problem);
     }
@@ -92,7 +92,7 @@ public class RentalController : ApiController
     public async Task<IActionResult> ConfirmReturn(Guid id)
     {
         var result = await _rentalService
-            .CancelRentalAsync(id);
+            .ConfirmStoreReturnAsync(id);
 
         return result.Match(NoContent, Problem);
     }

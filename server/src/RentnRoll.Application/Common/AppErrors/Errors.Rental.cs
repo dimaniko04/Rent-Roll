@@ -25,5 +25,25 @@ public static partial class Errors
             Error.InvalidRequest(
                 "Rentals.RentalAlreadyActive",
                 $"Rental with ID {rentalId} cannot be canceled because it is already active.");
+
+        public static Error RentalNotActive(Guid rentalId) =>
+            Error.InvalidRequest(
+                "Rentals.RentalNotActive",
+                $"Rental with ID {rentalId} cannot be returned because it is not active.");
+
+        public static Error NoRelatedStore(Guid guid) =>
+            Error.NotFound(
+                "Rentals.NoRelatedStore",
+                $"No store is related to the rental with ID {guid}.");
+
+        public static Error NoRelatedCell(Guid guid) =>
+            Error.NotFound(
+                "Rentals.NoRelatedStore",
+                $"No cell is related to the rental with ID {guid}.");
+
+        public static Error CellNotInMaintenance(Guid cellId) =>
+            Error.InvalidRequest(
+                "Rentals.CellNotInMaintenance",
+                $"Cell with ID {cellId} is not in maintenance.");
     }
 }
