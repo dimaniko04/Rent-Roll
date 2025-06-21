@@ -6,6 +6,7 @@ using Quartz;
 using RentnRoll.Application.Common.Interfaces.Repositories;
 using RentnRoll.Application.Common.Interfaces.Services;
 using RentnRoll.Application.Common.Interfaces.UnitOfWork;
+using RentnRoll.Domain.Entities.Lockers.Enums;
 using RentnRoll.Domain.Entities.Rentals;
 using RentnRoll.Domain.Entities.Rentals.Enums;
 using RentnRoll.Persistence.Identity;
@@ -90,6 +91,11 @@ public class RentalOverdueJob : IJob
             overdue.Id);
 
         overdue.Status = RentalStatus.Overdue;
+
+        if (overdue.LockerRental?.Cell != null)
+        {
+            overdue.LockerRental.Cell.Status = CellStatus.Maintenance;
+        }
 
         var user = await _userManager
             .FindByIdAsync(overdue.UserId);

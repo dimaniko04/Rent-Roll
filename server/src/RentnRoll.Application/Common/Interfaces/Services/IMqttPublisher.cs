@@ -5,4 +5,7 @@ public interface IMqttPublisher
     Task PublishLockerConfigAsync(
         string deviceId,
         ICollection<(Guid cellId, int pin)> config);
+    Task PublishLockerOpenAsync(
+        string deviceId,
+        Guid cellId);
 }

@@ -71,11 +71,11 @@ void handleMessage(char *topic, byte *payload, unsigned int length)
   }
   else if (topicStr.endsWith("/open"))
   {
-    openLocker(doc["lockerId"].as<String>());
+    openLocker(doc["cellId"].as<String>());
   }
   else if (topicStr.endsWith("/close"))
   {
-    closeLocker(doc["lockerId"].as<String>());
+    closeLocker(doc["cellId"].as<String>());
   }
 }
 

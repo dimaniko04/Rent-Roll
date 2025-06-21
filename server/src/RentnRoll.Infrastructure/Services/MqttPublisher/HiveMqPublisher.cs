@@ -72,6 +72,51 @@ public class HiveMqPublisher : IMqttPublisher
         }
     }
 
+    public async Task PublishLockerOpenAsync(
+        string deviceId,
+        Guid cellId)
+    {
+        var factory = new MqttClientFactory();
+        using var client = factory.CreateMqttClient();
+
+        try
+        {
+            if (!client.IsConnected)
+                await ConnectAsync(client);
+
+            _logger.LogInformation("Connected to HiveMQ broker at {Host}:{Port}",
+                _settings.Host, _settings.Port);
+
+            var topic = $"locker/{deviceId}/open";
+            var payload = JsonSerializer.Serialize(
+                new
+                {
+                    cellId = cellId.ToString()
+                });
+
+            var message = new MqttApplicationMessageBuilder()
+                .WithTopic(topic)
+                .WithPayload(payload)
+                .WithQualityOfServiceLevel(
+                    MqttQualityOfServiceLevel.AtLeastOnce)
+                .Build();
+
+            await client.PublishAsync(message);
+            _logger.LogInformation("Published message to topic {Topic}", topic);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to publish message to HiveMQ broker");
+            throw new InvalidOperationException(
+                "Failed to publish message to HiveMQ broker", ex);
+        }
+        finally
+        {
+            await DisconnectAsync(client);
+            _logger.LogInformation("Disconnected from HiveMQ broker");
+        }
+    }
+
     private async Task ConnectAsync(IMqttClient client)
     {
         var options = new MqttClientOptionsBuilder()

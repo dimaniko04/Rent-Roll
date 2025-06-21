@@ -15,13 +15,13 @@ public interface IRentalService
     Task<Result> CreateRentalAsync(
         CreateRentalRequest request);
     Task<Result> CancelRentalAsync(Guid rentalId);
-    Task<Result> OpenCellAsync(
-        Guid rentalId,
-        string openReason);
     Task<Result> ConfirmStorePickUpAsync(
         Guid rentalId);
     Task<Result> ConfirmStoreReturnAsync(
         Guid rentalId);
+    Task<Result> OpenCellAsync(
+        Guid rentalId,
+        string openReason);
     Task<Result> SolveMaintenance(
         Guid rentalId,
         string solution);

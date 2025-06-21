@@ -1,6 +1,7 @@
 
 using RentnRoll.Application.Common.AppErrors;
 using RentnRoll.Application.Common.Interfaces.Repositories;
+using RentnRoll.Application.Common.Interfaces.Services;
 using RentnRoll.Application.Common.Interfaces.UnitOfWork;
 using RentnRoll.Application.Common.UserContext;
 using RentnRoll.Application.Contracts.Common;
@@ -20,17 +21,20 @@ namespace RentnRoll.Application.Services.Rentals;
 public class RentalService : IRentalService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMqttPublisher _mqttPublisher;
     private readonly IRentalRepository _rentalRepository;
     private readonly IValidationService _validationService;
     private readonly ICurrentUserContext _userContext;
 
     public RentalService(
         IUnitOfWork unitOfWork,
+        IMqttPublisher mqttPublisher,
         ICurrentUserContext userContext,
         IValidationService validationService)
     {
         _unitOfWork = unitOfWork;
         _userContext = userContext;
+        _mqttPublisher = mqttPublisher;
         _validationService = validationService;
         _rentalRepository = unitOfWork
             .GetRepository<IRentalRepository>();
@@ -209,13 +213,6 @@ public class RentalService : IRentalService
         return Result.Success();
     }
 
-    public Task<Result> OpenCellAsync(
-        Guid rentalId,
-        string openReason)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<Result> ConfirmStorePickUpAsync(
         Guid rentalId)
     {
@@ -288,6 +285,74 @@ public class RentalService : IRentalService
         return Result.Success();
     }
 
+    public async Task<Result> OpenCellAsync(
+        Guid rentalId,
+        string openReason)
+    {
+        var rental = await _rentalRepository
+            .GetByIdAsync(rentalId, trackChanges: true);
+
+        if (rental == null)
+        {
+            return Result.Failure(
+                [Errors.Rentals.RentalNotFound(rentalId)]);
+        }
+
+        if (rental.UserId != _userContext.UserId)
+        {
+            return Result.Failure(
+                [Error.Forbidden()]);
+        }
+
+        var cell = rental.LockerRental?.Cell;
+
+        if (cell == null)
+        {
+            return Result.Failure(
+                [Errors.Rentals.NoRelatedCell(rentalId)]);
+        }
+
+        if (cell.IotDeviceId == null)
+        {
+            return Result.Failure(
+                [Error.InvalidRequest(
+                    "Rentals.CellNotConfigured",
+                    $"Cell {cell.Id} is not configured with an IoT device.")]);
+        }
+
+        if (cell.Status != CellStatus.Reserved ||
+            (rental.Status != RentalStatus.Expectation &&
+            rental.Status != RentalStatus.Active))
+        {
+            return Result.Failure(
+                [Errors.Rentals.RentalNotActive(rentalId)]);
+        }
+
+        if (!Enum.TryParse<OpenReason>(openReason, out var reason))
+        {
+            return Result.Failure(
+                [Error.InvalidRequest(
+                    "Rentals.InvalidOpenReason",
+                    $"Invalid open reason: {openReason}. Expected \"PickUp\", \"Return\"")]);
+        }
+
+        if (reason == OpenReason.PickUp)
+        {
+            rental.Status = RentalStatus.Active;
+        }
+        else if (reason == OpenReason.Return)
+        {
+            cell.Status = CellStatus.Available;
+            rental.Status = RentalStatus.Returned;
+        }
+        await _mqttPublisher
+            .PublishLockerOpenAsync(cell.IotDeviceId, cell.Id);
+
+
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Success();
+    }
+
     public async Task<Result> SolveMaintenance(
         Guid rentalId, string solution)
     {
@@ -330,6 +395,7 @@ public class RentalService : IRentalService
         {
             cell.Status = CellStatus.Empty;
             cell.BusinessGame = null;
+            cell.BusinessGameId = null;
         }
 
         await _unitOfWork.SaveChangesAsync();
@@ -368,7 +434,7 @@ public class RentalService : IRentalService
         if (rental.LockerRental?.Cell == null)
         {
             return Result.Failure(
-                [Errors.Rentals.NoRelatedStore(rental.Id)]);
+                [Errors.Rentals.NoRelatedCell(rental.Id)]);
         }
 
         var cell = rental.LockerRental.Cell;

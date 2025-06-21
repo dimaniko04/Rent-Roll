@@ -10,12 +10,12 @@
         },
         "Cells": [
             {
-                "IotDeviceId": "locker-device-001",
+                "IotDeviceId": null,
                 "BusinessName": "TableTop Empire",
                 "BusinessGameName": "Terraforming Mars"
             },
             {
-                "IotDeviceId": "locker-device-001",
+                "IotDeviceId": null,
                 "BusinessName": "TableTop Empire",
                 "BusinessGameName": "Wingspan"
             }

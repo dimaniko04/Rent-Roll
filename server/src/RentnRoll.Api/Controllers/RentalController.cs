@@ -66,17 +66,6 @@ public class RentalController : ApiController
         return result.Match(NoContent, Problem);
     }
 
-    [HttpPut("{id:guid}/open")]
-    public async Task<IActionResult> OpenCell(
-        Guid id,
-        [FromBody] string openReason)
-    {
-        var result = await _rentalService
-            .OpenCellAsync(id, openReason);
-
-        return result.Match(NoContent, Problem);
-    }
-
     [HttpPut("{id:guid}/pick")]
     [Authorize(Roles = Roles.Business)]
     public async Task<IActionResult> ConfirmPickUp(Guid id)
@@ -97,11 +86,22 @@ public class RentalController : ApiController
         return result.Match(NoContent, Problem);
     }
 
-    [HttpPut("{id:guid}/solve")]
+    [HttpPut("{id:guid}/open/{openReason}")]
+    public async Task<IActionResult> OpenCell(
+        Guid id,
+        string openReason)
+    {
+        var result = await _rentalService
+            .OpenCellAsync(id, openReason);
+
+        return result.Match(NoContent, Problem);
+    }
+
+    [HttpPut("{id:guid}/solve/{solution}")]
     [Authorize(Roles = Roles.Business)]
     public async Task<IActionResult> SolveMaintenance(
         Guid id,
-        [FromBody] string solution)
+        string solution)
     {
         var result = await _rentalService
             .SolveMaintenance(id, solution);
