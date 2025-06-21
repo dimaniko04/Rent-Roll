@@ -57,11 +57,18 @@ internal sealed class PricingPolicyConfigurations
             .OnDelete(DeleteBehavior.ClientCascade);
 
         builder
-            .OwnsMany(p => p.Items, ConfigurePricingPolicyItems);
+            .HasMany(p => p.Items)
+            .WithOne(pi => pi.Policy)
+            .HasForeignKey(i => i.PolicyId)
+            .OnDelete(DeleteBehavior.ClientCascade);
     }
+}
 
-    private void ConfigurePricingPolicyItems(
-        OwnedNavigationBuilder<PricingPolicy, PricingPolicyItem> builder)
+internal class PricingPolicyItemConfigurations
+    : IEntityTypeConfiguration<PricingPolicyItem>
+{
+    public void Configure(
+        EntityTypeBuilder<PricingPolicyItem> builder)
     {
         builder
             .HasKey(i => new { i.PolicyId, i.GameId });
@@ -71,13 +78,15 @@ internal sealed class PricingPolicyConfigurations
             .IsRequired();
 
         builder
-            .WithOwner(i => i.Policy)
-            .HasForeignKey(i => i.PolicyId);
-
-        builder
             .HasOne(i => i.Game)
             .WithMany()
             .HasForeignKey(i => i.GameId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasOne(i => i.Policy)
+            .WithMany(p => p.Items)
+            .HasForeignKey(i => i.PolicyId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -9,7 +9,7 @@
     "AveragePlayTime": 75,
     "ComplexityScore": 315,
     "Genres": [
-      "Card Game",
+      "Strategy",
       "Cooperative"
     ],
     "Categories": [
@@ -72,7 +72,7 @@
     ],
     "Categories": [
       "Exploration",
-      "War"
+      "WarGameGame"
     ],
     "Mechanics": [
       "Cooperative Play",
@@ -93,12 +93,11 @@
     "AveragePlayTime": 90,
     "ComplexityScore": 351,
     "Genres": [
-      "Abstract"
+      "Strategy"
     ],
     "Categories": [
-      "Nature",
       "City Building",
-      "War"
+      "WarGame"
     ],
     "Mechanics": [
       "Drafting",
@@ -124,7 +123,7 @@
       "Adventure"
     ],
     "Categories": [
-      "War",
+      "WarGame",
       "City Building",
       "Sci-Fi"
     ],
@@ -152,7 +151,7 @@
     "Categories": [
       "Exploration",
       "Economic",
-      "War"
+      "WarGame"
     ],
     "Mechanics": [
       "Worker Placement",
@@ -179,7 +178,7 @@
     "Categories": [
       "Sci-Fi",
       "Exploration",
-      "War"
+      "WarGame"
     ],
     "Mechanics": [
       "Worker Placement",
@@ -261,7 +260,7 @@
       "Fantasy",
       "Sci-Fi",
       "Nature",
-      "War"
+      "WarGame"
     ],
     "Mechanics": [
       "Cooperative Play",
@@ -286,7 +285,7 @@
     ],
     "Categories": [
       "Sci-Fi",
-      "War",
+      "WarGame",
       "Exploration",
       "Nature"
     ],
@@ -367,7 +366,7 @@
     ],
     "Categories": [
       "Nature",
-      "War"
+      "WarGame"
     ],
     "Mechanics": [
       "Drafting",
@@ -500,7 +499,7 @@
     ],
     "Categories": [
       "Economic",
-      "War"
+      "WarGame"
     ],
     "Mechanics": [
       "Worker Placement",
@@ -525,7 +524,7 @@
       "Family"
     ],
     "Categories": [
-      "War",
+      "WarGame",
       "Nature",
       "Exploration",
       "Fantasy"

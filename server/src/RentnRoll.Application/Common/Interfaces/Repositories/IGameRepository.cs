@@ -17,8 +17,4 @@ public interface IGameRepository : IBaseRepository<Game>
     Task<PaginatedResponse<RentableGameResponse>>
         GetRentableGamesAsync(
             GetAllRentableGamesRequest request);
-    Task<RentableGameDetailsResponse?>
-        GetRentableGameDetailsAsync(
-            Guid businessGameId,
-            Guid locationId);
 }

@@ -19,5 +19,26 @@
     },
     {
         "Name": "Wargame"
+    },
+    {
+        "Name": "Party"
+    },
+    {
+        "Name": "Card Game"
+    },
+    {
+        "Name": "Cooperative"
+    },
+    {
+        "Name": "Deck Building"
+    },
+    {
+        "Name": "Dice Game"
+    },
+    {
+        "Name": "Role Playing Game"
+    },
+    {
+        "Name": "Trivia"
     }
 ]

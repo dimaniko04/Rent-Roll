@@ -1,6 +1,7 @@
 namespace RentnRoll.Application.Contracts.Games.Response;
 
 public record RentableGameResponse(
+    Guid Id,
     Guid BusinessGameId,
     Guid LocationId,
     string LocationType,
@@ -9,4 +10,6 @@ public record RentableGameResponse(
     string? ThumbnailUrl,
     DateTime PublishedAt,
     bool IsVerified,
-    int Price);
+    int Price,
+    string City,
+    string TimeUnit);

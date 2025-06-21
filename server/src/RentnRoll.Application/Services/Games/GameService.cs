@@ -83,6 +83,16 @@ public class GameService : IGameService
         return game;
     }
 
+    public async Task<PaginatedResponse<RentableGameResponse>>
+        GetAllRentableGamesAsync(
+            GetAllRentableGamesRequest request)
+    {
+        var games = await _gameRepository
+            .GetRentableGamesAsync(request);
+
+        return games;
+    }
+
     public async Task<Result<string>> UpdateGameThumbnailAsync(
         Game game,
         IFormFile file)
