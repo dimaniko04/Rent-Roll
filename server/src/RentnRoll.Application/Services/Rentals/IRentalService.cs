@@ -10,10 +10,19 @@ public interface IRentalService
 {
     Task<PaginatedResponse<RentalResponse>> GetAllRentalsAsync(
         GetAllRentalsRequest request);
+    Task<ICollection<UserRentalResponse>> GetAllUserRentalsAsync(
+        string userId);
     Task<Result> CreateRentalAsync(
         CreateRentalRequest request);
-    Task<Result> CancelRentalAsync();
-    Task<Result> OpenCellAsync(string openReason);
-    Task<Result> ConfirmStorePickUpAsync();
-    Task<Result> SolveMaintenance(string solution);
+    Task<Result> CancelRentalAsync(Guid rentalId);
+    Task<Result> OpenCellAsync(
+        Guid rentalId,
+        string openReason);
+    Task<Result> ConfirmStorePickUpAsync(
+        Guid rentalId);
+    Task<Result> ConfirmStoreReturnAsync(
+        Guid rentalId);
+    Task<Result> SolveMaintenance(
+        Guid rentalId,
+        string solution);
 }

@@ -12,6 +12,7 @@ using RentnRoll.Domain.Common;
 using RentnRoll.Domain.Entities.Lockers.Enums;
 using RentnRoll.Domain.Entities.PricingPolicies.Enums;
 using RentnRoll.Domain.Entities.Rentals;
+using RentnRoll.Domain.Entities.Rentals.Enums;
 using RentnRoll.Domain.Enums;
 
 namespace RentnRoll.Application.Services.Rentals;
@@ -40,6 +41,15 @@ public class RentalService : IRentalService
     {
         var rentals = await _rentalRepository
             .GetAllRentalsAsync(request);
+
+        return rentals;
+    }
+
+    public async Task<ICollection<UserRentalResponse>>
+        GetAllUserRentalsAsync(string userId)
+    {
+        var rentals = await _rentalRepository
+            .GetAllUserRentalsAsync(userId);
 
         return rentals;
     }
@@ -146,22 +156,80 @@ public class RentalService : IRentalService
         return Result.Success();
     }
 
-    public Task<Result> CancelRentalAsync()
+    public async Task<Result> CancelRentalAsync(Guid id)
+    {
+        var userId = _userContext.UserId;
+        var rental = await _rentalRepository
+            .GetByIdAsync(id, trackChanges: true);
+
+        if (rental == null || rental.UserId != userId)
+        {
+            return Result.Failure(
+                [Errors.Rentals.RentalNotFound(id)]);
+        }
+
+        if (rental.Status != RentalStatus.Expectation)
+        {
+            return Result.Failure(
+                [Errors.Rentals.RentalAlreadyActive(id)]);
+        }
+
+        if (rental.LockerRental != null)
+        {
+            var cell = await _unitOfWork
+                .GetRepository<ILockerRepository>()
+                .GetCellByIdAsync(rental.LockerRental.CellId);
+
+            if (cell == null)
+            {
+                return Result.Failure(
+                    [Errors.Lockers.CellNotFound(rental.LockerRental.CellId)]);
+            }
+
+            cell.Status = CellStatus.Available;
+        }
+        else
+        {
+            var asset = await _unitOfWork
+                .GetRepository<IStoreRepository>()
+                .GetStoreAssetByIdAsync(rental.StoreRental!.StoreAssetId);
+
+            if (asset == null)
+            {
+                return Result.Failure(
+                    [Errors.Stores.AssetNotFound(rental.StoreRental.StoreAssetId)]);
+            }
+
+            asset.Quantity++;
+        }
+
+        rental.Status = RentalStatus.Cancelled;
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result.Success();
+    }
+
+    public Task<Result> OpenCellAsync(
+        Guid rentalId,
+        string openReason)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Result> ConfirmStorePickUpAsync()
+    public Task<Result> ConfirmStorePickUpAsync(
+        Guid rentalId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Result> OpenCellAsync(string openReason)
+    public Task<Result> ConfirmStoreReturnAsync(
+        Guid rentalId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Result> SolveMaintenance(string solution)
+    public Task<Result> SolveMaintenance(
+        Guid rentalId, string solution)
     {
         throw new NotImplementedException();
     }

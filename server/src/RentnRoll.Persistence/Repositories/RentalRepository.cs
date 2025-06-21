@@ -1,5 +1,3 @@
-using Humanizer.Localisation;
-
 using Microsoft.EntityFrameworkCore;
 
 using RentnRoll.Application.Common.Interfaces.Repositories;
@@ -19,6 +17,22 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
         : base(context)
     {
     }
+
+    public override Task<Rental?> GetByIdAsync(
+        Guid id,
+        bool trackChanges = false)
+    {
+        var query = _dbSet
+            .Include(r => r.StoreRental)
+            .Include(r => r.StoreRental!.StoreAsset)
+            .Include(r => r.LockerRental)
+            .Include(r => r.LockerRental!.Cell);
+
+        return trackChanges
+            ? query.FirstOrDefaultAsync(r => r.Id == id)
+            : query.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
+    }
+
 
     public Task<PaginatedResponse<RentalResponse>>
         GetAllRentalsAsync(

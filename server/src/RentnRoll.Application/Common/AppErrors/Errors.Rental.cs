@@ -15,5 +15,15 @@ public static partial class Errors
             Error.NotFound(
                 "Rentals.AssetPolicyNotFound",
                 $"Asset policy for store asset with ID {storeAssetId} and time unit {unit} does not exist.");
+
+        public static Error RentalNotFound(Guid rentalId) =>
+            Error.NotFound(
+                "Rentals.RentalNotFound",
+                $"Rental with ID {rentalId} does not exist.");
+
+        public static Error RentalAlreadyActive(Guid rentalId) =>
+            Error.InvalidRequest(
+                "Rentals.RentalAlreadyActive",
+                $"Rental with ID {rentalId} cannot be canceled because it is already active.");
     }
 }
