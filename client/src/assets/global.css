@@ -1,7 +1,52 @@
 @import "tailwindcss";
 
 @theme {
-  --font-montserrat: "Montserrat", sans-serif;
-  --font-roboto: "Roboto", sans-serif;
-  --font-dynapuff: "DynaPuff", system-ui;
+  --font-poppins: "Poppins", sans-serif;
+
+  --color-white: #ffffff;
+  --color-white-active: #f5f8fa;
+  --color-dark: #0c0d0f;
+
+  --color-primary: #ffca23;
+  --color-primary-active: #274bc7;
+  --color-primary-light: #eff2ff;
+
+  --color-success: #50cd89;
+  --color-success-active: #47be7d;
+  --color-success-light: #e8fff3;
+
+  --color-danger: #f1416c;
+  --color-danger-active: #d9214e;
+  --color-danger-light: #fff5f8;
+
+  --color-gray-100: #f9f9f9;
+  --color-gray-200: #f1f1f2;
+  --color-gray-300: #e1e3ea;
+  --color-gray-400: #d8d8e5;
+  --color-gray-500: #a1a5b7;
+  --color-gray-600: #7e8299;
+  --color-gray-700: #5e6278;
+  --color-gray-800: #3f4254;
+  --color-gray-900: #16171b;
+}
+
+@layer base {
+  body {
+    min-height: 100vh;
+    font-family: var(--font-poppins);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    width: 100%;
+    color: white;
+    font-size: 17px;
+    line-height: 1.5;
+    font-weight: 500;
+    padding-block: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #3461ff;
+  }
 }
