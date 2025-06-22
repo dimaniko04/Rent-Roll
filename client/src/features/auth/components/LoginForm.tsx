@@ -21,6 +21,7 @@ export const LoginForm = () => {
       email: "",
       password: "",
     },
+    mode: "onBlur",
     resolver: zodResolver(LoginFormSchema),
   });
   const [passwordVisible, setPasswordVisible] = useState(false);

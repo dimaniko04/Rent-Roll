@@ -23,29 +23,30 @@ export const PasswordInput = <T extends FieldValues>({
 
   return (
     <div>
+      <label htmlFor={props.name} className="text-gray-600 text-sm leading-5">
+        {label}
+      </label>
+
       <div>
-        <label htmlFor={props.name} className="text-gray-600 text-sm leading-5">
-          {label}
-        </label>
-
-        <span className="text-danger float-end">
-          {fieldState.error?.message ?? ""}
+        <div className="relative">
+          <input
+            {...field}
+            className="border border-gray-400 py-2 px-2.5 rounded-sm text-sm w-full"
+            type={isVisible ? "text" : "password"}
+          />
+          <img
+            src={isVisible ? hide : view}
+            alt={isVisible ? "Hide" : "Show"}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={toggleVisibility}
+            className={`absolute right-0 top-1/2 -translate-y-1/2  p-4 cursor-pointer ${!field.value ? "hidden" : ""}`}
+          />
+        </div>
+        <span
+          className={`text-danger float-end text-xs ${fieldState.error ? "visible" : "invisible"}`}
+        >
+          {fieldState.error?.message || ""}
         </span>
-      </div>
-
-      <div className="relative">
-        <input
-          {...field}
-          className="border border-gray-400 py-2 px-2.5 rounded-sm text-sm"
-          type={isVisible ? "text" : "password"}
-        />
-        <img
-          src={isVisible ? hide : view}
-          alt={isVisible ? "Hide" : "Show"}
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={toggleVisibility}
-          className={`absolute right-0 top-1/2 -translate-y-1/2  p-4 cursor-pointer ${!field.value ? "hidden" : ""}`}
-        />
       </div>
     </div>
   );

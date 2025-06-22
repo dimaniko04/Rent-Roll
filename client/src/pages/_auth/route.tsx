@@ -9,17 +9,21 @@ export const Route = createFileRoute("/_auth")({
 
 function RouteComponent() {
   return (
-    <div className="flex h-full flex-row">
+    <div className="flex h-full flex-row overflow-hidden">
       <div className="flex-3/5">
         <img src={background} alt="cover" />
       </div>
-      <div className="flex-2/5 flex flex-col items-center mt-20 mb-6 gap-y-12">
-        <div>
-          <img src={logo} alt="Logo" className="inline mr-2" />
-          <img src={logoText} alt="Diploma" className="inline" />
-        </div>
+      <div className="overflow-auto flex-2/5">
+        <div className="flex flex-col items-center my-6">
+          <div className="w-fit flex flex-col gap-y-12 h-full">
+            <div>
+              <img src={logo} alt="Logo" className="inline mr-2" />
+              <img src={logoText} alt="Diploma" className="inline" />
+            </div>
 
-        <Outlet />
+            <Outlet />
+          </div>
+        </div>
       </div>
     </div>
   );

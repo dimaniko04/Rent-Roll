@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { LoginForm } from "@features/auth";
 
@@ -19,6 +19,18 @@ function RouteComponent() {
       </div>
 
       <LoginForm />
+
+      <Link
+        to="/register"
+        className="mt-auto py-3.5 text-sm leading-5 text-gray-600 group"
+      >
+        <p>
+          New on out platform
+          <span className="ml-2.5 text-primary group-hover:underline">
+            Create an account
+          </span>
+        </p>
+      </Link>
     </>
   );
 }

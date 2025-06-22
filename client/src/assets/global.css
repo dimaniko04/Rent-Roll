@@ -7,7 +7,7 @@
   --color-white-active: #f5f8fa;
   --color-dark: #0c0d0f;
 
-  --color-primary: #ffca23;
+  --color-primary: #3461ff;
   --color-primary-active: #274bc7;
   --color-primary-light: #eff2ff;
 
@@ -47,6 +47,6 @@
     padding-block: 12px;
     border-radius: 8px;
     cursor: pointer;
-    background-color: #3461ff;
+    background-color: var(--color-primary);
   }
 }
