@@ -32,8 +32,6 @@ builder.AddSerilog();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
-
 if (app.Environment.IsDevelopment())
 {
     await app.ApplyMigrationsAsync();
@@ -53,11 +51,13 @@ else
     app.UseHsts();
 }
 
-app.UseCors(CORS_ALLOW_ALL);
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 
 app.UseStaticFiles();
+app.UseRouting();
+
+app.UseCors(CORS_ALLOW_ALL);
 
 app.UseAuthentication();
 app.UseAuthorization();

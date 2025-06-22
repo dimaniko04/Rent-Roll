@@ -178,7 +178,8 @@ public class AuthService : IAuthService
         user.RefreshToken = null;
         user.RefreshTokenExpiry = null;
 
-        await _userManager.UpdateAsync(user);
+        await _dbContext.SaveChangesAsync();
+
         _tokenService.SetTokenCookie(string.Empty, isExpired: true);
 
         return Result.Success();
@@ -194,7 +195,8 @@ public class AuthService : IAuthService
 
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
-        await _userManager.UpdateAsync(user);
+
+        await _dbContext.SaveChangesAsync();
 
         _tokenService.SetTokenCookie(refreshToken, isExpired: false);
 

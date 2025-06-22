@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 // Import Routes
 
 import { Route as rootRoute } from './pages/__root'
@@ -17,27 +15,11 @@ import { Route as RentalsRouteImport } from './pages/rentals/route'
 import { Route as DashboardRouteImport } from './pages/_dashboard/route'
 import { Route as AuthRouteImport } from './pages/_auth/route'
 import { Route as IndexImport } from './pages/index'
+import { Route as DashboardGamesImport } from './pages/_dashboard/games'
 import { Route as AuthRegisterImport } from './pages/_auth/register'
 import { Route as AuthLoginImport } from './pages/_auth/login'
 
-// Create Virtual Routes
-
-const RegisterLazyImport = createFileRoute('/register')()
-const LoginLazyImport = createFileRoute('/login')()
-
 // Create/Update Routes
-
-const RegisterLazyRoute = RegisterLazyImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./pages/register.lazy').then((d) => d.Route))
-
-const LoginLazyRoute = LoginLazyImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./pages/login.lazy').then((d) => d.Route))
 
 const RentalsRouteRoute = RentalsRouteImport.update({
   id: '/rentals',
@@ -59,6 +41,12 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardGamesRoute = DashboardGamesImport.update({
+  id: '/games',
+  path: '/games',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 
 const AuthRegisterRoute = AuthRegisterImport.update({
@@ -105,20 +93,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RentalsRouteImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/_auth/login': {
       id: '/_auth/login'
       path: '/login'
@@ -132,6 +106,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/register'
       preLoaderRoute: typeof AuthRegisterImport
       parentRoute: typeof AuthRouteImport
+    }
+    '/_dashboard/games': {
+      id: '/_dashboard/games'
+      path: '/games'
+      fullPath: '/games'
+      preLoaderRoute: typeof DashboardGamesImport
+      parentRoute: typeof DashboardRouteImport
     }
   }
 }
@@ -152,68 +133,76 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface DashboardRouteRouteChildren {
+  DashboardGamesRoute: typeof DashboardGamesRoute
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardGamesRoute: DashboardGamesRoute,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof DashboardRouteRoute
+  '': typeof DashboardRouteRouteWithChildren
   '/rentals': typeof RentalsRouteRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
+  '/games': typeof DashboardGamesRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof DashboardRouteRoute
+  '': typeof DashboardRouteRouteWithChildren
   '/rentals': typeof RentalsRouteRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
+  '/games': typeof DashboardGamesRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/_dashboard': typeof DashboardRouteRoute
+  '/_dashboard': typeof DashboardRouteRouteWithChildren
   '/rentals': typeof RentalsRouteRoute
-  '/login': typeof LoginLazyRoute
-  '/register': typeof RegisterLazyRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
+  '/_dashboard/games': typeof DashboardGamesRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/rentals' | '/login' | '/register'
+  fullPaths: '/' | '' | '/rentals' | '/login' | '/register' | '/games'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/rentals' | '/login' | '/register'
+  to: '/' | '' | '/rentals' | '/login' | '/register' | '/games'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/_dashboard'
     | '/rentals'
-    | '/login'
-    | '/register'
     | '/_auth/login'
     | '/_auth/register'
+    | '/_dashboard/games'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  DashboardRouteRoute: typeof DashboardRouteRoute
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   RentalsRouteRoute: typeof RentalsRouteRoute
-  LoginLazyRoute: typeof LoginLazyRoute
-  RegisterLazyRoute: typeof RegisterLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  DashboardRouteRoute: DashboardRouteRoute,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   RentalsRouteRoute: RentalsRouteRoute,
-  LoginLazyRoute: LoginLazyRoute,
-  RegisterLazyRoute: RegisterLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -229,9 +218,7 @@ export const routeTree = rootRoute
         "/",
         "/_auth",
         "/_dashboard",
-        "/rentals",
-        "/login",
-        "/register"
+        "/rentals"
       ]
     },
     "/": {
@@ -245,16 +232,13 @@ export const routeTree = rootRoute
       ]
     },
     "/_dashboard": {
-      "filePath": "_dashboard/route.tsx"
+      "filePath": "_dashboard/route.tsx",
+      "children": [
+        "/_dashboard/games"
+      ]
     },
     "/rentals": {
       "filePath": "rentals/route.tsx"
-    },
-    "/login": {
-      "filePath": "login.lazy.tsx"
-    },
-    "/register": {
-      "filePath": "register.lazy.tsx"
     },
     "/_auth/login": {
       "filePath": "_auth/login.tsx",
@@ -263,6 +247,10 @@ export const routeTree = rootRoute
     "/_auth/register": {
       "filePath": "_auth/register.tsx",
       "parent": "/_auth"
+    },
+    "/_dashboard/games": {
+      "filePath": "_dashboard/games.tsx",
+      "parent": "/_dashboard"
     }
   }
 }

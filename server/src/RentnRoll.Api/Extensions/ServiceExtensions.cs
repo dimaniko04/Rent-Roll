@@ -66,9 +66,13 @@ public static class ServiceExtensions
             options.AddPolicy(name: policyName,
                 corsPolicyBuilder =>
                 {
-                    corsPolicyBuilder.AllowAnyOrigin();
+                    corsPolicyBuilder.WithOrigins(
+                        "https://localhost:3000",
+                        "http://localhost:3000"
+                    );
                     corsPolicyBuilder.AllowAnyMethod();
                     corsPolicyBuilder.AllowAnyHeader();
+                    corsPolicyBuilder.AllowCredentials();
                 });
         });
 

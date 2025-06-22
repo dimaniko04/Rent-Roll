@@ -1,3 +1,4 @@
+import { useAuth } from "@/main";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -5,5 +6,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  return <Navigate to="/login" />;
+  const { isAuth } = useAuth();
+
+  return <Navigate to={isAuth ? "/games" : "/login"} replace />;
 }

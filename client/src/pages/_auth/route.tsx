@@ -1,13 +1,20 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
 import background from "@assets/img/background.png";
 import logo from "@assets/icons/logo.svg";
 import logoText from "@assets/icons/logoText.svg";
+import { useAuth } from "@/main";
 
 export const Route = createFileRoute("/_auth")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const { isAuth } = useAuth();
+
+  if (isAuth) {
+    return <Navigate to="/games" replace />;
+  }
+
   return (
     <div className="flex h-full flex-row overflow-hidden">
       <div className="flex-3/5">
