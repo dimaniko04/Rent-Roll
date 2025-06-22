@@ -16,7 +16,7 @@ export class AuthService {
     fullName: string,
     country: string
   ): Promise<AxiosResponse<AuthResponse>> {
-    return api.post<AuthResponse>("authentication/registration", {
+    return api.post<AuthResponse>("authentication/register", {
       email,
       password,
       fullName,

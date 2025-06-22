@@ -5,6 +5,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CountrySelect } from "./CountrySelect";
+import { useMutation } from "@tanstack/react-query";
+import { AuthService } from "../services/AuthService";
+import { AxiosError } from "axios";
+import { handleAxiosError } from "@/utils/handleAxiosError";
+import { useAuth } from "@/main";
+import { useNavigate } from "@tanstack/react-router";
 
 const RegisterFormSchema = z
   .object({
@@ -31,7 +37,7 @@ interface RegisterFormData {
 }
 
 export const RegisterForm = () => {
-  const { control, handleSubmit } = useForm<RegisterFormData>({
+  const { control, handleSubmit, setError } = useForm<RegisterFormData>({
     defaultValues: {
       email: "",
       password: "",
@@ -42,14 +48,56 @@ export const RegisterForm = () => {
     mode: "onBlur",
     resolver: zodResolver(RegisterFormSchema),
   });
+  const { setIsAuth } = useAuth();
+  const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const toggleVisibility = () => {
     setPasswordVisible((prev) => !prev);
   };
 
+  const registerMutation = useMutation({
+    mutationFn: async (values: RegisterFormData) => {
+      return await AuthService.register(
+        values.email,
+        values.password,
+        values.fullName,
+        values.country
+      );
+    },
+    onError: (error: Error) => {
+      if (error instanceof AxiosError) {
+        const message = handleAxiosError(error);
+
+        if (typeof message === "string") {
+          setServerError(message);
+        } else if (typeof message === "object") {
+          Object.entries(message).forEach(([field, messages]) => {
+            messages.forEach((msg) => {
+              setError(field as keyof RegisterFormData, {
+                type: "validate",
+                message: msg,
+              });
+            });
+          });
+        }
+      } else {
+        console.error("Unexpected error:", error);
+        setServerError("An unexpected error occurred.");
+      }
+    },
+    onSuccess: (response) => {
+      setServerError(null);
+      setIsAuth(true);
+      localStorage.setItem("token", response.data.accessToken);
+      console.log("Logged in:", response);
+      navigate({ to: "/games" });
+    },
+  });
+
   const onSubmit = (data: RegisterFormData) => {
-    console.log("Form submitted with data:", data);
+    registerMutation.mutate(data);
   };
 
   return (
@@ -76,7 +124,15 @@ export const RegisterForm = () => {
 
       <CountrySelect label="Country" name="country" control={control} />
 
-      <button type="submit" className="btn-primary">
+      {serverError && (
+        <div className="text-red-500 text-sm mb-2">{serverError}</div>
+      )}
+
+      <button
+        type="submit"
+        className="btn-primary disabled:bg-primary-light"
+        disabled={registerMutation.isPending}
+      >
         Sign In
       </button>
     </form>

@@ -24,8 +24,8 @@ interface LoginFormData {
 export const LoginForm = () => {
   const { control, handleSubmit, setError } = useForm<LoginFormData>({
     defaultValues: {
-      email: "alex.morrison@example.com",
-      password: "SecurePass123!",
+      email: "",
+      password: "",
     },
     mode: "onBlur",
     resolver: zodResolver(LoginFormSchema),
