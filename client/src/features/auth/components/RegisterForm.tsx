@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { CountrySelect } from "./CountrySelect";
 
 const RegisterFormSchema = z
   .object({
@@ -73,7 +74,7 @@ export const RegisterForm = () => {
 
       <TextInput label="Full Name" control={control} name="fullName" />
 
-      <TextInput label="Country" control={control} name="country" />
+      <CountrySelect label="Country" name="country" control={control} />
 
       <button type="submit" className="btn-primary">
         Sign In
