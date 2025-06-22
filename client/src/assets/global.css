@@ -49,4 +49,10 @@
     cursor: pointer;
     background-color: var(--color-primary);
   }
+
+  .white-svg {
+    svg {
+      fill: var(--color-white);
+    }
+  }
 }
