@@ -56,3 +56,10 @@
     }
   }
 }
+
+@layer utilities {
+  .auto-fit-min-max-500 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  }
+}

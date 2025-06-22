@@ -32,7 +32,7 @@ public class TokenService : ITokenService
     {
         var expires = isExpired
             ? DateTime.UtcNow.AddDays(-1)
-            : DateTime.UtcNow.AddMinutes(
+            : DateTime.UtcNow.AddDays(
                 _jwtSettings.RefreshTokenExpirationInDays);
 
         var options = new CookieOptions

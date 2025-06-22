@@ -1,41 +1,28 @@
 import api from "@/services/api";
+import type { Game } from "../types/Game";
+import type { GameFilters } from "../types/GameFilters";
+import type { PaginatedList } from "@/types/PaginatedList";
 
 export class GameService {
-  static async getGames(
-    page: number = 1,
-    pageSize: number = 10,
-    search: string = "",
-    genres: string[] = [],
-    categories: string[] = [],
-    mechanics: string[] = [],
-    isVerified: boolean = true
-  ) {
-    const params: Record<string, string> = {
-      page: page.toString(),
-      pageSize: pageSize.toString(),
-      search,
-      genres: genres.join(","),
-      categories: categories.join(","),
-      mechanics: mechanics.join(","),
-      isVerified: isVerified ? "true" : "false",
-    };
-
-    const response = await api.get(`/api/games?${new URLSearchParams(params)}`);
+  static async getGames(filters: GameFilters) {
+    const response = await api.get<PaginatedList<Game>>("/games/rent", {
+      params: filters,
+    });
     return response.data;
   }
 
   static async getGenres() {
-    const response = await api.get("/api/genres");
+    const response = await api.get("/genres");
     return response.data;
   }
 
   static async getCategories() {
-    const response = await api.get("/api/categories");
+    const response = await api.get("/categories");
     return response.data;
   }
 
   static async getMechanics() {
-    const response = await api.get("/api/mechanics");
+    const response = await api.get("/mechanics");
     return response.data;
   }
 }
