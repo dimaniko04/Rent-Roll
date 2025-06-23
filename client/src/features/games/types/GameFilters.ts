@@ -1,5 +1,5 @@
 export type GameFilters = {
-  searchTerm?: string;
+  search?: string;
   locationType?: "gameStore" | "locker";
   timeUnit?: "hour" | "day" | "week" | "month";
   isVerified?: boolean;

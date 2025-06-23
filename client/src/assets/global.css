@@ -62,4 +62,69 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   }
+
+  .radio {
+    position: relative;
+    appearance: none;
+    cursor: pointer;
+    border: 1px solid #666;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: background-color 0.1s ease;
+  }
+
+  .radio:checked {
+    appearance: none;
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    transition: background-color 0.1s ease;
+  }
+
+  .radio::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: transform 0.1s ease;
+  }
+
+  .radio:checked::before {
+    transform: translate(-50%, -50%) scale(1);
+    transition: transform 0.1s ease;
+  }
+
+  .checkbox {
+    appearance: none;
+    cursor: pointer;
+    border-radius: 4px;
+    position: relative;
+    border: 1px solid #666;
+    background-color: transparent;
+    transition: background-color 0.1s ease;
+  }
+
+  .checkbox:checked {
+    appearance: none;
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    transition: background-color 0.1s ease;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 23%;
+      left: 40%;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
 }

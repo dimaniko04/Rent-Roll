@@ -34,6 +34,8 @@ export const GameList = () => {
     };
   });
 
+  console.log(data);
+
   return (
     <div ref={scrollRef} className="overflow-y-auto px-6 pb-8">
       {isLoading && <div className="text-center py-4">Loading games...</div>}
@@ -42,8 +44,12 @@ export const GameList = () => {
       )}
 
       <ul className="grid auto-fit-min-max-500 gap-6">
-        {data?.pages.map((page) =>
-          page.items.map((game) => <GameItem key={game.id} game={game} />)
+        {data && !data.pages.every((page) => page.items.length === 0) ? (
+          data.pages.map((page) =>
+            page.items.map((game) => <GameItem key={game.id} game={game} />)
+          )
+        ) : (
+          <div className="text-center py-4">No games found</div>
         )}
       </ul>
 

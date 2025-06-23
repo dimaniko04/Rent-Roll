@@ -13,3 +13,18 @@ export type Game = {
   address: string;
   timeUnit: "hour" | "day" | "week" | "month";
 };
+
+export type Genre = {
+  id: string;
+  name: string;
+};
+
+export type Category = {
+  id: string;
+  name: string;
+};
+
+export type Mechanic = {
+  id: string;
+  name: string;
+};

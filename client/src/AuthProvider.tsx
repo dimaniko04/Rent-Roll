@@ -18,9 +18,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       }
     };
 
-    if (localStorage.getItem("token")) {
-      isAuthenticated();
-    }
+    isAuthenticated();
   }, []);
 
   return <AuthContext value={{ isAuth, setIsAuth }}>{children}</AuthContext>;

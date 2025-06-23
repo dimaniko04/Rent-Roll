@@ -8,7 +8,7 @@ interface GameItemProps {
 export const GameItem = ({ game }: GameItemProps) => {
   return (
     <div className="flex flex-row gap-x-4 items-center">
-      <div className="rounded-2xl overflow-hidden w-32 h-32 flex-shrink-0">
+      <div className="rounded-2xl overflow-hidden w-28 h-28 flex-shrink-0">
         <img
           src={getImageUrl(game.thumbnailUrl)}
           alt="Thumbnail"

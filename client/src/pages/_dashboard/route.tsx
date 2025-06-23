@@ -13,16 +13,18 @@ function RouteComponent() {
 
   return (
     <PrivateRoute isAllowed={isAuth}>
-      <div className="relative h-full flex flex-col">
-        <div className="flex-1 flex flex-row">
-          <aside className="flex-3/12 bg-gray-200">
+      <div className="flex flex-col h-full">
+        <div className="flex flex-1 overflow-y-auto flex-row">
+          <aside className="flex-3/12 max-w-64 bg-gray-200 overflow-y-auto">
             <SideBar />
           </aside>
 
-          <div className="flex-9/12 flex flex-col bg-white">
+          <div className="flex-9/12 flex flex-col overflow-y-auto bg-white">
             <GamesHeader />
 
-            <Outlet />
+            <div className="flex-1 overflow-y-auto">
+              <Outlet />
+            </div>
           </div>
         </div>
 
