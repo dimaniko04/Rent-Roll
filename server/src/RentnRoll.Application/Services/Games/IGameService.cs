@@ -20,6 +20,8 @@ public interface IGameService
     Task<PaginatedResponse<RentableGameResponse>>
         GetAllRentableGamesAsync(
             GetAllRentableGamesRequest request);
+    Task<Result<RentableGameDetailsResponse>>
+        GetRentableGameDetailsAsync(Guid id);
     Task<PaginatedResponse<GameNameResponse>> GetAllGameNamesAsync(
         GetAllGameNamesRequest request);
     Task<Result<GameResponse>> CreateGameAsync(

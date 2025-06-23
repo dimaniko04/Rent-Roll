@@ -1,5 +1,6 @@
 import { getImageUrl } from "@/utils/getImageUrl";
 import type { Game } from "../types/Game";
+import { Link } from "@tanstack/react-router";
 
 interface GameItemProps {
   game: Game;
@@ -7,7 +8,11 @@ interface GameItemProps {
 
 export const GameItem = ({ game }: GameItemProps) => {
   return (
-    <div className="flex flex-row gap-x-4 items-center">
+    <Link
+      to="/games/$gameId"
+      params={{ gameId: game.id }}
+      className="flex cursor-pointer flex-row gap-x-4 items-center rounded-2xl hover:bg-gray-200"
+    >
       <div className="rounded-2xl overflow-hidden w-28 h-28 flex-shrink-0">
         <img
           src={getImageUrl(game.thumbnailUrl)}
@@ -29,6 +34,6 @@ export const GameItem = ({ game }: GameItemProps) => {
           {new Date(game.publishedAt).toLocaleDateString()}
         </data>
       </div>
-    </div>
+    </Link>
   );
 };

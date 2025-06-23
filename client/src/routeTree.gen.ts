@@ -12,23 +12,19 @@
 
 import { Route as rootRoute } from './pages/__root'
 import { Route as RentalsRouteImport } from './pages/rentals/route'
-import { Route as DashboardRouteImport } from './pages/_dashboard/route'
 import { Route as AuthRouteImport } from './pages/_auth/route'
 import { Route as IndexImport } from './pages/index'
 import { Route as DashboardGamesImport } from './pages/_dashboard/games'
 import { Route as AuthRegisterImport } from './pages/_auth/register'
 import { Route as AuthLoginImport } from './pages/_auth/login'
+import { Route as DashboardGamesIndexImport } from './pages/_dashboard/games.index'
+import { Route as DashboardGamesGameIdImport } from './pages/_dashboard/games.$gameId'
 
 // Create/Update Routes
 
 const RentalsRouteRoute = RentalsRouteImport.update({
   id: '/rentals',
   path: '/rentals',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DashboardRouteRoute = DashboardRouteImport.update({
-  id: '/_dashboard',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -44,9 +40,9 @@ const IndexRoute = IndexImport.update({
 } as any)
 
 const DashboardGamesRoute = DashboardGamesImport.update({
-  id: '/games',
+  id: '/_dashboard/games',
   path: '/games',
-  getParentRoute: () => DashboardRouteRoute,
+  getParentRoute: () => rootRoute,
 } as any)
 
 const AuthRegisterRoute = AuthRegisterImport.update({
@@ -59,6 +55,18 @@ const AuthLoginRoute = AuthLoginImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const DashboardGamesIndexRoute = DashboardGamesIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardGamesRoute,
+} as any)
+
+const DashboardGamesGameIdRoute = DashboardGamesGameIdImport.update({
+  id: '/$gameId',
+  path: '/$gameId',
+  getParentRoute: () => DashboardGamesRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -77,13 +85,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRoute
-    }
-    '/_dashboard': {
-      id: '/_dashboard'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRoute
     }
     '/rentals': {
@@ -112,7 +113,21 @@ declare module '@tanstack/react-router' {
       path: '/games'
       fullPath: '/games'
       preLoaderRoute: typeof DashboardGamesImport
-      parentRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/_dashboard/games/$gameId': {
+      id: '/_dashboard/games/$gameId'
+      path: '/$gameId'
+      fullPath: '/games/$gameId'
+      preLoaderRoute: typeof DashboardGamesGameIdImport
+      parentRoute: typeof DashboardGamesImport
+    }
+    '/_dashboard/games/': {
+      id: '/_dashboard/games/'
+      path: '/'
+      fullPath: '/games/'
+      preLoaderRoute: typeof DashboardGamesIndexImport
+      parentRoute: typeof DashboardGamesImport
     }
   }
 }
@@ -133,76 +148,98 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
-interface DashboardRouteRouteChildren {
-  DashboardGamesRoute: typeof DashboardGamesRoute
+interface DashboardGamesRouteChildren {
+  DashboardGamesGameIdRoute: typeof DashboardGamesGameIdRoute
+  DashboardGamesIndexRoute: typeof DashboardGamesIndexRoute
 }
 
-const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardGamesRoute: DashboardGamesRoute,
+const DashboardGamesRouteChildren: DashboardGamesRouteChildren = {
+  DashboardGamesGameIdRoute: DashboardGamesGameIdRoute,
+  DashboardGamesIndexRoute: DashboardGamesIndexRoute,
 }
 
-const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
-  DashboardRouteRouteChildren,
+const DashboardGamesRouteWithChildren = DashboardGamesRoute._addFileChildren(
+  DashboardGamesRouteChildren,
 )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof DashboardRouteRouteWithChildren
+  '': typeof AuthRouteRouteWithChildren
   '/rentals': typeof RentalsRouteRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
-  '/games': typeof DashboardGamesRoute
+  '/games': typeof DashboardGamesRouteWithChildren
+  '/games/$gameId': typeof DashboardGamesGameIdRoute
+  '/games/': typeof DashboardGamesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof DashboardRouteRouteWithChildren
+  '': typeof AuthRouteRouteWithChildren
   '/rentals': typeof RentalsRouteRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
-  '/games': typeof DashboardGamesRoute
+  '/games/$gameId': typeof DashboardGamesGameIdRoute
+  '/games': typeof DashboardGamesIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/_dashboard': typeof DashboardRouteRouteWithChildren
   '/rentals': typeof RentalsRouteRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
-  '/_dashboard/games': typeof DashboardGamesRoute
+  '/_dashboard/games': typeof DashboardGamesRouteWithChildren
+  '/_dashboard/games/$gameId': typeof DashboardGamesGameIdRoute
+  '/_dashboard/games/': typeof DashboardGamesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/rentals' | '/login' | '/register' | '/games'
+  fullPaths:
+    | '/'
+    | ''
+    | '/rentals'
+    | '/login'
+    | '/register'
+    | '/games'
+    | '/games/$gameId'
+    | '/games/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/rentals' | '/login' | '/register' | '/games'
+  to:
+    | '/'
+    | ''
+    | '/rentals'
+    | '/login'
+    | '/register'
+    | '/games/$gameId'
+    | '/games'
   id:
     | '__root__'
     | '/'
     | '/_auth'
-    | '/_dashboard'
     | '/rentals'
     | '/_auth/login'
     | '/_auth/register'
     | '/_dashboard/games'
+    | '/_dashboard/games/$gameId'
+    | '/_dashboard/games/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   RentalsRouteRoute: typeof RentalsRouteRoute
+  DashboardGamesRoute: typeof DashboardGamesRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   RentalsRouteRoute: RentalsRouteRoute,
+  DashboardGamesRoute: DashboardGamesRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -217,8 +254,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_auth",
-        "/_dashboard",
-        "/rentals"
+        "/rentals",
+        "/_dashboard/games"
       ]
     },
     "/": {
@@ -229,12 +266,6 @@ export const routeTree = rootRoute
       "children": [
         "/_auth/login",
         "/_auth/register"
-      ]
-    },
-    "/_dashboard": {
-      "filePath": "_dashboard/route.tsx",
-      "children": [
-        "/_dashboard/games"
       ]
     },
     "/rentals": {
@@ -250,7 +281,18 @@ export const routeTree = rootRoute
     },
     "/_dashboard/games": {
       "filePath": "_dashboard/games.tsx",
-      "parent": "/_dashboard"
+      "children": [
+        "/_dashboard/games/$gameId",
+        "/_dashboard/games/"
+      ]
+    },
+    "/_dashboard/games/$gameId": {
+      "filePath": "_dashboard/games.$gameId.tsx",
+      "parent": "/_dashboard/games"
+    },
+    "/_dashboard/games/": {
+      "filePath": "_dashboard/games.index.tsx",
+      "parent": "/_dashboard/games"
     }
   }
 }

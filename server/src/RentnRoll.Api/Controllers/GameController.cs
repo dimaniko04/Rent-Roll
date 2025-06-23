@@ -56,6 +56,16 @@ public class GameController : ApiController
         return Ok(result);
     }
 
+    [HttpGet("rent/{rentableId:guid}")]
+    public async Task<IActionResult> GetRentableGameById(
+        Guid rentableId)
+    {
+        var result = await _gameService
+            .GetRentableGameDetailsAsync(rentableId);
+
+        return result.Match(Ok, Problem);
+    }
+
     [HttpGet("{gameId:guid}")]
     public async Task<IActionResult> GetGameById(Guid gameId)
     {

@@ -2,6 +2,7 @@ import api from "@/services/api";
 import type { Game } from "../types/Game";
 import type { GameFilters } from "../types/GameFilters";
 import type { PaginatedList } from "@/types/PaginatedList";
+import type { GameDetails } from "../types/GameDetails";
 
 export class GameService {
   static async getGames(filters: GameFilters) {
@@ -19,6 +20,11 @@ export class GameService {
         return searchParams.toString();
       },
     });
+    return response.data;
+  }
+
+  static async getGameById(id: string) {
+    const response = await api.get<GameDetails>(`/games/rent/${id}`);
     return response.data;
   }
 

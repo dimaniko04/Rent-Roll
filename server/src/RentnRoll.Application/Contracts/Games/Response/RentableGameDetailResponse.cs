@@ -2,7 +2,14 @@ using RentnRoll.Domain.Entities.PricingPolicies.Enums;
 
 namespace RentnRoll.Application.Contracts.Games.Response;
 
+public record RentableGamePrice(
+    int UnitCount,
+    TimeUnit TimeUnit,
+    int Price
+);
+
 public record RentableGameDetailsResponse(
+    Guid id,
     Guid BusinessGameId,
     string Name,
     string Description,
@@ -18,11 +25,7 @@ public record RentableGameDetailsResponse(
     IEnumerable<string> Categories,
     IEnumerable<string> Mechanics,
     IEnumerable<string> Images,
-    Guid PricingPolicyItemId,
-    int Price,
-    int UnitCount,
-    TimeUnit TimeUnit,
-    Guid LocationId,
+    IEnumerable<RentableGamePrice> Prices,
     string LocationName,
     string LocationType,
     string LocationAddress

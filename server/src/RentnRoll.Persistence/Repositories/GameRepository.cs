@@ -13,6 +13,10 @@ using RentnRoll.Application.Contracts.Mechanics;
 using RentnRoll.Application.Contracts.Games.Response;
 using RentnRoll.Application.Contracts.Games.GetAllGames;
 using Microsoft.Extensions.Logging;
+using RentnRoll.Domain.Entities.Lockers;
+using RentnRoll.Domain.Entities.Stores;
+using RentnRoll.Domain.Entities.Lockers.Enums;
+using RentnRoll.Domain.Enums;
 
 namespace RentnRoll.Persistence.Repositories;
 
@@ -299,5 +303,142 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
             .ToPaginatedResponse(
                 request.PageNumber,
                 request.PageSize);
+    }
+
+    public async Task<RentableGameDetailsResponse?>
+        GetRentableGameDetailsAsync(Guid id)
+    {
+        var cellGame = await _context
+            .Set<Cell>()
+            .Where(c => c.Id == id &&
+                c.Status == CellStatus.Available)
+            .FirstOrDefaultAsync();
+
+        if (cellGame is not null)
+        {
+            return await GetRentableGameDetailsFromCellAsync(
+                cellGame);
+        }
+
+        var storeAssetGame = await _context
+            .Set<StoreAsset>()
+            .Where(sa => sa.Id == id &&
+                sa.Quantity > 0)
+            .FirstOrDefaultAsync();
+
+        if (storeAssetGame is not null)
+        {
+            return await GetRentableGameDetailsFromStoreAsync(
+                storeAssetGame);
+        }
+
+        return null;
+    }
+
+    private Task<RentableGameDetailsResponse?>
+        GetRentableGameDetailsFromCellAsync(Cell cell)
+    {
+        return _context
+            .Set<Cell>()
+            .AsNoTracking()
+            .Where(c => c.Id == cell.Id)
+            .Include(c => c.BusinessGame!)
+            .ThenInclude(bg => bg.Game)
+            .Where(c => c.BusinessGame != null)
+            .Include(c => c.Locker)
+            .ThenInclude(l => l.PricingPolicies)
+            .ThenInclude(pp => pp.Items)
+            .Select(c =>
+                new
+                {
+                    c,
+                    l = c.Locker,
+                    g = c.BusinessGame!.Game,
+                    pp = c.Locker.PricingPolicies
+                        .Select(pp => new RentableGamePrice(
+                            pp.UnitCount,
+                            pp.TimeUnit,
+                            pp.Items.FirstOrDefault(ppi =>
+                                ppi.GameId == c.BusinessGameId
+                            )!.Price
+                        ))
+                })
+            .Select(j => new RentableGameDetailsResponse(
+                j.c.Id,
+                j.c.BusinessGameId!.Value,
+                j.g.Name,
+                j.g.Description,
+                j.g.ThumbnailUrl,
+                j.g.PublishedAt,
+                j.g.MinPlayers,
+                j.g.MaxPlayers,
+                j.g.Age,
+                j.g.AveragePlayTime,
+                j.g.ComplexityScore,
+                j.g.IsVerified,
+                j.g.Genres.Select(g => g.Name),
+                j.g.Categories.Select(c => c.Name),
+                j.g.Mechanics.Select(m => m.Name),
+                j.g.Images.Select(i => i.Url),
+                j.pp,
+                j.l.Name,
+                LocationType.Locker.ToString(),
+                j.l.Address.ToString()
+            ))
+            .FirstOrDefaultAsync();
+    }
+
+
+    private Task<RentableGameDetailsResponse?>
+        GetRentableGameDetailsFromStoreAsync(StoreAsset storeAsset)
+    {
+        return _context
+            .Set<StoreAsset>()
+            .AsNoTracking()
+            .Where(a => a.Id == storeAsset.Id)
+            .Include(a => a.BusinessGame!)
+            .ThenInclude(bg => bg.Game)
+            .Where(a => a.BusinessGame != null)
+            .Include(a => a.Store)
+            .ThenInclude(s => s.Policy)
+            .ThenInclude(pp => pp!.Items)
+            .Select(a =>
+                new
+                {
+                    a,
+                    s = a.Store,
+                    g = a.BusinessGame!.Game,
+                    pp = new[] {
+                    new RentableGamePrice(
+                        a.Store.Policy!.UnitCount,
+                        a.Store.Policy.TimeUnit,
+                        a.Store.Policy.Items.FirstOrDefault(ppi =>
+                            ppi.GameId == a.BusinessGameId
+                        )!.Price
+                    )}
+                })
+            .Select(j => new RentableGameDetailsResponse(
+                j.a.Id,
+                j.a.BusinessGameId,
+                j.g.Name,
+                j.g.Description,
+                j.g.ThumbnailUrl,
+                j.g.PublishedAt,
+                j.g.MinPlayers,
+                j.g.MaxPlayers,
+                j.g.Age,
+                j.g.AveragePlayTime,
+                j.g.ComplexityScore,
+                j.g.IsVerified,
+                j.g.Genres.Select(g => g.Name),
+                j.g.Categories.Select(a => a.Name),
+                j.g.Mechanics.Select(m => m.Name),
+                j.g.Images.Select(i => i.Url),
+                j.pp,
+                j.s.Name,
+                LocationType.GameStore.ToString(),
+                j.s.Address.ToString()
+            ))
+            .FirstOrDefaultAsync();
     }
 }
