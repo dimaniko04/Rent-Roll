@@ -10,5 +10,6 @@ public record RentalResponse(
     int TotalPrice,
     string Address,
     string GameName,
+    string? GameThumbnail,
     string LocationName,
     string? IotDeviceId);

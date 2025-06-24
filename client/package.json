@@ -16,6 +16,7 @@
     "@tanstack/react-router": "^1.120.5",
     "@tanstack/react-router-devtools": "^1.120.6",
     "axios": "^1.10.0",
+    "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

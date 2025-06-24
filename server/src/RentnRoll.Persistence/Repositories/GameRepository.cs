@@ -207,10 +207,10 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
                 .Where(j => j.u.LocationType == request.LocationType.Value.ToString());
         }
 
-        if (!string.IsNullOrEmpty(request.City))
+        if (!string.IsNullOrEmpty(request.Country))
         {
             query = query
-                .Where(j => j.u.Address.Contains(request.City));
+                .Where(j => j.u.Address.Contains(request.Country));
         }
 
         if (request.MinPrice != null && request.MinPrice > 0)

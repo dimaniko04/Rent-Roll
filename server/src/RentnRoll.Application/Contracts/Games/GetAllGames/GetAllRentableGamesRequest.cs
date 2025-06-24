@@ -7,7 +7,7 @@ public record GetAllRentableGamesRequest(
     int? MaxPlayers,
     int? MinPlayTime,
     int? MaxPlayTime,
-    string? City,
+    string? Country,
     string? TimeUnit,
     int? MinPrice,
     int? MaxPrice,

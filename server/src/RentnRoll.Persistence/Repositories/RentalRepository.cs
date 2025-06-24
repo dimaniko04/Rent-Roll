@@ -90,6 +90,9 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
                     ? j.Rental.StoreRental.StoreAsset!.BusinessGame.Game.Name
                     : j.Rental.LockerRental!.Cell!.BusinessGame!.Game.Name,
                 j.Rental.StoreRental != null
+                    ? j.Rental.StoreRental.StoreAsset!.BusinessGame.Game.ThumbnailUrl
+                    : j.Rental.LockerRental!.Cell!.BusinessGame!.Game.ThumbnailUrl,
+                j.Rental.StoreRental != null
                     ? j.Rental.StoreRental.StoreAsset!.Store.Name
                     : j.Rental.LockerRental!.Cell!.Locker!.Name,
                 j.Rental.LockerRental != null
@@ -117,7 +120,9 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
             .Include(r => r.LockerRental!.Cell)
             .ThenInclude(c => c!.BusinessGame)
             .ThenInclude(bg => bg!.Game)
-            .Include(r => r.LockerRental!.Cell!.Locker);
+            .Include(r => r.LockerRental!.Cell!.Locker)
+            .OrderByDescending(r => r.StartDate)
+            .OrderByDescending(r => r.Status);
 
         var rentals = await query
             .Select(r => new UserRentalResponse(
@@ -132,6 +137,9 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
                 r.StoreRental != null
                     ? r.StoreRental.StoreAsset!.BusinessGame.Game.Name
                     : r.LockerRental!.Cell!.BusinessGame!.Game.Name,
+                r.StoreRental != null
+                    ? r.StoreRental.StoreAsset!.BusinessGame.Game.ThumbnailUrl
+                    : r.LockerRental!.Cell!.BusinessGame!.Game.ThumbnailUrl,
                 r.StoreRental != null
                     ? r.StoreRental.StoreAsset!.Store.Name
                     : r.LockerRental!.Cell!.Locker!.Name,
