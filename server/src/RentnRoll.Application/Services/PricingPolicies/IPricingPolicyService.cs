@@ -20,7 +20,7 @@ public interface IPricingPolicyService
         Guid businessId,
         CreatePricingPolicyRequest request);
 
-    Task<Result<PricingPolicyDetailsResponse>> UpdatePricingPolicyAsync(
+    Task<Result<PricingPolicyResponse>> UpdatePricingPolicyAsync(
         Guid businessId,
         Guid pricingPolicyId,
         UpdatePricingPolicyRequest request);

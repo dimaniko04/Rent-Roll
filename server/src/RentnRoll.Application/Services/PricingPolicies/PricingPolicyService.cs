@@ -90,7 +90,7 @@ public class PricingPolicyService : IPricingPolicyService
         return response;
     }
 
-    public async Task<Result<PricingPolicyDetailsResponse>>
+    public async Task<Result<PricingPolicyResponse>>
         UpdatePricingPolicyAsync(
             Guid businessId,
             Guid pricingPolicyId,
@@ -118,7 +118,7 @@ public class PricingPolicyService : IPricingPolicyService
         request.UpdatePricingPolicy(policy);
         await _unitOfWork.SaveChangesAsync();
 
-        var response = PricingPolicyDetailsResponse
+        var response = PricingPolicyResponse
             .FromPricingPolicy(policy);
 
         return response;
