@@ -29,7 +29,11 @@ export const TextInput = <T extends FieldValues>({
             id={props.name}
             type={type}
             className="border border-gray-400 py-2 px-2.5 rounded-sm text-sm w-full"
-            {...field}
+            {...{
+              ...field,
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                field.onChange(Number(e.target.value)),
+            }}
           />
         </div>
         <span

@@ -4,7 +4,7 @@ namespace RentnRoll.Application.Contracts.Games.Response;
 
 public record RentableGamePrice(
     int UnitCount,
-    TimeUnit TimeUnit,
+    string TimeUnit,
     int Price
 );
 

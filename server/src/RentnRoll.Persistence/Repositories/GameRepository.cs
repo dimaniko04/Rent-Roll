@@ -358,7 +358,7 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
                     pp = c.Locker.PricingPolicies
                         .Select(pp => new RentableGamePrice(
                             pp.UnitCount,
-                            pp.TimeUnit,
+                            pp.TimeUnit.ToString(),
                             pp.Items.FirstOrDefault(ppi =>
                                 ppi.GameId == c.BusinessGameId
                             )!.Price
@@ -412,7 +412,7 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
                     pp = new[] {
                     new RentableGamePrice(
                         a.Store.Policy!.UnitCount,
-                        a.Store.Policy.TimeUnit,
+                        a.Store.Policy.TimeUnit.ToString(),
                         a.Store.Policy.Items.FirstOrDefault(ppi =>
                             ppi.GameId == a.BusinessGameId
                         )!.Price

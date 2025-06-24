@@ -1,6 +1,6 @@
 import { getImageUrl } from "@/utils/getImageUrl";
-import type { Game } from "../types/Game";
 import { Link } from "@tanstack/react-router";
+import type { Game } from "../../types/Game";
 
 interface GameItemProps {
   game: Game;
