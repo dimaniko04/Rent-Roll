@@ -1,11 +1,17 @@
 import { getImageUrl } from "@/utils/getImageUrl";
 import type { Rental } from "../types/Rental";
+import { useMutation } from "@tanstack/react-query";
+import { RentalService } from "../services/RentalService";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
+import { Route } from "@/pages/rentals";
 
 interface Props {
   rental: Rental;
 }
 
 export const RentalItem = ({ rental }: Props) => {
+  const navigate = Route.useNavigate();
   let statusClasses = "";
 
   switch (rental.status) {
@@ -16,12 +22,42 @@ export const RentalItem = ({ rental }: Props) => {
       statusClasses = "bg-gray-300 text-grey-700";
       break;
     case "Returned":
-      statusClasses = "bg-gray-100 text-gray-900 opacity-70";
+      statusClasses = "bg-gray-700 text-white-active";
       break;
     case "Overdue":
       statusClasses = "bg-red-100 text-danger-active";
       break;
   }
+
+  const openCellMutatition = useMutation({
+    mutationFn: async () => {
+      return await RentalService.openCell(
+        rental.id,
+        rental.status === "Expectation"
+      );
+    },
+    onError: (error: Error) => {
+      if (error instanceof AxiosError) {
+        const axiosError = error as AxiosError;
+
+        if ("response" in axiosError) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const response = axiosError.response as any;
+
+          toast.error(
+            `Error opening the cell: ${response?.status} ${response.data.message}`
+          );
+          return;
+        }
+      }
+
+      toast.error(`Error opening the cell: ${error.message}`);
+    },
+    onSuccess: () => {
+      toast.success("Cell opened successfully");
+      navigate({ reloadDocument: true, to: "/rentals" });
+    },
+  });
 
   return (
     <div key={rental.id} className="border-b pb-6 mb-6">
@@ -68,12 +104,11 @@ export const RentalItem = ({ rental }: Props) => {
       {rental.iotDeviceId && (
         <button
           disabled={rental.status === "Returned" || rental.status === "Overdue"}
-          className={
-            "cursor-pointer mt-4 w-32 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-2 px-4 font-medium rounded "
-          }
+          onClick={() => openCellMutatition.mutate()}
+          className={`cursor-pointer mt-4 w-32 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-2 px-4 font-medium rounded ${rental.status === "Active" ? "bg-purple-700 hover:bg-purple-500" : ""}`}
         >
-          {rental.status !== "active" && "Open Cell"}
-          {rental.status === "active" && "Return"}
+          {rental.status !== "Active" && "Open Cell"}
+          {rental.status === "Active" && "Return"}
         </button>
       )}
     </div>

@@ -121,8 +121,8 @@ public class RentalRepository : BaseRepository<Rental>, IRentalRepository
             .ThenInclude(c => c!.BusinessGame)
             .ThenInclude(bg => bg!.Game)
             .Include(r => r.LockerRental!.Cell!.Locker)
-            .OrderByDescending(r => r.StartDate)
-            .OrderByDescending(r => r.Status);
+            .OrderByDescending(r => r.Status)
+            .OrderByDescending(r => r.StartDate);
 
         var rentals = await query
             .Select(r => new UserRentalResponse(

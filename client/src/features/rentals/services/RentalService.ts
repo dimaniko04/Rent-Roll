@@ -11,4 +11,10 @@ export class RentalService {
     const res = await api.get<Rental[]>("rentals/my");
     return res.data;
   }
+
+  static async openCell(id: string, isPickUp: boolean) {
+    return api.put<Rental>(
+      `rentals/${id}/open/${isPickUp ? "PickUp" : "Return"}`
+    );
+  }
 }

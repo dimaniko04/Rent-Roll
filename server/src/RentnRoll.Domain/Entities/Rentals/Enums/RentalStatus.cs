@@ -2,9 +2,9 @@ namespace RentnRoll.Domain.Entities.Rentals.Enums;
 
 public enum RentalStatus
 {
-    Expectation = 0,
-    Active = 1,
-    Returned = 2,
-    Cancelled = 3,
+    Returned = 0,
+    Cancelled = 1,
+    Expectation = 2,
+    Active = 3,
     Overdue = 4
 }
