@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/main";
 import profile from "@assets/icons/profile.svg";
 import { Route } from "@/pages/_dashboard/games";
+import { AuthService } from "@/features/auth";
 
 export const GamesHeader = () => {
   const { setIsAuth } = useAuth();
@@ -45,11 +46,17 @@ export const GamesHeader = () => {
             <img src={profile} alt="Profile" />
           </button>
           <button
-            onClick={() => {
-              setIsOpen(!isOpen);
-              setIsAuth(false);
-              localStorage.removeItem("token");
-              navigate({ to: "/login" });
+            onClick={async () => {
+              try {
+                await AuthService.logout();
+              } catch (error) {
+                console.error("Logout failed:", error);
+              } finally {
+                setIsOpen(!isOpen);
+                setIsAuth(false);
+                localStorage.removeItem("token");
+                navigate({ to: "/login" });
+              }
             }}
             className={`absolute cursor-pointer top-5 right-2 rounded-full ${isOpen ? "block" : "hidden"} bg-gray-300 shadow-lg p-4 hover:bg-gray-400`}
           >

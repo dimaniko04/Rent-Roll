@@ -383,7 +383,8 @@ public class LockerService : ILockerService
             .Select(ga => ga.CellId)
             .ToList();
         var gameIds = request.GameAssignments
-            .Select(ga => ga.BusinessGameId)
+            .Where(g => g.BusinessGameId.HasValue)
+            .Select(ga => ga.BusinessGameId!.Value)
             .ToList();
 
         var cells = await _lockerRepository

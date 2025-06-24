@@ -14,10 +14,6 @@ public class AssignGamesRequestValidator
         RuleForEach(x => x.GameAssignments)
             .ChildRules(gameAssignment =>
             {
-                gameAssignment.RuleFor(x => x.BusinessGameId)
-                    .NotEmpty()
-                    .WithMessage("Business game ID cannot be empty.");
-
                 gameAssignment.RuleFor(x => x.CellId)
                     .NotEmpty()
                     .WithMessage("Cell ID cannot be empty.");

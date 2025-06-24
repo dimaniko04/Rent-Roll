@@ -32,7 +32,9 @@ export const TextInput = <T extends FieldValues>({
             {...{
               ...field,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                field.onChange(Number(e.target.value)),
+                type == "number"
+                  ? field.onChange(Number(e.target.value))
+                  : field.onChange(e.target.value),
             }}
           />
         </div>
