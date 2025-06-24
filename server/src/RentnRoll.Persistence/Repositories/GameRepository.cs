@@ -344,6 +344,7 @@ public class GameRepository : BaseRepository<Game>, IGameRepository
             .Where(c => c.Id == cell.Id)
             .Include(c => c.BusinessGame!)
             .ThenInclude(bg => bg.Game)
+            .ThenInclude(g => g.Images)
             .Where(c => c.BusinessGame != null)
             .Include(c => c.Locker)
             .ThenInclude(l => l.PricingPolicies)

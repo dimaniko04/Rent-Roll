@@ -1,6 +1,6 @@
 import { useSearch } from "@tanstack/react-router";
-import type { GameFilters } from "../types/GameFilters";
-import { useGames } from "../hooks/useGames";
+import type { GameFilters } from "../../types/GameFilters";
+import { useGames } from "../../hooks/useGames";
 import { useEffect, useRef } from "react";
 import { GameItem } from "./GameItem";
 
@@ -33,8 +33,6 @@ export const GameList = () => {
       element.removeEventListener("scroll", onScroll);
     };
   });
-
-  console.log(data);
 
   return (
     <div ref={scrollRef} className="overflow-y-auto px-6 pb-8">

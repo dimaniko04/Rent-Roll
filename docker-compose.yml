@@ -39,20 +39,20 @@ services:
       - sql-data:/var/opt/mssql
     restart: unless-stopped
 
-  webapp:
-    container_name: rent-roll-webapp
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./client:/app
-      - /app/node_modules
-    networks:
-      - local_dev
-    depends_on:
-      - api
+  # webapp:
+  #   container_name: rent-roll-webapp
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./client:/app
+  #     - /app/node_modules
+  #   networks:
+  #     - local_dev
+  #   depends_on:
+  #     - api
 
 volumes:
   sql-data:
